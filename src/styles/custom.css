@@ -1,0 +1,31 @@
+/*
+此处使用自定义css修复主题toc栏多级标题缩进问题。
+针对主题的修复：https://github.com/Axiaobo7788/starlight-material-design-theme/pull/2
+*/
+nav[aria-labelledby="starlight__on-this-page"] a,
+ul.isMobile a {
+  padding-inline-start: calc(1rem + var(--depth) * 1rem) !important;
+}
+
+/*
+减小右侧导航栏间距
+*/
+:root {
+  --sl-content-width: 65rem; 
+}
+
+@media (min-width: 72rem) {
+  .right-sidebar-container {
+    width: 280px !important;
+    flex: none !important;
+  }
+
+  .main-pane {
+    flex: 1 1 0% !important;
+    width: auto !important;
+  }
+
+  .main-pane .sl-container {
+    margin-inline-start: 0 !important;
+  }
+}
