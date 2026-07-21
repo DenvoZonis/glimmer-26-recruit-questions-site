@@ -67,24 +67,30 @@ export default defineConfig({
 			],
 			sidebar: [{
 					label: '招新相关',
+					collapsed: true,
 					items: [{ label: '招新说明', slug: 'information' },
 						{ label: '其他渠道招新说明', slug: 'special_recruit' },
 						{ label: 'Q&A 常见问题解答', slug: 'QA' }
 					],
 				},{
 					label: '日常基础',
+					collapsed: true,
 					items: [{ label: '日常-1', slug: 'daily/daily-1' }],
 				},{
 					label: '计算机系统',
+					collapsed: true,
 					items: [{ label: '计算机系统简介', slug: 'cs/introduction' }],
 				},{
 					label: '前端',
+					collapsed: true,
 					items: [{ label: '前端简介', slug: 'frontend/introduction' }],
 				},{
 					label: '后端',
+					collapsed: true,
 					items: [{ label: '后端简介', slug: 'backend/introduction' }],
 				},{
 					label: '机器学习',
+					collapsed: true,
 					items: [{ label: '机器学习简介', slug: 'ml/introduction' }],
 				}
 			],
