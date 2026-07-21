@@ -1,6 +1,6 @@
 ---
-title: 2026 微光招新
-description: A Starlight site using starlight-theme-md3.
+title: 招新平台
+description: 电子科技大学微光工作室2026招新平台
 template: splash
 hero:
   tagline: 2026 Glimmer Recruit
@@ -8,77 +8,78 @@ hero:
     file: ../../assets/glimmer_logo.png
   actions:
     - text: 招新说明
-      link: /welcome/
+      link: /recruit/information/
       icon: right-arrow
-    - text: Q&A
-      link: /welcome/#customize-the-theme
-      icon: setting
+    - text: 提交答案
+      link: /submit/
+      icon: pen
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Theme Surface
+{/* 自定义按钮 */}
+<style>{`
+  .action-btn {
+    display: inline-block;
+    margin-top: 1.2rem;
+    padding: 0.4rem 1.2rem;
+    border: 1px solid var(--sl-color-text-accent);
+    color: var(--sl-color-text-accent) !important;
+    background-color: transparent;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .action-btn:hover {
+    background-color: var(--sl-color-text-accent);
+    color: var(--sl-color-bg) !important;
+    transform: translateY(-2px);
+  }
+`}</style>
 
 <CardGrid>
-	<Card title="日常基础" icon="puzzle">
-		计算机学科与做招新题不得不知道の常识与有用的通识内容，建议阅读
-	</Card>
-	<Card title="计算机系统" icon="code-branch">
-		非常接近底层的通用语言，拥有强大且通用的能力，也是学院的必修课，推荐0基础同学选择
-	</Card>
-	<Card title="前端" icon="list-format">
-		制作网页界面，实现美观漂亮的视图，完善用户友好的交互逻辑，是具有极强成就感和正反馈的方向
-	</Card>
-	<Card title="后端" icon="server">
-		功能灵魂的具体实现，协调数据库、信息流动与业务逻辑，实现web安全和高效的大脑
-	</Card>
-	<Card title="机器学习" icon="server">
-		机器学习是人工智能的一个重要分支，是一类 “从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法”
-	</Card>
-	<Card title="特殊招新" icon="server">
-		除了通过招新题之外，加入工作室的其他渠道
-	</Card>
-	<Card title="更多方向等你开拓" icon="server">
-		微光工作室不限定成员的研究方向，你的兴趣和梦想或许就能成为写在这里的下一个方向......
-	</Card>
+    <Card title="日常基础" icon="puzzle">
+        计算机学科与做招新题不得不知道の常识与有用的通识内容，建议阅读
+        
+		<a href="/recruit/daily/daily-1/" class="action-btn">开始阅读 ➔</a>
+    </Card>
+    <Card title="计算机系统" icon="desktop">
+        非常接近底层的通用语言，拥有强大且通用的能力，也是学院的必修课，推荐0基础同学选择
+        
+        <a href="/recruit/cs/introduction/" class="action-btn">查看题目 ➔</a>
+    </Card>
+    <Card title="前端" icon="window">
+        制作网页界面，实现美观漂亮的视图，完善用户友好的交互逻辑，是具有极强成就感和正反馈的方向
+        
+        <a href="/recruit/frontend/introduction/" class="action-btn">查看题目 ➔</a>
+    </Card>
+    <Card title="后端" icon="server">
+        功能灵魂的具体实现，协调数据库、信息流动与业务逻辑，实现web安全和高效的大脑
+        
+        <a href="/recruit/backend/introduction/" class="action-btn">查看题目 ➔</a>
+    </Card>
+    <Card title="机器学习" icon="codeberg">
+        机器学习是人工智能的分支，是 “从数据中自动分析获得规律，并利用规律对未知数据进行预测的算法”
+        
+        <a href="/recruit/ml/introduction/" class="action-btn">查看题目 ➔</a>
+    </Card>
+    <Card title="特殊招新" icon="telegram">
+        除了通过招新题之外，加入工作室的其他渠道。比如OI爱好者、光点计划和活动赛道
+        
+        <a href="/recruit/special_recruit/" class="action-btn">查看题目 ➔</a>
+    </Card>
+    <Card title="更多方向等你开拓" icon="random">
+        微光工作室不限定成员的研究方向，你的兴趣和梦想或许就能成为写在这里的下一个方向......
+        
+        <a href="/recruit/information/#联系我们" class="action-btn">联系我们 ➔</a>
+    </Card>
+	<Card title="Q&A" icon="question-circle">
+		一些常见问题的解答。如果还有其它的问题也欢迎来群里提问。把握机会也是重要的技能哦~
+        
+        <a href="/recruit/QA/" class="action-btn">查看题目 ➔</a>
+    </Card>
 </CardGrid>
-
-## 下面是主题原有的内容
-
-## Theme Snapshot
-
-<div class="md3-showcase not-content" aria-label="Material Design 3 theme snapshot">
-	<section class="md3-showcase-panel">
-		<p class="md3-overline">Color roles</p>
-		<div class="md3-palette">
-			<div class="md3-swatch-line">Primary <span class="md3-swatch primary"></span></div>
-			<div class="md3-swatch-line">Secondary <span class="md3-swatch secondary"></span></div>
-			<div class="md3-swatch-line">Tertiary <span class="md3-swatch tertiary"></span></div>
-		</div>
-	</section>
-	<section class="md3-showcase-panel">
-		<p class="md3-overline">Controls</p>
-		<div class="md3-state-demo">
-			<span class="md3-demo-button filled">Filled</span>
-			<span class="md3-demo-button tonal">Tonal</span>
-			<span class="md3-demo-button outlined">Outlined</span>
-			<span class="md3-demo-button pressed">Pressed</span>
-			<span class="md3-demo-button disabled">Disabled</span>
-		</div>
-	</section>
-	<section class="md3-showcase-panel">
-		<p class="md3-overline">Navigation</p>
-		<div class="md3-mini-nav">
-			<span>Welcome</span>
-			<span class="active">Theme options</span>
-			<span>Components</span>
-		</div>
-	</section>
-</div>
-
-## Try The Starter
-
-The generated site already has `starlight-theme-md3` configured. Open the theme
-menu, run a production build to test search, and adjust the `seed` color in
-`astro.config.mjs` when you want a different Material You palette.

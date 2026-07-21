@@ -11,7 +11,7 @@ ul.isMobile a {
 减小右侧导航栏间距
 */
 :root {
-  --sl-content-width: 65rem; 
+  --sl-content-width: 63rem; 
 }
 
 @media (min-width: 72rem) {
@@ -20,12 +20,17 @@ ul.isMobile a {
     flex: none !important;
   }
 
-  .main-pane {
+/* 仅在包含 TOC（右侧目录）的页面，让主面板铺满剩余空间 */
+  html[data-has-toc] .main-pane {
     flex: 1 1 0% !important;
     width: auto !important;
   }
 
-  .main-pane .sl-container {
-    margin-inline-start: 0 !important;
+  /* 仅在包含 TOC 的页面，取消内容容器的居中，使其靠左并自定义边距 */
+  html[data-has-toc] .main-pane .sl-container {
+    margin-inline-start: 2rem !important; 
   }
 }
+
+/* 隐藏导航栏的小圆点 */
+.site-title::before { display: none !important; }
