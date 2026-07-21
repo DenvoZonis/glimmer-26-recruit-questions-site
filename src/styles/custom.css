@@ -34,3 +34,41 @@ ul.isMobile a {
 
 /* 隐藏导航栏的小圆点 */
 .site-title::before { display: none !important; }
+
+/* 防止正文内容过少导致页脚上浮 */
+main[data-pagefind-body] {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--sl-nav-height, 3.5rem));
+}
+
+main[data-pagefind-body] > .content-panel:last-child {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+main[data-pagefind-body] > .content-panel:last-child > .sl-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.sl-markdown-content {
+  flex-grow: 1;
+}
+
+/* 消除页脚下方的纯白色区域 */
+.main-pane,
+main[data-pagefind-body] {
+  padding-bottom: 0 !important;
+}
+
+main[data-pagefind-body] > .content-panel:last-child,
+.custom-footer {
+  margin-bottom: 0 !important;
+}
+
+.custom-footer {
+  padding-bottom: 2rem;
+}
