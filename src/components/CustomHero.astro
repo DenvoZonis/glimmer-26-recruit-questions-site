@@ -3,7 +3,7 @@ import { LinkButton } from '@astrojs/starlight/components';
 import logo from '../assets/glimmer_logo.png';
 
 const { data } = Astro.locals.starlightRoute.entry;
-const { title = data.title, tagline, actions = [] } = data.hero || {};
+const { tagline, actions = [] } = data.hero || {};
 
 // 这个不是标准的 Starlight 字段，使用局部常量
 const heroName = 'Glimmer'; 

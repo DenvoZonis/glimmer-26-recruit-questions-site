@@ -25,14 +25,14 @@ export default defineConfig({
           		tag: 'link',
           		attrs: {
             		rel: 'icon',
-            		href: '/favicon.png',
+            		href: '/recruit/favicon.png',
             		sizes: '32x32',
           		},
         		},{
           		tag: 'link',
           		attrs: {
             		rel: 'apple-touch-icon',
-            		href: '/apple-touch-icon.png',
+            		href: '/recruit/apple-touch-icon.png',
             		sizes: '180x180',
           		},},],
 			// 配置toc目录层级

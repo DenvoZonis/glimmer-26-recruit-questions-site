@@ -1,20 +1,31 @@
 ---
 import type { Props } from '@astrojs/starlight/props';
 import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
+import { Image } from 'astro:assets';
+import policeIcon from '../assets/police.png';
 ---
 
 <DefaultFooter {...Astro.props} />
 
 <div class="custom-footer">
-  <p>
+  <!-- 站点基础信息 -->
+  <div class="footer-row">
     <span>本站已支持IPv6访问</span>
     <span class="separator"> || </span>
-    <span>Copyright &copy; 2026 glimmer</span>
-    <span class="separator"> || </span>
+    <span>Copyright &copy; 2026 </span>
+    <a href="https://www.glimmer.org.cn/">glimmer</a>
+  </div>
+
+  <!-- 备案信息 -->
+  <div class="footer-row">
     <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
       蜀ICP备2026040807号-1
     </a>
-  </p>
+    <a href="https://beian.mps.gov.cn/#/query/webSearch?code=51010802033346" rel="noreferrer" target="_blank" class="police-link">
+      <Image src={policeIcon} alt="公安备案图标" width={16} height={16} />
+      川公网安备51010802033346号
+    </a>
+  </div>
 </div>
 
 <style>
@@ -25,10 +36,14 @@ import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
     text-align: center;
     font-size: var(--sl-text-sm);
     color: var(--sl-color-gray-3);
+    
+    /* 列排版控制两行之间的间距 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; 
   }
   
-  .custom-footer p {
-    margin: 0;
+  .footer-row {
     /* 弹性布局：让文本和链接垂直居中，并允许在手机屏幕上自动换行 */
     display: flex;
     align-items: center;
@@ -49,5 +64,12 @@ import DefaultFooter from '@astrojs/starlight/components/Footer.astro';
   
   .custom-footer a:hover {
     color: var(--sl-color-text-accent);
+  }
+
+  /* 专门针对公安备案链接的排版，让图标和文字紧密居中对齐 */
+  .police-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 </style>
