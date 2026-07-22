@@ -8,6 +8,16 @@ import policeIcon from '../assets/police.png';
 <DefaultFooter {...Astro.props} />
 
 <div class="custom-footer">
+  <!-- 网站统计信息 -->
+  <div class="footer-row">
+    <span>本页阅读次数 <span id="vercount_value_page_pv">Loading</span> 次</span>
+    <span class="separator"> | </span>
+    <span>本站访问次数 <span id="vercount_value_site_pv">Loading</span> 次</span>
+    <span class="separator"> | </span>
+    <span>本站访问人数 <span id="vercount_value_site_uv">Loading</span> 人</span>
+  </div>
+  <script defer src="https://events.vercount.one/js"></script>
+
   <!-- 站点基础信息 -->
   <div class="footer-row">
     <span>本站已支持IPv6访问</span>
