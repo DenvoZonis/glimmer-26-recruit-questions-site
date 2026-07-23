@@ -1,11 +1,13 @@
 /*
-此处使用自定义css修复主题toc栏多级标题缩进问题。
-针对主题的修复：https://github.com/Axiaobo7788/starlight-material-design-theme/pull/2
+在主体版本为0.2.0时，此处使用自定义css修复主题toc栏多级标题缩进问题。
+当时向主题提了一个修复此问题的PR：https://github.com/Axiaobo7788/starlight-material-design-theme/pull/2
+目前此PR已被合并进主分支并发布了版本0.2.1
+此css留作遗产（）
 */
-nav[aria-labelledby="starlight__on-this-page"] a,
+/* nav[aria-labelledby="starlight__on-this-page"] a,
 ul.isMobile a {
   padding-inline-start: calc(1rem + var(--depth) * 1rem) !important;
-}
+} */
 
 /*
 减小右侧导航栏间距
