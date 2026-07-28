@@ -1,0 +1,233 @@
+---
+title: MEDIUM-4：计算机网络常识与实验
+description: 微光工作室2026招新——计算机系统：MEDIUM-4：计算机网络常识与实验
+
+prev:
+  link: /recruit/cs/medium-3/
+  label: MEDIUM-3：Read From Memory
+next:
+  link: /recruit/cs/hard-1/
+  label: HARD-1：cache
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../assets/cs/banner.png';
+
+<Image src={banner} alt="计算机系统Banner" width="600" height="188" />
+
+## Step 1
+
+### Part 1：特殊 IP 地址与网段
+
+import { Badge } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. **127.0.0.1 的作用** 解释 <Badge text="127.0.0.1" /> 的含义及用途，并说明它与 <Badge text="localhost" /> 的关系。
+2. **常见特殊网段** 除了 <Badge text="127.0.0.1" />，还有哪些保留地址和特殊网段？请至少举出 3 类并说明用途，例如：
+   1. 私有地址（Private IP）
+   2. 回环地址（Loopback）
+   3. 链路本地地址（Link-local）
+   4. 多播地址（Multicast）
+   5. 广播地址（Broadcast）
+
+</Steps>
+
+### Part 2：计算机网络分层模型
+
+1. **各层协议与作用** 简述 **OSI 七层模型** 与 **TCP/IP 四层模型**，并说明每一层的主要功能和常见协议。
+
+> **提示：** 例如 HTTP 属于应用层，TCP 属于传输层。
+
+2. **常用协议举例** 列出至少 5 个常用网络协议，并标注它们所在的层次及典型用途。
+
+### Part 3：DNS 的工作流程
+
+<Steps>
+
+1. **DNS 的作用** 简述 DNS 在网络通信中的作用。
+2. **DNS 查询流程** 描述从浏览器输入 <Badge text="www.example.com" /> 到最终获取 IP 地址的 DNS 解析过程，包含以下内容：
+   1. 浏览器缓存、本地缓存、hosts 文件
+   2. 递归查询与迭代查询的区别
+   3. 根域名服务器、顶级域名服务器、权威 DNS 服务器的作用
+3. **实际操作** 使用 <Badge text="nslookup" /> 或 <Badge text="dig" /> 命令，查询任意一个域名的解析过程，并截图结果。
+
+</Steps>
+
+### Part 4：ARP 协议基础
+
+<Steps>
+
+1. **ARP 的作用** 简述 ARP（地址解析协议）的工作原理，以及它在局域网通信中的地位。
+2. **ARP 报文结构** 了解 ARP 请求与 ARP 响应的报文格式（硬件类型、协议类型、MAC 地址、IP 地址等字段）。
+3. **ARP 与安全** 简述 ARP 协议存在的安全隐患，以及常见的防护手段（例如静态 ARP 表、ARP 防护软件等）。
+4. **动手实验（可选加分）** 使用抓包工具（如 Wireshark）捕获一次正常的 ARP 请求与响应报文，并分析字段含义。
+
+</Steps>
+
+## Tips
+
+<Steps>
+
+1. 常识和基础部分可参考群中资料《计算机网络：自顶向下方法》，书中关于通信网的一些题目涵盖外的知识点也推荐了解一下。
+2. 后面部分需要同学们发挥主观能动性，自行了解相关概念；回答注意体现自己理解即可，完成度可以放在第二位，可以参考https://www.runoob.com/w3cnote/summary-of-network.html 以及 https://csdiy.wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/topdown_ustc/
+3. 本题不需要提交
+
+</Steps>
+
+## Step 2
+
+### Part 1:IP 地址转换
+
+**题目：** 编写一个程序，输入一个 IPv4 地址（形如 <Badge text="192.168.1.1" />），输出它对应的 32 位无符号整数形式。 再将该整数转换回 IPv4 字符串，验证是否一致。
+
+**示例：**
+
+makefileCopyEdit输入: 192.168.1.1
+
+输出: 3232235777
+
+再转换回: 192.168.1.1
+
+### Part 2:模拟 Ping
+
+**题目：** 编写一个简单的 **TCP** 或 **UDP** 客户端，连接到 <Badge text="example.com" /> 的 <Badge text="80" /> 端口，成功建立连接后输出“连接成功”，否则输出“连接失败”。 （不要求真正发送 ICMP Ping 报文，用 socket 即可）
+
+**提示：** 可以使用 <Badge text="socket" /> 库，注意异常处理。
+
+### Part 3:HTTP 请求解析
+
+**题目：** 编写一个程序，向 <Badge text="http://example.com" /> 发送 HTTP 请求（GET），接收服务器返回的数据，并打印 HTTP 响应头（Header）部分。
+
+**加分：** 在代码中手动构造 HTTP 请求报文（字符串拼接），而不是直接用高级网络库。
+
+## Step 3
+
+### Part 1:简易聊天室（TCP）
+
+**题目：** 使用 TCP Socket 编程，实现一个简单的 **多人聊天室**：
+
+- 服务器端：接收多个客户端连接，将收到的消息广播给所有已连接客户端。
+- 客户端：连接到服务器，能发送和接收消息。
+
+**加分：** 实现“昵称”功能，在每条消息前加上发送者昵称。
+
+### Part 2:数据包解析器
+
+**题目：** 编写一个程序，读取给定的一个 **PCAP 文件**（抓包文件），统计其中出现最多的源 IP 地址，并输出它的出现次数。
+
+**提示：**
+
+- PCAP 文件可以用 Wireshark 抓几个包生成。
+- Python 可用 <Badge text="scapy" /> 解析，C 可用 <Badge text="libpcap" />。
+
+### Part 3:自定义“迷你协议”
+
+**题目：** 自己设计一个简单的应用层协议：
+
+- 报文格式：<Badge text="[LEN][TYPE][DATA]" />
+  - <Badge text="LEN" />：数据部分长度（1字节）
+  - <Badge text="TYPE" />：消息类型（1字节，1=文本，2=数字）
+  - <Badge text="DATA" />：实际数据
+- 编写客户端与服务器：
+  - 客户端可发送两种类型的消息
+  - 服务器收到消息后解析，并按类型输出
+
+**加分：**
+
+- 支持多客户端
+- 支持粘包/拆包处理
+
+### Part 4:模拟 ARP 表
+
+**题目：** 编写一个程序，模拟一个 ARP 表（IP ↔ MAC 映射关系）：
+
+- 支持添加、删除、查询条目
+- 查询不到时输出“未找到”
+- 使用结构体（C/C++）或字典（Python）实现
+
+## Step 4
+
+### Part 1：ARP
+
+**什么是 ARP 欺骗？** 简述 ARP 协议的工作原理，并解释何为 ARP 欺骗攻击。
+
+**ARP 协议的漏洞分析** ARP 协议的哪一项设计特点，使得局域网内可以被实施 ARP 欺骗？请结合原理说明。
+
+**编程实战：ARP 欺骗** 使用 **C 语言** 编写一个简单的 ARP 欺骗程序，使得与您处于同一 Wi-Fi 网络的目标设备（例如室友的电脑，或您自己的另一台设备）失去网络连接。
+
+> **提示：** 建议先熟悉以太网帧结构与 ARP 报文格式。实验时请注意合法合规，仅在允许的设备上测试。
+
+### Part 2：IPv6
+
+**为什么需要 IPv6？** 简述 IPv6 出现的背景，以及相比 IPv4 的主要改进之处。
+
+**获取运营商分配的 IPv6 地址** 尝试在自己的设备上查看并获取运营商提供的 IPv6 地址，并截图记录。
+
+**实验：Nginx IPv6 配置** 配置 Nginx 使其可以通过 IPv6 对外提供服务，并在外网进行访问测试。（简单输出一个helloworld即可）
+
+> **加分项：** 如果使用校园网环境，可尝试直接通过 IPv6 对外访问。
+
+### Part 3：DNS
+
+**什么是 DNS 污染？** 调查并简述 DNS 污染的原理、表现形式以及危害。
+
+**修改本地 DNS 服务器地址** 将本机的 DNS 服务器地址修改为指定值（例如公共 DNS：8.8.8.8），并测试访问效果。
+
+**修改 hosts 文件** 编辑本机的 <Badge text="hosts" /> 文件，将 GitHub 相关域名直接映射到对应 IP 地址，然后测试访问是否有所改善。
+
+> **提示：** 注意修改前备份原文件，防止因配置错误导致无法访问网站。
+
+### Step 4：组网实验
+
+希望你可以使用任意的网络模拟器(推荐使用PacketTracer,当然了要是你能用HCL做我向你致以崇高的敬意)最终完成下示网络拓扑结构的搭建：
+
+![image-20250813193138281](https://raw.githubusercontent.com/ZHOUGONG24/pic/master/image-20250813193138281.png)
+
+咱们可以分步骤来进行:
+
+#### Part 4.1.1
+
+完成 <Badge text="10.0.10.0/24" />与10.0.20.0/24网段的搭建,使PC0至PC3可以互通
+
+#### Part 4.1.2
+
+完成<Badge text="10.0.30.0/24" />网段的搭建，并为<Badge text="Edge_Route" />与<Badge text="Side_Route" />配置动态路由协议，在不使用静态路由的前提下,使PC0至PC4可以互通
+
+#### Part 4.1.3
+
+配置ICP,并为其配置静态路由,使PC0至PC4可以连通**ICP**
+
+#### Part 4.1.4
+
+假设ICP所在的网段为外网,PC0至PC3所在的网段为内网,为<Badge text="Edge_Route" />配置NAT,你可以使用 Ping 测试连通性。
+
+### 额外项目
+
+#### Part 4.2.1
+
+配置VLAN,令PC0与PC2加入<Badge text="vlan10" />,PC1与PC3加入<Badge text="vlan20" />
+
+#### Part 4.2.2
+
+将<Badge text="Edge_Route" />替换为防火墙,并配置规则,使:
+
+- **PC0-3**能连通PC4、<Badge text="Edge_Route" />、**ICP**
+- **PC4**能连通<Badge text="Edge_Route" />、ICP、不能连通**PC0-3**
+- **ICP**不能连通PC0-4、<Badge text="Edge_Route" />
+
+小Tip:
+
+- 记得保存
+- 网络设备的命令行和Linux还是不太一样,建议多看看文档.可以在命令行里面输入<Badge text="?" />来获取可用命令和参数
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+> fw190 QQ:1242641543
+>
+> 杨沁雨 QQ: 1353516434

@@ -1,0 +1,125 @@
+---
+title: 5：AI Agent的使用
+description: 微光工作室2026招新——日常：5：AI Agent的使用
+
+prev:
+  link: /recruit/daily/4/
+  label: 4：代码管理
+next:
+  link: /recruit/daily/6/
+  label: 6：loafer想打派(网络)
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../assets/daily/banner.png';
+
+<Image src={banner} alt="日常Banner" width="640" height="256" />
+
+import { Badge } from '@astrojs/starlight/components';
+
+> <Badge text="难度系数" />：中等
+>
+> 近年来 AI 相关工具越来越多，相信你已经使用过诸如豆包、Deepseek、GPT等大语言模型（LLM），而代理（Agent）已经成为把ai模型能力和外部工具连接起来的常用模式。本练习将带你初步理解什么是 AI Agent、能做什么、如何安全地使用它们，你还可以通过几个实践任务上手写简单的 prompt 与使用场景。
+
+## 你能学到
+
+- 理解AI Agent的基本工作方式
+- 基本的 Prompt（提示词）设计技巧
+- 简单的工具调用与安全管理
+
+## 基本概念
+
+- AI Agent：通常指将大型语言模型（LLM）与外部能力（如搜索、文件读写、终端命令、HTTP 请求等）组合起来，能够“感知环境、计划步骤并执行工具”的系统。💡
+- Tool（工具）：Agent 可调用的外部能力，比如 <Badge text="search()" />, <Badge text="read_file()" />, <Badge text="run_command()" />。
+- Chain-of-thought（思路链）：让 Agent 输出推理步骤，有助于可解释性，但在生产环境需谨慎使用以免泄露内部信息。
+
+## 常见 Agent 类型与示例
+
+- 聊天型（Chatbot）：以对话为中心，适合问答、咨询场景。
+- 检索增强生成（RAG）：先检索相关文档，再由 LLM 生成答案，适合知识库问答。
+- 工具调用型：模型决定何时调用外部工具并处理返回结果，适合需要执行动作的场景（下订单、执行脚本）。
+
+## 使用策略与 Prompt 设计
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 明确目标：在提示里先写清楚要解决的问题与期望输出格式。
+2. 给出示例：提供 1-2 个输入输出示例，帮助模型遵循格式。
+3. 控制答复长度与风格：用 <Badge text="回答要点式列出，不超过 6 行。" /> 这样的约束。
+4. 错误/异常处理：指示 agent 在调用失败时如何重试或回退。
+
+</Steps>
+
+示例 Prompt（提纲生成）：
+
+> 你是一个写作助手。你的任务是根据用户给出的主题，生成一份文章提纲。
+>
+> 输出格式：
+> - 只输出提纲，不要解释过程。
+> - 每个要点单独一行，使用“1. 2. 3.”编号。
+> - 回答要点式列出，不超过 6 行。
+>
+> 异常处理：如果主题不明确，先返回 1 个澄清问题；如果生成失败，最多重试 1 次，仍失败则输出“无法生成提纲，请换一个更具体的主题”。
+>
+> 示例 1：
+> 输入：如何开始使用 AI Agent 开发项目
+> 输出：
+> 1. 了解 agent 的基本概念
+> 2. 选择合适的模型和工具
+> 3. 设计 prompt 与约束条件
+> 4. 连接数据源与外部能力
+> 5. 测试并持续迭代
+>
+> 示例 2：
+> 输入：如何学习前端基础
+> 输出：
+> 1. 学习 HTML 结构与语义
+> 2. 掌握 CSS 布局与样式
+> 3. 入门 JavaScript 语法
+> 4. 尝试做一个小项目
+> 5. 复盘并查漏补缺
+>
+> 现在请根据下面主题生成文章提纲：
+>
+> 主题：如何开始使用 AI agent 开发项目
+
+示例输出：
+
+<Steps>
+
+1. 了解 agent 架构与组件
+2. 选择合适的模型与工具接口
+3. 设计 prompt 与安全约束
+4. 搭建检索与数据管道
+5. 测试、监控与迭代
+
+</Steps>
+
+## 权限与安全注意事项
+
+- 最小权限原则：为 agent 授权时只开放必要能力（e.g.只读文件、禁止随意发起网络请求）。
+- 隐私保护：不要在 prompt 或工具返回中包含敏感信息（e.g.密码、私钥、个人隐私）。
+- 日志与审计：保留工具调用记录以便事后审查，但在保存日志前去除敏感字段。
+- 验证与确认：对会引起实际更改的操作（e.g.删除文件、发送请求）要求二次确认或人工审批。
+
+## 实践任务（建议按序完成）
+
+<Steps>
+
+1. 熟悉交互：可以使用不同种类的AI Agent工具给出问题，比较不同提示下的回答差异。
+2. 提纲练习：可以用上文示例 Prompt 生成 3 个主题的提纲。
+3. 本地文档问答：可以准备一篇短文（本地的任意 markdown 文件），构建一个手工的检索问答流程：
+	- 检索相关段落 → 将上下文拼接到 prompt → 询问答案并要求引用来源行号。
+
+</Steps>
+
+## 提交方式
+
+本题无需提交
+
+## 视频教程（供参考）
+
+- [从 LLM 到 Agent Skill，一期视频带你打通底层逻辑！](https://www.bilibili.com/video/BV1E7wtzaEdq/?share_source=copy_web&vd_source=29aa7aecf5877faad4d15cfa8c6fc647) 
+- [Codex新手保姆级教程-最强AI助手！从入门到进阶，22分钟速通Codex！](https://www.bilibili.com/video/BV1BVEs6LENZ/?share_source=copy_web&vd_source=29aa7aecf5877faad4d15cfa8c6fc647) 

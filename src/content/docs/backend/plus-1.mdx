@@ -1,0 +1,82 @@
+---
+title: plus-1
+description: 微光工作室2026招新——后端：plus-1
+
+prev:
+  link: /recruit/backend/plus-introduction/
+  label: 附加题说明
+next:
+  link: /recruit/backend/plus-2/
+  label: plus-2
+---
+
+如果你已经看到了这⾥，说明对前⾯java语⾔的学习，你已经掌握的很不错了，给优秀的⾃⼰点个赞吧！🌟
+
+语⾔只是后端开发中的冰⼭⼀⻆，选择⼀⻔合适的编程语⾔，除此之外，后端开发⼈员需要学习的知识还有很多。
+
+## Task.01 安装Linux
+
+你知道什么是操作系统吗？作为开发⼈员，更适合使⽤的操作系统是Linux，发展⾄今，Linux衍⽣出了许多发⾏版，例如Ubuntu，centOS等等，选择⼀个⾃⼰喜欢的Linux发⾏版（这⾥推荐Ubuntu，对新⼿⽐较友好，热⻔并容易获取）。
+
+> 搭配环境时可能会遇到很多困难，可以去CSDN，b站等查阅资料，或者拷打（？）ChatGPT，多动⼿，多思考。
+
+你可以通过选择下⾯⼏种⽅式安装Linux：
+
+- 虚拟机（推荐）
+  - wsl：windows的⼦系统，默认的Linux发⾏版是Ubuntu，可以参考官⽅的下载引导⽂档，[如何在windows上安装wsl](https://learn.microsoft.com/zh-cn/windows/wsl/install)。
+  - multipass：⼀个⾮常轻量级的虚拟机，在命令⾏使⽤简单的命令就可以创建，启动和运⾏，macOS⾸选，windows下使⽤需要升级专业版。
+  - vmware：⼀个强⼤的虚拟机软件，⽀持图形化界⾯，缺点是⽐较笨重。
+
+- 物理机上安装双系统（不太推荐？）
+  - 直接在你的物理机上安装Linux桌⾯版，可以使⽤图形化界⾯，体验原⽣的Linux功能，缺点是切换系统需要频繁的关机开机，如果你选择这个⽅案，需要规划好分盘和数据备份。
+
+- 服务器（推荐）
+  - 在远程服务器上安装Linux系统（⼀般租借的服务器是直接安装好的），可以去阿⾥云，腾讯云平台租借⼀个轻量级的应⽤服务器（学⽣应该是有优惠的，阿⾥云可以⽩嫖⼀年服务器...配置不⾼，腾讯云的服务器⽉租价格好像相对更便宜），建议选择前两种⽅案的同学，有精⼒也可以再多搞⼀个服务器。
+
+## Task.02 熟悉Linux
+
+安装好了Linux，接下来就该实际使⽤了！不像windows的图形化界⾯，Linux的⼤多数命令需要通过命令⾏执⾏，熟悉⼀些基本的Linux命令是很重要的。
+
+> ⼤家也可以先完成SSH连接部分，之后通过SSH连接来远程操作Linux
+
+import { Badge } from '@astrojs/starlight/components';
+
+- 简单了解⼀下Linux的⽬录结构。
+- 熟悉Linux的基本命令，可以⽤markdown做⼀些笔记或者速查表。
+- 熟悉⼀下包管理器，是⼀个强⼤的下载管理⼯具，不同的Linux发⾏版，包管理器也会不⼀样，但使⽤⽅法差别不会特别⼤，熟悉⾃⼰常⽤的即可。
+- 配置⼀个⾃⼰喜欢shell，它的作⽤是接受⽤户输⼊的命令，传给Linux内核执⾏，⼤多数Linux是bash，是最常⻅的也是使⽤范围最⼴的，通过<Badge text="echo $SHELL" />可以查看⾃⼰当前的shell类型。除此之外，⼤家也可以⾃⼰配置zsh，也是⼀个⽐较常⽤的shell，推荐<Badge text="on-my-zsh" />主题，⾮常好看。
+
+import { Image } from 'astro:assets';
+import p_p_1_1 from '../../../assets/backend/plus-1-1.png';
+
+<Image src={p_p_1_1} alt="shell截图" />
+
+不要死记硬背哦，熟悉⼀下即可，后⾯开发会经常⽤，慢慢就熟悉了，遇到不熟悉的多查⼀查速查表或者笔记～
+
+## Task.03 SSH远程开发
+
+> Tips：如果你觉得windows的power shell很难⽤（确实很难⽤bushi），可以使⽤git bash，安装git之后，右键即可调出，它也是⼀种bash，⽀持很多linux命令。
+
+### SSH连接
+
+简单了解⼀下ssh协议，尝试在⾃⼰的Linux虚拟机/服务器上下载openssh（⼀个免费开源的实现了SSH协议的程序）
+
+如果你有⼀台服务器，想通过在本地远程访问到你的服务器，让服务器执⾏你在本地键⼊的命令，可以通过ssh连接。没有服务器的同学⽤虚拟机代替服务器即可，重要的是体验⼀下配置的过程，[如何使⽤ssh连接到服务器](https://developer.aliyun.com/article/1317343)。
+
+### 免密登录
+
+每次ssh连接登录，都需要输⼊密码，太麻烦了，能不能让服务器识别我的设备，直接连接呢❓
+
+当然是可以的✅
+
+试着⽣成⼀对ssh密钥，把公钥放在服务器的<Badge text="~/.ssh/authorized_keys" />⽬录下，尝试⼀下免密登录吧！
+
+### 💡进阶挑战
+
+实际上，当你使⽤git访问远程仓库时，也是可以⽀持ssh连接的，相⽐与http与https更加安全，尝试再⽣成⼀对ssh密钥，把公钥交给你的github管理，使⽤ssh协议来操作git。
+
+当你有多对密钥时，通常需要编辑config⽂件来区分他们的连接对象，⾃⼰动⼿试⼀下吧！
+
+### 推荐
+
+推荐在vscode上安装remote插件，通过vscode来远程连接服务器，你可以在vscode上简单的编辑，上传⽂件（再⻅了vim~）。（不过稍微有点重量级，服务器配置不⾼的可以试试其他的连接⼯具，xshell，final bash都是很不错的选择）

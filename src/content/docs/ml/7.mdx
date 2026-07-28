@@ -1,0 +1,556 @@
+---
+title: 7：循环神经网络实战项目
+description: 微光工作室2026招新——机器学习：7：循环神经网络实战项目
+
+prev:
+  link: /recruit/ml/6/
+  label: 6：循环神经网络理论
+next:
+  link: /recruit/ml/8/
+  label: 8：Transformer
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../assets/ml/banner.png';
+
+<Image src={banner} alt="机器学习Banner" width="640" height="256" />
+
+恭喜你！🎉 在经过上一个题目的深入学习后，你已经成功掌握了循环神经网络的核心知识。现在是时候将理论付诸实践，构建一个真正能够理解人类情感的AI系统了！
+
+这个项目将带你从理论走向应用，体验AI工程师的真实工作流程——从数据处理到模型部署。准备好迎接挑战了吗？让我们开始这段激动人心的旅程吧！
+
+> 💡 **项目亮点**：你将要构建的情感分析系统，正是许多互联网公司用来分析用户评论、社交媒体情绪的核心技术！
+
+------
+
+## 📊 数据集准备
+
+### 主数据集
+
+**[Preprocessed Dataset Sentiment Analysis](https://www.kaggle.com/datasets/pradeeshprabhakar/preprocessed-dataset-sentiment-analysis)**
+
+### 备选数据集（任选其一）
+
+- [Sentiment Labelled Sentences Data Set](https://www.kaggle.com/datasets/marklvl/sentiment-labelled-sentences-data-set)
+- [Sentiment Analysis Dataset](https://www.kaggle.com/datasets/abhi8923shriv/sentiment-analysis-dataset)
+
+> **数据集说明**：这些都是经过精心筛选的真实文本数据，包含了丰富的情感表达，是训练情感分析模型的绝佳素材！
+
+------
+
+## 🎯 项目任务
+
+### 核心目标
+
+基于已清洗的文本数据，设计并实现一个**智能情感分类系统**，能够准确识别文本中的情感倾向（正面、负面、中性）。
+
+想象一下：当用户在电商平台写下一条评论，或者在社交媒体发表一个状态时，你的系统能够瞬间理解其中的情感色彩——这就是AI的魅力所在！✨
+
+------
+
+## 📋 项目要求
+
+### 核心实现要求（展现你的硬核实力！）
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. **数据理解**
+   - 使用提供的数据处理代码，深入理解数据处理流程
+   - 掌握从原始文本到模型输入的完整转换过程
+2. **模型构建**
+   - **手动搭建双向LSTM模型**（展现你的深度学习功底！）
+   - 只能使用`PyTorch`的基础库函数如`nn.LSTM`等
+   - ⚠️ **重要**：这部分请独立完成，不要直接使用AI编写代码！
+3. **训练实现**
+   - **手动实现完整训练循环**（包括前向传播、损失计算、反向传播）
+   - 这将让你真正理解深度学习训练的每一个细节
+   - ⚠️ **重要**：这部分也请独立完成，体验真正的AI工程师工作！
+4. **性能优化**
+   - 改进模型性能（这里可以**随意发挥，随意调用库函数**！）
+   - **目标挑战**：准确率达到85%以上
+   - 💪 **提升空间**：在这个阶段，可以适度使用AI工具来探索更好的解决方案
+
+</Steps>
+
+> 🎯 **学习策略**：前两个要求让你深入理解原理，最后一个要求让你体验工程优化的乐趣！
+
+------
+
+## 🛠️ 提供的强力辅助工具
+
+我们为你准备了完整的数据处理和评估工具包，让你专注于核心的模型实现！
+
+### 1️⃣ 数据处理模块（已提供完整实现）
+
+```python
+import pandas as pd
+import numpy as np
+import torch
+from torch.utils.data import Dataset, DataLoader
+from collections import Counter
+import re
+
+class DataProcessor:
+    def __init__(self, max_vocab_size=10000, max_seq_length=128):
+        self.max_vocab_size = max_vocab_size
+        self.max_seq_length = max_seq_length
+        self.word2idx = {'<PAD>': 0, '<UNK>': 1}
+        self.idx2word = {0: '<PAD>', 1: '<UNK>'}
+        
+    def clean_text(self, text):
+        """简单文本清洗"""
+        text = re.sub(r'[^a-zA-Z\s]', '', str(text).lower())
+        return text.strip()
+        
+    def build_vocabulary(self, texts):
+        """构建词汇表 - 只在训练集上调用"""
+        word_counts = Counter()
+        for text in texts:
+            words = text.split()
+            word_counts.update(words)
+        
+        # 选择最常见的词
+        most_common = word_counts.most_common(self.max_vocab_size - 2)
+        
+        for i, (word, _) in enumerate(most_common):
+            self.word2idx[word] = i + 2
+            self.idx2word[i + 2] = word
+            
+        print(f"词汇表大小: {len(self.word2idx)}")
+        
+    def text_to_sequence(self, text):
+        """文本转序列"""
+        words = text.split()
+        sequence = [self.word2idx.get(word, 1) for word in words]  # 1是<UNK>
+        return sequence
+        
+    def pad_sequences(self, sequences):
+        """序列填充"""
+        padded = []
+        for seq in sequences:
+            if len(seq) >= self.max_seq_length:
+                padded.append(seq[:self.max_seq_length])
+            else:
+                padded.append(seq + [0] * (self.max_seq_length - len(seq)))
+        return np.array(padded)
+        
+    def prepare_data(self, texts, labels, build_vocab=True):
+        """准备训练数据"""
+        # 清洗文本
+        cleaned_texts = [self.clean_text(text) for text in texts]
+        
+        # 只在需要时构建词汇表（通常只在训练集上）
+        if build_vocab:
+            self.build_vocabulary(cleaned_texts)
+        
+        # 转换为序列
+        sequences = [self.text_to_sequence(text) for text in cleaned_texts]
+        
+        # 填充序列
+        padded_sequences = self.pad_sequences(sequences)
+        
+        return padded_sequences, np.array(labels)
+    
+    def transform_data(self, texts, labels):
+        """转换数据（不构建词汇表）- 用于验证集和测试集"""
+        # 清洗文本
+        cleaned_texts = [self.clean_text(text) for text in texts]
+        
+        # 转换为序列
+        sequences = [self.text_to_sequence(text) for text in cleaned_texts]
+        
+        # 填充序列
+        padded_sequences = self.pad_sequences(sequences)
+        
+        return padded_sequences, np.array(labels)
+
+class SentimentDataset(Dataset):
+    def __init__(self, texts, labels):
+        self.texts = torch.LongTensor(texts)
+        self.labels = torch.LongTensor(labels)
+        
+    def __len__(self):
+        return len(self.texts)
+        
+    def __getitem__(self, idx):
+        return self.texts[idx], self.labels[idx]
+
+def load_and_prepare_data(file_path):
+    """加载并准备数据"""
+    # 根据不同数据集调整读取方式
+    df = pd.read_csv(file_path)
+    
+    # 假设列名为 'text' 和 'label'，根据实际情况调整
+    texts = df['text'].values
+    labels = df['label'].values
+    
+    # 将标签转换为数字（如果需要）
+    if labels.dtype == 'object':
+        unique_labels = list(set(labels))
+        label_to_idx = {label: idx for idx, label in enumerate(unique_labels)}
+        labels = [label_to_idx[label] for label in labels]
+    
+    return texts, labels
+
+def create_data_loaders(texts, labels, batch_size=32, test_size=0.2, val_size=0.1):
+    """创建数据加载器"""
+    from sklearn.model_selection import train_test_split
+    
+    # 数据分割
+    X_temp, X_test, y_temp, y_test = train_test_split(
+        texts, labels, test_size=test_size, random_state=42, stratify=labels
+    )
+    
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_temp, y_temp, test_size=val_size/(1-test_size), random_state=42, stratify=y_temp
+    )
+    
+    # 处理数据 - 只在训练集上构建词汇表
+    processor = DataProcessor()
+    X_train_processed, y_train_processed = processor.prepare_data(X_train, y_train, build_vocab=True)
+    X_val_processed, y_val_processed = processor.transform_data(X_val, y_val)
+    X_test_processed, y_test_processed = processor.transform_data(X_test, y_test)
+    
+    # 创建数据集
+    train_dataset = SentimentDataset(X_train_processed, y_train_processed)
+    val_dataset = SentimentDataset(X_val_processed, y_val_processed)
+    test_dataset = SentimentDataset(X_test_processed, y_test_processed)
+    
+    # 创建数据加载器
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    
+    return train_loader, val_loader, test_loader, processor
+```
+
+### 2️⃣ 评估指标计算（已提供完整实现）
+
+```python
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def calculate_metrics(y_true, y_pred, num_classes):
+    """计算所有评估指标"""
+    accuracy = accuracy_score(y_true, y_pred)
+    
+    # 根据类别数量选择平均方式
+    average = 'binary' if num_classes == 2 else 'macro'
+    
+    precision = precision_score(y_true, y_pred, average=average, zero_division=0)
+    recall = recall_score(y_true, y_pred, average=average, zero_division=0)
+    f1 = f1_score(y_true, y_pred, average=average, zero_division=0)
+    
+    return {
+        'accuracy': accuracy,
+        'precision': precision,
+        'recall': recall,
+        'f1_score': f1
+    }
+
+def plot_confusion_matrix(y_true, y_pred, class_names=None):
+    """绘制混淆矩阵"""
+    cm = confusion_matrix(y_true, y_pred)
+    
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=class_names, yticklabels=class_names)
+    plt.title('Confusion Matrix')
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
+    plt.show()
+    
+    return cm
+
+def plot_training_history(train_losses, val_losses, train_accs, val_accs):
+    """绘制训练历史"""
+    epochs = range(1, len(train_losses) + 1)
+    
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+    
+    # 损失曲线
+    ax1.plot(epochs, train_losses, 'b-', label='Training Loss')
+    ax1.plot(epochs, val_losses, 'r-', label='Validation Loss')
+    ax1.set_title('Training and Validation Loss')
+    ax1.set_xlabel('Epochs')
+    ax1.set_ylabel('Loss')
+    ax1.legend()
+    
+    # 准确率曲线
+    ax2.plot(epochs, train_accs, 'b-', label='Training Accuracy')
+    ax2.plot(epochs, val_accs, 'r-', label='Validation Accuracy')
+    ax2.set_title('Training and Validation Accuracy')
+    ax2.set_xlabel('Epochs')
+    ax2.set_ylabel('Accuracy')
+    ax2.legend()
+    
+    plt.tight_layout()
+    plt.show()
+```
+
+------
+
+## 💻 你的核心挑战任务
+
+现在轮到你大显身手了！以下是需要你独立完成的核心部分：
+
+### 3️⃣ 双向LSTM模型实现 🧠
+
+```python
+import torch
+import torch.nn as nn
+
+class BiLSTMClassifier(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_layers, num_classes, dropout=0.3):
+        super(BiLSTMClassifier, self).__init__()
+        
+        # TODO: 定义模型层
+        # 挑战提示：
+        # - 嵌入层：将词汇ID转换为向量表示
+        # - 双向LSTM层：捕捉序列的前向和后向信息
+        # - 全连接层：进行最终分类
+        # - Dropout层：防止过拟合
+        
+        pass
+        
+    def forward(self, x):
+        """
+        前向传播
+        x: [batch_size, seq_len]
+        """
+        # TODO: 实现前向传播
+        # 思考：
+        # - 如何处理双向LSTM的输出？
+        # - 如何将序列信息转换为分类结果？
+        
+        pass
+```
+
+### 4️⃣ 训练器实现 🚂
+
+```python
+class SentimentTrainer:
+    def __init__(self, model, device='cuda' if torch.cuda.is_available() else 'cpu'):
+        self.model = model.to(device)
+        self.device = device
+        
+        # TODO: 初始化优化器和损失函数
+        # 💡 提示：考虑使用Adam优化器和交叉熵损失
+        
+        pass
+        
+    def train_epoch(self, train_loader):
+        """训练一个epoch"""
+        self.model.train()
+        total_loss = 0
+        correct = 0
+        total = 0
+        
+        # TODO: 实现训练循环
+        # 核心步骤：
+        # 1. 遍历批次数据
+        # 2. 前向传播
+        # 3. 计算损失
+        # 4. 反向传播
+        # 5. 参数更新
+        # 6. 统计准确率
+        
+        pass
+        
+        return total_loss / len(train_loader), correct / total
+        
+    def evaluate(self, data_loader):
+        """评估模型"""
+        self.model.eval()
+        total_loss = 0
+        all_predictions = []
+        all_labels = []
+        
+        with torch.no_grad():
+            # TODO: 实现评估循环
+            # 核心任务：
+            # 1. 遍历验证数据
+            # 2. 前向传播（无梯度计算）
+            # 3. 收集预测结果和真实标签
+            
+            pass
+            
+        return total_loss / len(data_loader), all_predictions, all_labels
+        
+    def train(self, train_loader, val_loader, num_epochs=10):
+        """完整训练流程"""
+        train_losses, val_losses = [], []
+        train_accs, val_accs = [], []
+        
+        # TODO: 实现完整训练循环
+        # 完整流程：
+        # 1. 循环训练多个epoch
+        # 2. 每个epoch后进行验证
+        # 3. 记录训练历史
+        # 4. 可选：实现早停机制
+        
+        pass
+        
+        return train_losses, val_losses, train_accs, val_accs
+```
+
+### 5️⃣ 主函数完善 🎮
+
+```python
+def main():
+    # 加载数据
+    file_path = "your_dataset.csv"  # 替换为实际路径
+    texts, labels = load_and_prepare_data(file_path)
+    
+    # 创建数据加载器
+    train_loader, val_loader, test_loader, processor = create_data_loaders(texts, labels)
+    
+    # TODO: 创建模型
+    # 参数设计提示：
+    # - vocab_size: len(processor.word2idx)
+    # - embed_dim: 尝试128或256
+    # - hidden_dim: 尝试128或256
+    # - num_layers: 从1开始尝试
+    # - num_classes: 根据数据集的类别数确定
+    
+    
+    # TODO: 创建训练器并训练
+    # 训练策略：
+    # - 选择合适的epoch数量
+    # - 观察训练曲线
+    # - 调整学习率
+    
+    
+    # TODO: 测试模型
+    # 最终评估：
+    # - 在测试集上评估
+    # - 计算各项指标
+    # - 分析结果
+    
+    
+    # 显示结果
+    print("测试集结果:")
+    for metric, value in test_metrics.items():
+        print(f"{metric}: {value:.4f}")
+    
+    # 绘制训练曲线和混淆矩阵
+    plot_training_history(train_losses, val_losses, train_accs, val_accs)
+    plot_confusion_matrix(test_labels, test_predictions)
+```
+
+> **编程建议**：先实现基本功能，再逐步优化。记住，调试是编程的艺术！
+
+------
+
+## 🚀 性能提升挑战
+
+基础模型完成后，是时候释放你的创造力了！尝试以下改进策略：
+
+### 模型架构优化
+
+- **架构探索**：尝试GRU替代LSTM，或增加LSTM层数
+- **残差连接**：探索更深层的网络结构
+
+### 训练策略升级
+
+- **学习率调度**：实现学习率衰减或循环学习率
+- **正则化技术**：批归一化、权重衰减等
+
+### 超参数精调
+
+- **嵌入维度**：尝试不同的embedding维度
+- **隐藏层大小**：探索最适合的hidden size
+- **Dropout比例**：找到过拟合与欠拟合的平衡点
+- **批次大小**：优化训练效率
+
+> 💡 **优化提示**：这个阶段可以充分利用AI工具来探索更先进的技术和方法！
+
+------
+
+## 📝 实验报告撰写指南
+
+你的实验报告将展现你的完整项目经历，建议包含以下精彩内容：
+
+### **1. 模型实现篇**
+
+- 双向LSTM模型的具体实现细节
+- 关键设计决策的深入解释
+- 遇到的技术难点及创新解决方案
+
+### **2. 训练过程篇**
+
+- 训练流程的完整实现
+- 超参数选择的思考过程和调优历程
+- 训练中的有趣发现和现象观察
+
+### **3. 改进策略篇**
+
+- 尝试的各种改进方法和实验设计
+- 每种方法的效果分析和性能对比
+- 最终达到的性能指标和突破过程
+
+### **4. 收获与思考篇**
+
+- 对RNN和LSTM的深层理解和新认识
+- 项目中积累的宝贵经验和技能
+- 遇到的挑战和创造性解决思路
+- 对深度学习领域的前瞻性思考
+
+>  **报告提示**：用你自己的语言来描述这个项目！分享你的思考过程、遇到的困难以及解决问题时的成就感。
+
+## 🌟 项目寄语
+
+恭喜你即将完成一个完整的深度学习项目！🎊 从数据处理到模型构建，从训练优化到性能评估，你将体验到AI工程师的完整工作流程。
+
+这个情感分析系统不仅仅是一个作业项目，它代表着你在AI道路上的重要里程碑。通过这个项目，你将：
+
+- 🧠 **深度理解**RNN/LSTM的工作原理
+- 💻 **掌握实战**深度学习项目的完整流程
+- 🚀 **体验创新**模型优化的乐趣
+- 📊 **学会评估**AI系统的性能
+
+记住，每一行你亲手写下的代码，每一个你独立解决的问题，都在为你的AI工程师之路打下坚实的基础。
+
+**相信自己，你正在创造智能！** 🌟✨
+
+加油，未来的AI专家！你的情感分析系统将会是你AI之路上的第一个杰作！🎨🤖
+
+## ⚠️ 重要提醒
+
+### 🤝 关于AI工具的合理使用
+
+-  **鼓励独立思考**：核心模型实现和训练循环请独立完成
+-  **适度借助AI**：在性能优化阶段可以使用AI工具探索解决方案
+-  **面试准备**：确保自己能够清晰解释每一行代码的作用和原理
+-  **学习目标**：通过独立实现加深理解，通过工具使用提升效率
+
+------
+
+## 提交要求
+
+### **提交内容清单**
+
+import { Badge } from '@astrojs/starlight/components';
+
+- **代码文件**
+
+  ：完整的.py实现文件，命名格式：<Badge text="ml-7-姓名-学号.py" />
+
+- **实验报告**
+
+  ：详细的.md报告文件，命名格式：<Badge text="ml-7-姓名-学号.md" />
+
+- 将两个文件压缩为一个压缩包
+
+### 提交方式
+
+- **邮箱**: <Badge text="gimmerml401@163.com" />
+
+- **主题**: <Badge text="7-姓名-学号" />
+
+>出题人：Pluto.
+>
+>QQ：1183452142

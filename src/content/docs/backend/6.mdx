@@ -1,0 +1,138 @@
+---
+title: 6：封装继承与多态
+description: 微光工作室2026招新——后端：6：封装继承与多态
+
+prev:
+  link: /recruit/backend/5/
+  label: 5：面向对象基础
+next:
+  link: /recruit/backend/7/
+  label: 7：集合与泛型
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+## Task1.继承
+
+继承是java面向对象编程技术的一块基石.
+
+继承就是子类继承父类的特征和行为，使得子类对象（实例）具有父类的实例域和方法，或子类从父类继承方法，使得子类具有父类相同的行为。
+
+```java
+public class Animal { 
+    private String name;  
+    private int id; 
+    public Animal(String myName, int myid) { 
+        name = myName; 
+        id = myid;
+    } 
+    public void eat(){ 
+        System.out.println(name+"正在吃"); 
+    }
+    public void sleep(){
+        System.out.println(name+"正在睡");
+    }
+    public void introduction() { 
+        System.out.println("大家好！我是"         + id + "号" + name + "."); 
+    } 
+}
+```
+
+这个Animal类就作为一个父类，企鹅类和老鼠类继承这个类之后，就具有父类当中的属性和方法，子类就不会存在重复的代码，维护性也提高，代码也更加简洁，提高代码的复用性（复用性主要是可以多次使用，不用再多次写同样的代码）
+
+```java
+public class Penguin extends Animal { 
+    public Penguin(String myName, int myid) { 
+        super(myName, myid); 
+    } 
+}
+```
+
+```java
+public class Mouse extends Animal { 
+    public Mouse(String myName, int myid) { 
+        super(myName, myid); 
+    } 
+}
+```
+
+请注意，java并不支持多继承，这是为什么？
+
+## Task2.多态
+
+多态是同一个行为具有多个不同表现形式或形态的能力。
+
+import { Badge } from '@astrojs/starlight/components';
+
+你知道<Badge text="@Override" />吗，他负责在子类重写父类的方法来实现不同类的运算逻辑，请完成以下问题：
+
+对几何图形进行建模并完成圆，三角形，矩形的周长，面积计算
+
+其实还有另一种做法，使用接口来完成，请你给出使用接口的解答
+
+## Task3.封装
+
+在面向对象程式设计方法中，封装是指一种将抽象性函式接口的实现细节部分包装、隐藏起来的方法。
+
+封装可以被认为是一个保护屏障，防止该类的代码和数据被外部类定义的代码随机访问。
+
+要访问该类的代码和数据，必须通过严格的接口控制。
+
+封装最主要的功能在于我们能修改自己的实现代码，而不用修改那些调用我们代码的程序片段。
+
+请你说明public,private等关键词的用法
+
+并完成以下代码
+
+```java
+public class BankAccount {
+    // TODO 修改属性的可见性
+    String accountNumber;
+    String accountHolder;
+    double balance;
+    String password; // 敏感信息，需要严格保护
+    
+   BankAccount(String accountNumber, String accountHolder, double initialBalance, String password) {
+        //TODO
+    }
+    
+    void deposit(double amount) {
+        //TODO
+    }
+    
+    boolean withdraw(double amount, String inputPassword) {
+        //TODO
+    }
+    
+    boolean transfer(BankAccount recipient, double amount, String inputPassword) {
+        //TODO
+    }
+    
+    double getBalance() {
+        //TODO
+    }
+    
+    String getAccountInfo() {
+        //TODO
+    }
+    // 只需修改可见性
+    boolean validatePassword(String inputPassword) {
+        return true;
+    }
+    // 只需修改可见性
+   boolean validateAmount(double amount) {
+        return true;
+    }
+}
+```
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+>**出题人QQ：3425282590**

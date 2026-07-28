@@ -1,0 +1,97 @@
+---
+title: 4：控制流
+description: 微光工作室2026招新——后端：4：控制流
+
+prev:
+  link: /recruit/backend/3/
+  label: 3：数据类型与数据结构
+next:
+  link: /recruit/backend/5/
+  label: 5：面向对象基础
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+>你一定见过以下流程图：
+>
+>流程图是对现实问题解决方案的抽象，一个操作有了流程图，就能被写成程序，为了能控制程序如何运行，我们需要学习流程控制。
+>
+
+import img from '../../../assets/backend/4-1.webp';
+
+<Image src={img} alt="后端Banner" />
+
+## **Task1.if-else**
+
+import { Badge } from '@astrojs/starlight/components';
+
+请了解<Badge text="if-else" />相关知识。补全下面的函数：
+
+   ```java
+   //这个函数用于判断传入的年份是否为闰年
+   //是闰年返回1，不是闰年返回2
+   boolean isLeapYear(int year){
+   
+   }
+   ```
+
+   你知道<Badge text="switch-case" />吗，有人说<Badge text="switch-case" />是<Badge text="if-else" />的语法糖(<Badge text="syntax suger" />)这是正确的吗?你知道他们的底层实现原理吗？
+
+
+## **Task2.for-while**
+
+请了解<Badge text="for-while" />相关知识。补全下面函数：
+
+   ```java
+   //这个函数打印一个高度为n的空心菱形，保证n为奇数
+   //如n=5,则打印如下图形：
+   //  *
+   // * *
+   //*   *
+   // * *
+   //  *
+   void print(int n){
+   
+   }
+   ```
+
+## **Task3.递归和迭代**
+
+请了解递归和迭代相关知识，为斐波那契数列实现两个版本
+
+   ```java
+   int Fibonacci(int n){
+       
+   }
+   ```
+
+   迭代和递归不同处在于哪里，为什么一般偏好迭代？循环是否能完全用递归来取代？
+
+## **Task4.汉诺塔**
+
+   通过<Badge text="if-else" />，<Badge text="for-while" />等等能够对程序进行简单的流程控制，下面的问题是一个名为汉诺塔的游戏。现在有A,B,C三个柱子，在A柱上有n块铁饼，现在要把A柱上的n块铁饼都移动到C柱上，**请补全函数**，使得函数打印出移动的过程。**要求给出你代码的具体思路，可以写在文档或者代码注释中**（这题对初学的同学可能会有一定挑战性，可以先跳过等后回来做）
+
+```java
+//当n=3时，函数应该打印如下内容：
+//A->C   (A->C的意思是把A柱最上方的铁饼移动到C柱上，以下同理)
+//A->B
+//C->B
+//A->C
+//B->A
+//B->C
+//A->C
+void hanoi(int n){
+	
+}
+```
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+>**出题人QQ：3425282590**
