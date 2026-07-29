@@ -1,0 +1,178 @@
+---
+title: 7：Node.js
+description: 微光工作室2026招新——前端：7：Node.js
+
+prev:
+  link: /recruit/archives/25/frontend/6/
+  label: 6：第三方API&&排序
+next:
+  link: /recruit/archives/25/frontend/8/
+  label: 8：VitePress
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/frontend/banner.png';
+
+<Image src={banner} alt="前端Banner" width="640" height="256" />
+
+> ```
+> 难度系数：有点难
+> ```
+>
+> 了解后端是学习前端的必修课!
+>
+> 在前面的学习中，我们尝试调用了外部的API。接下来，一个API是怎样诞生的呢？在本节中，你将会浅尝服务器端的相关知识，初试Node.js，熟悉Node.js环境，在本地搭建一个简易服务器，并在这个服务器上搭建自己的API。这道题将带领你从前端初级阶段，迈入高级阶段的大门。做好准备，咱们开始吧！
+
+## **题目描述**
+
+在前面的学习中，你已经学会调用第三方API。那么，API是如何工作的？我可以写一个自己的API吗？**学习使用Node.js，尝试自己编写一个API。**
+
+#### 题目背景
+
+> 小鱼在调用后端接口的时候总是发现后端描述的变量名与自己写的代码对不上，一番检查之后又发现后端给的接口返回数据不规范，前前后后十几次向后端反馈之后，后端人员怒斥小鱼：你行你上！
+>
+> 小鱼同学认为这是一次接触后端的好机会，他决定先从一个简单的服务器开始做起。
+
+#### **题目要求**
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 下载Node.js
+2. 用Node.js搭建服务器并利用服务器在**命令框**和**浏览器**上分别显示“hello，glimmer”，迈出第一步！
+3. **实战题目：创建简易 HTTP 服务器**
+
+</Steps>
+
+import { Badge } from '@astrojs/starlight/components';
+
+**要求**：使用 Node.js 内置 <Badge text="http" /> 模块实现一个服务器，根据请求路径返回不同响应
+
+**描述**：
+
+<Steps>
+
+1. 创建 HTTP 服务器监听 <Badge text="3000" /> 端口
+2. 实现路由处理，详细见“期望输出”部分
+3. 所有响应头设置 <Badge text="Content-Type: text/plain; charset=utf-8" />
+
+</Steps>
+
+你的服务器的**期望输出**：
+
+<Steps>
+
+1. 访问 <Badge text="http://localhost:3000" /> →
+
+   ```
+   这是一个首页。
+   ```
+
+2. 访问 <Badge text="http://localhost:3000/date" /> →
+
+   ```
+   现在是2025-10-05，北京时间14:30:22  
+   // 你的服务器需要与时俱进！
+   ```
+
+3. 访问 <Badge text="http://localhost:3000/about" /> →
+
+   ```
+   关于我：......
+   //你还可以试试在自己的博客里调用它！
+   ```
+
+4. 访问 <Badge text="http://localhost:3000/xxx" /> →
+
+   ```
+   404：页面不存在QwQ   //这个页面指的是访问不到对应路由的结果
+   ```
+
+</Steps>
+
+试试看在你的服务器中添加更多接口？
+
+在完成了以上任务后，整理一下你的心得、代码和测试结果的截图（使用ApiFox 或者 Postman ），导出为一个pdf文件，交给我们欣赏一下吧🥰。
+
+------
+
+##### 附加题：（对后端实现感兴趣的可以了解！）
+
+<Steps>
+
+1. 利用npm下载express框架（或者去了解一下py的flask框架？）
+2. 学习使用express框架，并利用express框架，制作一个API，完成一个简单常见的任务管理功能：
+
+</Steps>
+
+**描述：**
+
+<Steps>
+
+1. **基础设置**
+
+   - 使用 Express 创建服务器监听 3000 端口
+   - 添加中间件解析 JSON 请求体
+
+2. **数据格式**
+
+   ```javascript
+   { 
+     id: Number,       // 自增ID
+     title: String,    // 任务名称
+     completed: Boolean // 完成状态
+   }
+   ```
+
+3. **实现接口**
+
+   | 方法   | 路径       | 功能         | 状态码  | 验证规则     |
+   | :----- | :--------- | :----------- | :------ | :----------- |
+   | GET    | /tasks     | 获取所有任务 | 200     | 不作要求     |
+   | POST   | /tasks     | 创建新任务   | 201     | 验证是否为空 |
+   | GET    | /tasks/:id | 获取单个任务 | 200/404 | 不作要求     |
+   | PUT    | /tasks/:id | 更新任务     | 200/404 | 验证任务对象 |
+   | DELETE | /tasks/:id | 删除任务     | 204/404 | 不作要求     |
+   
+4. **错误处理**
+
+   - 无效请求返回 400 + JSON 错误信息
+   - 资源不存在返回 404 + JSON 错误信息
+   - 服务器错误返回 500
+
+</Steps>
+
+​完成后使用Apifox或者postman测试，打包你的代码并提交。
+
+------
+
+##### **可能遇到的问题**
+
+我该怎么规范定义我的 API ？ 这里可以看看 [Restful API](https://www.ruanyifeng.com/blog/2014/05/restful_api.html) 规范。
+
+**Node.js入门教程** 
+
+- [学习教程 | Node中文网](https://dev.nodejs.cn/learn/) 
+- [Node.js 教程 | 菜鸟教程](https://www.runoob.com/nodejs/) 
+
+**很多同学可能发现Node.js和之前学习的JavaScript不太一样，大家可以参考下面两个链接**
+
+- [需要了解多少 JavaScript 才能使用 Node.js？](https://dev.nodejs.cn/learn/how-much-javascript-do-you-need-to-know-to-use-nodejs/)
+- [Node.js 和浏览器之间的区别?](https://dev.nodejs.cn/learn/differences-between-nodejs-and-the-browser/)
+
+**express框架可以参考哪些教程？**
+
+- [Express 教程 |Node.js中文网 ](https://express.nodejs.cn/en/starter/installing.html)
+- [Node.js Express 框架 | 菜鸟教程](https://www.runoob.com/nodejs/nodejs-express-framework.html)
+- 较难的问题可以参考B站上的视频教程
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## **出题者Q&A方式**
+
+> QQ：3064517736
+>
+> 邮箱：[3064517736@qq.com](mailto:3064517736@qq.com)

@@ -1,0 +1,197 @@
+---
+title: 8：异常处理与Stream流
+description: 微光工作室2026招新——后端：8：异常处理与Stream流
+
+prev:
+  link: /recruit/archives/25/backend/7/
+  label: 7：集合与泛型
+next:
+  link: /recruit/archives/25/backend/9/
+  label: 9：IO流
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+> 提交题目时 提交Q1-Q5的答案 附上你的思考与心得可以加分哦~
+
+***
+
+## Task1.异常
+
+当你写好了代码 IDE检查没有语法错误 仔细检查过没有bug 程序一开始也能正常运行 是否就意味着万事大吉了呢? 
+
+当然不是 程序在运行的过程中会遇到很多不确定的情况 比如程序试图打开一个不存在的文件 程序遇到了网络连接问题 程序在运算时把0作为了除数 等等等等
+
+比如以下代码
+
+```java
+public class Example {
+    public static void main(String[] args) {
+        System.out.println(10/0);
+        System.out.println("test");
+    }
+}
+```
+
+import { Badge } from '@astrojs/starlight/components';
+
+当程序运行到<Badge text="System.out.println(10/0)" />时就会**抛出**ArithmeticException异常 也不会执行后面的打印语句。
+
+实际上 Exception和Error都是Throwable的子类，所以它们才能够被抛出(throw)和捕获(catch)
+
+**Q1. 请你简单概述一下Error与Exception的区别 当发生Exception和Error时 程序的处理态度分别应该是什么?**
+
+异常Exception可以分为两类 一类是继承了RuntimeException的异常 我们称之为运行时异常 也称unckecked异常
+
+对应的 另一类称为checked异常 继承了Exception 但不继承RuntimeException
+
+**Q2. 你知道这两种异常有什么区别吗 他们发生的原因分别是什么?**
+
+***
+
+## Task2.处理
+
+了解了异常的基础知识 那么 当异常发生时 我们应该如何处理呢?
+
+常见的处理方法有两种 一种是用try-catch捕获处理 另一种是在方法签名中用throws关键字抛出该异常 让调用该方法的上一层代码进行处理 ( 上一层代码同样可以选择用try-catch捕获或者再向上一层抛出 ) 如果一个异常一直没有被catch捕获 直到被抛到main方法仍然未被处理 则会由JVM来终止程序运行
+
+实际上 在日常开发中 我们并不需要总是在方法体内部使用try-catch进行异常处理 在spring等框架中 提供了更为便捷的全局异常处理机制 我们只需要简单的在方法标签上用throws关键字声名抛出的异常 统一交给全局异常处理类处理即可
+
+具体的练习题目
+
+**Q3. 题目: 文件读取和数据处理**
+
+> 此题设计IO流的部分知识 可以再学习了下一章节之后再来完成本题
+
+编写一个Java程序，要求完成以下功能：
+
+1. 读取文件: 在当前目录下，从一个文本文件中读取内容。假设文件名为<Badge text="data.txt" />，其中每一行包含一个整数。
+
+2. 数据处理: 计算这些整数的平均值。
+
+3. 异常处理
+   - 如果文件不存在，抛出自定义异常<Badge text="FileNotFoundException" />，提示文件未找到。
+   - 如果文件为空，抛出自定义异常<Badge text="EmptyFileException" />，提示文件为空。
+   - 如果文件中包含无法解析为整数的内容，捕获<Badge text="NumberFormatException" />，并提示读取到的内容格式错误。
+   - 最后，使用<Badge text="finally" />块确保文件资源被正确关闭。
+
+要求：
+
+- 创建自定义异常类<Badge text="EmptyFileException" />。
+- 使用<Badge text="try-with-resources" />语句或者<Badge text="finally" />语句来管理文件的读取。
+- 捕获并处理可能发生的所有异常，并给出相应的提示信息。
+
+提示：
+
+- 使用<Badge text="BufferedReader" />来读取文件内容。
+- 计算平均值时，可以在读取数据的同时进行累计和计数。
+
+***
+
+## Task3.Stream流
+
+Stream流可以帮我们更便捷的筛选和获取数据 体现了函数式的编程风格 代码更加简洁 Stream流的方法大致分为下面三类
+
+- 获取Stream流
+
+  我们可以通过Collection的静态方法 从集合创建流 也可以使用Arrays工具类的stream方法 从数组创建流 等等等等
+
+- 中间方法
+
+  创建了流之后 我们可以通过中间方法对元素进行转换 过滤等操作 有趣的是 这些方法的返回值仍然为流 就像一条流水线一样 我们可以不断使用中间方法 返回新的流 经过层层筛选 最后只在流上保留你需要的元素 filter map sorted等都是常见的中间方法
+
+- 终结方法
+
+  常见的终结方法有forEach遍历 count计数 collect收集 等等
+
+```java
+List<String> strings = List.of("I", "am", "a", "list", "of", "Strings");
+//获取stream流
+Stream<String> stream = strings.stream();
+//调用中间方法
+Stream<String> limit = stream.limit(4);
+//最后我们打印结果
+System.out.println("limit = " + limit);
+```
+
+**Q4. 尝试执行上面代码 会得到什么结果? 这和你预想的一样吗? 为什么会出现这种结果?**
+
+**Q5. 完成下述题目**
+
+- 定义一个学生类
+
+```java
+public class Student {
+    String name;
+    int score;
+
+    public Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+}
+```
+
+- 初始代码
+
+```java
+public class Main {
+
+    public static void main(String[] args) {
+        // 测试数据：学生列表
+        List<Student> students = Arrays.asList(
+                new Student("Alice", 85),
+                new Student("Bob", 58),
+                new Student("Charlie", 90),
+                new Student("David", 45),
+                new Student("Eve", 72),
+                new Student("Frank", 60),
+                new Student("Grace", 55),
+                new Student("Heidi", 95)
+        );
+
+        // 请在这里补充代码，完成以下任务：
+        // 1. 过滤分数≥60的学生
+        // 2. 姓名转换成大写
+        // 3. 按姓名字母顺序排序
+        // 4. 收集成 List<String> 返回并打印
+
+        // --- 你的代码开始 ---
+
+        List<String> passingStudents = students.stream()
+        // TODO: 补充流操作链
+
+        // --- 你的代码结束 ---
+
+        // 打印结果
+        System.out.println(passingStudents);
+    }
+}
+```
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+>
+## 出题人联系方式
+
+>**出题人QQ: 3322640054**

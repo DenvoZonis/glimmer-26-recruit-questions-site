@@ -1,0 +1,204 @@
+---
+title: 0：跨出机器学习的第一步
+description: 微光工作室2026招新——机器学习：0：跨出机器学习的第一步
+
+prev:
+  link: /recruit/archives/25/ml/introduction/
+  label: 机器学习简介
+next:
+  link: /recruit/archives/25/ml/1/
+  label: 1：基础的线性回归
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/ml/banner.png';
+
+<Image src={banner} alt="机器学习Banner" width="640" height="256" />
+
+## **欢迎来到深度学习**
+
+🌟 欢迎来到深度学习世界！​​
+机器学习是一门融合概率论、统计学、逼近论、凸分析、算法复杂度理论等多学科的交叉领域。它致力于让计算机模拟人类学习行为，获取新知识/技能，重组已有知识，持续优化系统性能。​深度学习正是机器学习中最耀眼的明星分支！
+
+## 数学基础
+
+🧮 数学基础 (别担心！)​​
+你需要了解：
+
+* ​微积分​：重点掌握偏导数、链式求导、梯度概念与计算。
+
+* ​线性代数​：核心是矩阵运算和线性变换。矩阵运算里有必要拓展了解一下矩阵求导。
+
+* ​概率论​：高中基础足够理解大部分概念，只需熟悉新术语。
+
+>📌提示​：无需深钻，够用即可！
+
+## ✅编程语言基础
+
+python，你可以看网课或者自己用文档学习，不需要很多内容，很多python操作你在后面的题目中并不会用上。
+
+### 💻编辑器选择
+
+这里推荐pycharm或者vscode,可以使用其中的jupyter插件。
+
+## 📱深度学习
+
+深度学习基本概念(非常推荐以[动手学深度学习](https://zh.d2l.ai/)为主（有免费的教材与讲解视频，还附赠源代码和课程讨论区），[吴恩达深度学习](https://www.bilibili.com/video/BV11H4y1F7uH/?spm_id_from=333.337.search-card.all.click&vd_source=b09c379bfaaea43b4b23c2857b42d724)作为辅助理解)，[Pytorch文档](https://pytorch.ac.cn/docs/stable/index.html#google_vignette)，[Pytorch框架教学](https://www.bilibili.com/video/BV1Y7411d7Ys/?spm_id_from=333.999.0.0&vd_source=dcc19fc51d3383c70024af0b50fd9206)
+
+### 🌈硬件要求
+
+作为一名软件工程专业的学生，我相信你的电脑一定配置还不错，深度学习是需要算力的，CPU虽然能胜任大部分计算任务，但是对于深度学习来说并不是最适合的，而GPU能加速计算过程，我们后面的任务需要用到GPU来加速你的计算，否则一个任务你可能会等待很久，如果你的电脑有独立显卡，那最好了。如果没有，那也不需要着急，因为现在有很多平台会提供免费的算力资源。
+
+你可以使用以下平台获取算力：
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. [kaggle](https://www.kaggle.com/)(实名注册后每周30小时的GPU加速时间，可用T4*2,P100)
+
+2. [阿里云](https://www.aliyun.com/product/ecs/gpu?utm_content=se_1015892169)(新用户可以选择免费使用，连续三月，每月250算力)
+
+3. [九天·毕昇](https://jiutian.10086.cn/edu/#/home)(注册后 随机参加一个比赛可以获得1000算力豆折合下来是200 V100(16G)时)
+
+4. [autoDL](https://www.autodl.com/) (有学生优惠95折，是目前使用最广泛的算力租借平台)
+
+5. 其他算力租借平台
+
+</Steps>
+
+### ⚠️环境配置（这一步很重要）
+
+如果你想要在你自己的电脑上或者服务器上运行你的模型训练任务，环境配置是必要的，当然你也可以使用kaggle这一类的平台中的notebook来暂时避免麻烦，不过为了长远发展，我建议还是自己进行环境配置
+
+<Steps>
+
+1. 李沐的**动手学深度学习**视频中有环境的配置过程可以参考
+
+2. 你已经是一名软件工程的学生了，网络上有丰富的教程你可以自行选择，所以STFW吧
+
+</Steps>
+
+环境要求有以下这些(其实跟着李沐应该没什么问题)
+
+conda/miniconda，jupyter，torch，torchvision，d2l/d2l-zh
+
+**速度慢的话可以换源**
+
+>注意 ：conda是一个开源的软件包管理系统和环境管理系统，它主要用于安装多个版本的软件包及其依赖关系，并能轻松地在它们之间切换。建议你使用anaconda创建你自己的环境进行环境管理。
+
+### Tips
+
+>💡合理利用ai和搜索工具提高你的学习效率
+
+## 🎯入门题目
+
+>一些相关的简单的代码，经过学习你需要一些实践
+
+### **1. 列表、元组与字典**
+
+<Steps>
+
+1. **元组解包与切片**  
+   ```python
+   t = (10, 20, 30, 40)
+   print(t[-2:])          # 输出？
+   x, *y, z = t
+   print(y)               # 输出？
+   ```
+
+2. **字典嵌套操作**  
+   ```python
+   stu = {"name": "LiMing", "scores": {"Math": 90, "Python": 85}}
+   stu["scores"]["Python"] = 95  # 修改Python成绩
+   print(stu["scores"]["Python"])  # 输出？
+   ```
+
+</Steps>
+
+### **2. 文件操作**
+
+在一切开始之前，在当前目录下创建一个名为'example.txt'的文件，并输入以下内容。
+
+>深度学习是这样的，懂的人只需要全身心投入到网络模型架构中，随便堆叠几个模块，无聊试试就可以了，可是调参要考虑的事情就很多了，要不断在Python文件中修改学习率这些超参数，操作太复杂了
+
+<Steps>
+
+1. **文件内容统计**  
+   
+    统计example.txt中"Python"出现的次数
+
+
+2. **行号标记写入**  
+   将example.txt内容按行写入new.txt，每行前加行号
+
+</Steps>
+
+---
+
+### **3. NumPy基础**
+
+<Steps>
+
+1. 创建一个10\*10的array A，并用1-100的随机值填充。
+
+2. 创建一个10\*10的单位矩阵B，并将A与B作矩阵乘法，得到矩阵C。打印出矩阵C的值。
+
+3. **条件筛选操作**
+   在矩阵A中找出大于80的元素并替换为0
+
+4. **分块计算平均值**  
+   将10x10矩阵拆分为4个5x5子矩阵，求每个子矩阵均值
+   
+</Steps>
+
+---
+### **4. PyTorch基础**
+
+1. 张量创建和属性
+```python
+import torch
+# 创建张量 A：形状 (3, 4)，元素为 [0, 11] 的整数
+A = torch.arange(12).reshape(3, 4)
+# 创建张量 B：形状 (3, 4)，服从标准正态分布
+B = _____
+# 判断以下操作是否正确：
+# (1) A.shape 返回 torch.Size([3, 4])  
+# (2) B.dtype 默认返回 torch.float32  
+# (3) A.device 默认为 GPU
+```
+2. 张量运算与广播
+```python
+a = torch.tensor([[1], [2], [3]])  # shape (3, 1)
+b = torch.tensor([4, 5, 6])        # shape (3,)
+# 计算 c = a + b，并写出 c 的形状
+c = _____
+# 计算 d = a * b，并解释广播规则
+d = _____
+```
+
+## 提交要求
+
+### 提交内容
+
+import { Badge } from '@astrojs/starlight/components';
+
+- **代码文件**
+
+  ：将代码部分的.ipynb文件作为邮件附件，命名格式：<Badge text="ml-0-姓名-学号.ipynb" />
+
+- **文档报告**
+
+  ：将写有这道题目文本解答的.md文件作为邮件附件，命名格式：<Badge text="ml-0-姓名-学号.md" />
+
+- 将两个文件压缩成压缩包<Badge text="ml-0-姓名-学号.zip" />
+
+### 提交方式
+
+- **邮箱**: <Badge text="gimmerml401@163.com" />
+
+- **主题**: <Badge text="0-姓名-学号" />
+
+>出题人：鹁霖
+>
+>QQ：2046193615

@@ -1,0 +1,123 @@
+---
+title: 1：基础的线性回归
+description: 微光工作室2026招新——机器学习：1：基础的线性回归
+
+prev:
+  link: /recruit/archives/25/ml/0/
+  label: 0：跨出机器学习的第一步
+next:
+  link: /recruit/archives/25/ml/2/
+  label: 2：多层感知机理论
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/ml/banner.png';
+
+<Image src={banner} alt="机器学习Banner" width="640" height="256" />
+
+## 🔍 背景回顾​：还记得高中用直线拟合散点图吗？
+
+在高中学习统计时，老师肯定提过用不同的函数去拟合散点图，现在，你将利用梯度下降的基础知识来实现这个过程！
+
+## 无需提交部分
+
+* 你之前了解过什么衡量平均误差的方法？均方误差是什么？
+
+* 什么是**损失函数**？MSE损失如何计算？并且去了解其他损失函数如**交叉熵损失**。
+
+* **学习率**是什么？它在梯度下降中起到什么角色？
+
+* Matplotlib 库你会使用吗？
+
+## 需要提交部分
+
+现有函数:
+
+$$
+f(x,y)=3x^3+y^4+e^y+5+\epsilon
+$$
+
+$$
+x \sim \mathcal{U}(-2, 2), \quad
+y \sim \mathcal{U}(-2, 2), \quad
+\epsilon \sim \mathcal{N}(0, 0.01)
+$$
+
+其中：
+
+x\~U(-2,2)表示随机变量 x 服从 -2 到 2 的均匀分布，$\epsilon$为人为构造的噪声，
+
+$$
+\epsilon\sim N(0,0.01)
+$$
+
+表示随机变量,e服从均值为 0，方差为 0.01 的正态分布
+
+1. 在x,y的分布区域内均匀取点(x,y)计算对应函数值
+
+2. 使用Matplotlib库绘制出函数
+
+$$
+f(x,y)=3x^3+y^4+e^y+5
+$$
+
+
+**在第一小问中，你构造的散点图就是接下来需要拟合的数据**
+
+3. 现在，使用函数 $\hat{f}(x, y) = \hat{a}x^3 + \hat{b}y^4 + \hat{c}e^y + \hat{d}$ 来拟合 $f(x, y)$。
+
+   需要注意：
+
+   - 机器学习库只能用 Numpy
+   - $f(x, y)$ 是标签， $\hat{f}(x, y)$ 是预测
+   - 应用**梯度下降法**，采用MSE损失，也就是说：求出恰当的 $\hat{a}, \hat{b}, \hat{c}, \hat{d}$ ，使每个数据点到平面 $\hat{f}(x, y) = \hat{a}x^3 + \hat{b}y^4 + \hat{c}e^y + \hat{d}$ 的**竖直方向距离（Z轴方向）的平方之和**最小。
+   - 训练过程中，要求每 20 次迭代打印当前损失（点到平面的竖直距离）。
+   - 如果你正确的使用了梯度下降法，那么求得的 $\hat{a}, \hat{b}, \hat{c}, \hat{d}$ 将与你预先设定的 $a, b, c, d$ 非常接近。
+
+4. 调整学习率，看看有什么变化。
+
+5. 大概画出损失函数图像，试想一下，你未来遇到的所有损失函数都能画出来吗。
+
+6. （简单拓展）把 $\begin{matrix} x \sim U(-2, 2) \\ y \sim U(-2, 2) \end{matrix}$ 修改为 $\begin{matrix} x \sim U(-2, 2) \\ y \sim U(0, 4) \end{matrix}$ 之后，是否出现问题？若有问题，思考原因并且给出解决方案。
+
+7. 写一个小总结。在小总结中，用梯度下降法实现拟合函数的过程（简单推导），还需要看到你的解决思路和学习收获，不需要长篇大论。
+
+## 注意事项
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 源代码（必要的注释和良好的规范）
+
+2. 每小问代码运行结果截图
+
+3. Matplotlib 库绘制出的函数图像截图
+
+</Steps>
+
+## 提交要求
+
+### 提交内容
+
+import { Badge } from '@astrojs/starlight/components';
+
+- **代码文件**
+
+  ：将代码部分的.ipynb文件作为邮件附件，命名格式：<Badge text="ml-01-姓名-学号.ipynb" />
+
+- **文档报告**
+
+  ：将写有这道题目文本解答的.md文件作为邮件附件，命名格式：<Badge text="ml-01-姓名-学号.md" />
+
+- 将两个文件压缩成压缩包<Badge text="ml-01-姓名-学号.zip" />
+
+### 提交方式
+
+- **邮箱**: <Badge text="gimmerml401@163.com" />
+
+- **主题**: <Badge text="1-姓名-学号" />
+
+>出题人：鹁霖
+>
+>QQ：2046193615

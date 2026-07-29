@@ -5,11 +5,9 @@ description: 往届招新题目归档索引
 
 以下是历年（23、24年）招新出题归档，按年份和方向分类，便于跳转查看。注意，所有归档文件均无法通过侧边栏索引，也没有其他外链，访问仅能通过URL访问。
 
-25年的题目请直接看招新网站，目前26年的题目还未出炉，先用25年的放在上面，顺带测试一下样式如何。
+目前26年的题目还未出炉，所以先把25年的题目放上去作为测试，同时这些经过测试的题目也会放在25年的归档中。
 
-文件内容全部未经过修改，同时也未做对网页的适配优化，可能出现一些与网页主题不和的样式。
-
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+文件内容未经过修改，23、24年的归档未做对网页的优化，可能出现一些与网页主题不和的样式。25年的是正常的。
 
 ## 2023年
 
@@ -85,3 +83,63 @@ description: 往届招新题目归档索引
   - [拓展题-卷积神经网络(CNN)实践](24/ml/拓展题-卷积神经网络cnn实践)
   - [进阶题1.论文阅读](24/ml/进阶题1论文阅读)
   - [进阶题2.NLP 任务实战](24/ml/进阶题2nlp-任务实战)
+
+## 2025年
+
+### 计算机系统
+
+- [计算机系统简介](25/cs/introduction)
+  - [EASY-1: What's your name](25/cs/easy-1)
+  - [EASY-2: 基础数据结构](25/cs/easy-2)
+  - [EASY-3: 编译原理引入](25/cs/easy-3)
+  - [MEDIUM-1: 位计算](25/cs/medium-1)
+  - [MEDIUM-2: 浮点数](25/cs/medium-2)
+  - [MEDIUM-3: Read From Memory](25/cs/medium-3)
+  - [MEDIUM-4: 计算机网络常识与实验](25/cs/medium-4)
+  - [HARD-1: cache](25/cs/hard-1)
+
+### 前端
+
+- [前端简介](25/frontend/introduction)
+  - [1: 初识HTML](25/frontend/1)
+  - [2: 了解网页F12开发者工具](25/frontend/2)
+  - [3: CSS初识](25/frontend/3)
+  - [4: Javascript入门和进阶](25/frontend/4)
+  - [5: 制作blog](25/frontend/5)
+  - [6: 第三方API&&排序](25/frontend/6)
+  - [7: Node.js](25/frontend/7)
+  - [8: VitePress](25/frontend/8)
+  - [9: Vue的学习](25/frontend/9)
+
+### 后端
+
+- [后端简介](25/backend/introduction)
+  - [1: 环境搭建](25/backend/1)
+  - [2: 程序运行](25/backend/2)
+  - [3: 数据类型与数据结构](25/backend/3)
+  - [4: 控制流](25/backend/4)
+  - [5: 面向对象](25/backend/5)
+  - [6: 封装继承与多态](25/backend/6)
+  - [7: 集合与泛型](25/backend/7)
+  - [8: 异常处理与Stream流](25/backend/8)
+  - [9: IO流](25/backend/9)
+  - [10: 快递取件码查询项目](25/backend/10)
+  - [附加题说明](25/backend/plus-introduction)
+  - [plus-1](25/backend/plus-1)
+  - [plus-2](25/backend/plus-2)
+  - [plus-3](25/backend/plus-3)
+  - [plus-4](25/backend/plus-4)
+
+### 机器学习
+
+- [机器学习简介](25/ml/introduction)
+  - [0: 跨出机器学习的第一步](25/ml/0)
+  - [1: 基础的线性回归](25/ml/1)
+  - [2: 多层感知机理论](25/ml/2)
+  - [3: 多层感知机实战](25/ml/3)
+  - [4: 卷积神经网络理论](25/ml/4)
+  - [5: 卷积神经网络实战](25/ml/5)
+  - [6: 循环神经网络理论](25/ml/6)
+  - [7: 循环神经网络实战](25/ml/7)
+  - [8: Transformer](25/ml/8)
+  - [9: BERT](25/ml/9)

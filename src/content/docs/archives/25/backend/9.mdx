@@ -1,0 +1,240 @@
+---
+title: 9：IO流
+description: 微光工作室2026招新——后端：9：IO流
+
+prev:
+  link: /recruit/archives/25/backend/8/
+  label: 8：异常处理与Stream流
+next:
+  link: /recruit/archives/25/backend/10/
+  label: 10：项目挑战
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+> 提交题目时 提交Q1至Q3的答案 附上你的思考与心得可以加分哦~
+
+import { Badge } from '@astrojs/starlight/components';
+
+Java中I/O操作主要是指使用<Badge text="java.io" />包下的内容 进行输入/输出操作。**输入**也叫做**读取**数据 **输出**也叫做作**写出**数据 输入/输出是针对程序而言的 程序向文件中写入数据 就是程序在输出数据 程序读取文件中的数据 就是程序在输入数据
+
+要用程序进行输入输出 就需要用到输入输出流 也就是I/O流 根据其输入输出数据的类型 可以分为字节流和字符流
+
+|            |           **输入流**            |              输出流              |
+| :--------: | :-----------------------------: | :------------------------------: |
+| **字节流** | 字节输入流<br />**InputStream** | 字节输出流<br />**OutputStream** |
+| **字符流** |   字符输入流<br />**Reader**    |    字符输出流<br />**Writer**    |
+
+***
+
+## Task1.字节流
+
+万物皆字节
+
+所有的数据在计算机内部都是以二进制的数字保存 因此 字节流可以传输任意类型的文件数据
+
+这张可爱的doro也是字节哦~
+
+import doro from '../../../../../assets/backend/9-1.jpg';
+
+<Image src={doro} alt="doro" style="zoom: 25%;" />
+
+[点击下载图片](/recruit/archives/backend/Java09-1.zip)
+
+请你将将这张可爱的doro复制到你的项目根目录下 命名为doro.jpg
+
+**Q1.  设计一个程序 实现功能: 将doro.jpg复制一份到项目根目录下 新图片命名为doro_copy.jpg**
+
+提示:
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 使用File类来管理你的目录和文件
+2. 使用FileInputStream和FileOutStream( 常见的字节流 )来对目标文件进行读写
+3. 读写时既可以一个一个字节的读写 也可以使用字节数组进行读写 建议使用后者效率更高哦 ( 字节数组的大小设置为1024 )
+
+4. 调用FileInputStream实体类的read方法可以读入文件数据 当读到文件末尾时返回-1 据此设计循环条件
+5. 完成后记得关闭你的流资源 注意思考输入输出流的开关顺序哦
+
+</Steps>
+
+***
+
+## Task2.字符流
+
+掌握了字节流的基本用法之后 你可能会有疑问
+
+既然有了字节流 为什么还需要字符流呢
+
+尽管字符在计算机底层仍然是以字节形式储存 但是对于一份相同的字节数据 使用不同的编码格式 编码出的文本就会不同 从而导致乱码问题 使用字符流 可以自动处理编码格式问题
+
+因此 对于图片 音频等 不需要关心编码格式的数据 使用字节流即可 而对于文本数据 使用字符流更为便捷
+
+下面是一张姓名表 请你在你的项目根目录下创建txt文件 命名为name.txt 将表中的内容拷贝进去
+
+**Q2. 设计一个程序: 读取name.txt 将表中的人名按照unicode自然排序 每个人名占据一行 在项目根目录下创建name_sorted.txt文件 将排序后的内容写入name_sorted.txt文件 要求去掉多余的首尾空格与空行**
+
+```
+  张三
+李四
+
+ 王五
+ 赵六
+  孙七
+周八    
+  钱九
+吴十
+
+郑十一
+  王十二
+冯十三
+ 陈十四  
+褚十五
+卫十六
+
+蒋十七
+沈十八  
+ 韩十九
+杨二十   
+```
+
+提示:
+
+<Steps>
+
+1. 常用的字符流为FileReader和FileWriter 但其无法指定编码格式 因此处理字符更好的方式是先创建字节流 再创建**转换流** 将字节流转换为字符流 同时指定编码格式 本题请使用UTF-8编码
+
+2. 在实际开发中 字符流通常不会直接拿来使用 而是再包裹一层**缓冲流** 它与字符流使用方法类似 并额外提供了一些更便利的字符操作
+
+3. 创建字符输入流的示例如下: 
+
+   ```java
+   File source = new File("./name.txt");
+   //创建字节流
+   FileInputStream fileInputStream = new FileInputStream(source);
+   //创建转换流
+   InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+   //创建缓冲流
+   BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+   ```
+
+   创建了三个流 在代码结束时 你就需要关闭三个流 较为繁琐 如果你使用下面这种方式创建 当最外层的流被关闭时 内部包裹的流就会依次自动关闭
+
+   ```java
+   BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(source), StandardCharsets.UTF_8));
+   ```
+
+4. 建议使用BufferedReader中的readLine()方法 可以依次读取一行数据 读到末尾时返回null
+
+5. 建议使用BufferedWriter中的newLine()方法进行换行( 为什么不建议手写换行符? )
+
+6. String的trim方法可以去除首位的空格/制表符/换行
+
+7. 同样要注意流的开关顺序哦~
+
+</Steps>
+
+***
+
+## Task3.序列化与反序列化
+
+这里有一个学生类
+
+```java
+public class Student {
+    private Integer id;
+    private String name;
+    private Integer gender; //1表示男性 2表示女性
+    private String phone;
+
+    public Student(Integer id, String name, Integer gender, String phone) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.phone = phone;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
+}
+```
+
+在主类的main函数中 我们创建这样的一个学生对象
+
+```java
+Student student = new Student(1, "doro", 2, "114514");
+```
+
+那么我们能不能用字节流 把这样的一个实体对象储存到一个文件中呢？
+
+答案是肯定的 这就是对象的**序列化** 而从文件中把这个对象数据提取出来的过程 就是**反序列化**
+
+**Q3. 用上面的代码 创建一个student对象 使用序列化将该对象的信息储存在项目文件根目录下的student.dat文件中 再使用反序列化将数据赋值给新的Student对象doro 最后输出doro的信息 ( Student的toString方法已重写好了 )**
+
+提示:
+
+<Steps>
+
+1. 了解一下Serializable接口 掌握它的功能 为Student类补充完整
+
+2. 创建序列化流的方法示例:
+
+   ```java
+   ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("student.dat"));
+   ```
+
+3. 由于输入输出流都是操作同一个文件 所以注意流的开关时机
+
+</Steps>
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+>**出题人QQ：3322640054**

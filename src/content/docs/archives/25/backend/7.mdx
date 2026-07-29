@@ -1,0 +1,206 @@
+---
+title: 7：集合与泛型
+description: 微光工作室2026招新——后端：7：集合与泛型
+
+prev:
+  link: /recruit/archives/25/backend/6/
+  label: 6：封装继承与多态
+next:
+  link: /recruit/archives/25/backend/8/
+  label: 8：异常处理与Stream流
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+> 提交题目时 提交Q1至Q5的答案 附上你的思考与心得可以加分哦~
+
+## Task1.集合
+
+你知道什么是集合吗?
+
+它和数组有什么相同点和不同点呢?
+
+既然有了数组 为什么还需要集合呢?
+
+下面是一张集合的体系结构
+
+import p7_1 from '../../../../../assets/archives/backend/7-1.png';
+
+<Image src={p7_1} alt="7-1" />
+
+聪明的你一定发现了 紫色方框是接口 而黄色方框是其实现类
+
+**Q1. 请你简单了解一下上面的集合接口以及实现类 简单的说一说他们各自的功能 并概括一下数组与集合的区别**
+
+## Task2.遍历
+
+太好了 你现在已经了解了常用的集合! 那么 如何去遍历一个集合呢? 下面以List为例 来详细阐述一下集合是如何遍历的
+
+1. 增强for循环( 又称for-each循环 )
+
+我们先从创建一个List对象开始吧! 但由于List是一个接口 通常 我们会创建它的实现类ArrayList作为它的对象实例 并添加4个元素
+
+```java
+List<Integer> list = new ArrayList<>();
+list.add(1);
+list.add(2);
+list.add(3);
+list.add(4);
+```
+
+你可能会有小小的疑问 欸? 这里的 Integer 是什么? 这便是泛型了 简单来说 这里的 Integer 就是用来规定list当中的元素类型的 但是泛型的强大之处远不止如此 这只是它的冰山一角 不过没关系 在后面的题目中 我们再来详细讨论它
+
+增强for循环是一种**语法糖** 自行了解一下 然后完成第二题吧!
+
+**Q2. 请你用增强for循环遍历list中的元素 依次打印出结果 给出你的代码和运行结果截图**
+
+2. forEach方法
+
+List已经为我们封装好了一些方法 常用的遍历方法便是forEach了
+
+```java
+list.forEach(new Consumer<Integer>() {
+    @Override
+    public void accept(Integer integer) {
+        System.out.println(integer);
+    }
+});
+```
+
+你能看懂这段代码吗? 去了解一下**匿名内部类**吧! 内部类实际上有很多 但其中最常用的就是匿名内部类了
+
+通常 当一个方法的参数是一个类时 我们会传入这个类的对象实例 **而当方法的参数是一个抽象类或接口时 我们应该传入实现了这个类或接口的类的对象实例!** 这个题便是一个很好的例子 其中的Consumer实际上是一个**函数式接口** accept是它内部的抽象方法
+
+然而 这并不是最简洁的写法 实际上 在jdk8之后 Java引入了**lambda表达式** 它可以在很大程度上简化匿名内部类的写法 让代码变得更加简洁 了解一下lambda表达式 然后完成第三题吧!
+
+**Q3. 什么是匿名内部类 什么是函数式接口? ( 感兴趣的同学可以去了解一下四大函数式接口 体会一下OOP和FP的区别 ) 把上面的遍历代码用lambda表达式改写 给出你的代码和运行结果截图 并总结一下lambda表达式的用法**
+
+3. 迭代器遍历
+
+这是集合底层最本质的遍历方法 其他的两种遍历方法都是依赖于它
+
+我们知道 List实现了Collection接口 而Collection接口又继承了Iterable接口
+
+```java
+public interface Iterable<T> {
+    Iterator<T> iterator();
+
+    default void forEach(Consumer<? super T> action) {
+        Objects.requireNonNull(action);
+        for (T t : this) {
+            action.accept(t);
+        }
+    }
+
+    default Spliterator<T> spliterator() {
+        return Spliterators.spliteratorUnknownSize(iterator(), 0);
+    }
+}
+```
+
+在Iterable接口中 给出了forEach方法的默认实现 看到这里 你应该就能理解List中的forEach方法是怎么来的了 在forEach方法的内部 实际上是增强for的语法糖的写法 可以还原成迭代器版本 作为开发人员 通常并不需要在乎他们底层封装方法的具体实现 理解过后直接调用方法即可 这里不做重点要求
+
+***
+
+## Task3.泛型
+
+请你简单了解一下什么是**泛型** 它是JDK5中引入的特性 它提供了编译时类型安全检测机制 把运行时期的问题提前到了编译期间
+
+学习时可以参考该链接 [菜鸟教程-泛型](https://www.runoob.com/java/java-generics.html)
+
+泛型常用在三处地方
+
+- 泛型类
+- 泛型方法
+- 泛型接口
+
+**Q4. 请你完成下面的模拟项目**
+
+- 创建一个泛型接口 该接口是一个仓库 要求能够储存任何类型的数据 ( 使用泛型 )
+
+```java
+public interface Repository
+```
+
+- 这个接口内有两个方法 save( ) 方法用于向仓库中添加数据 getById( ) 方法用来根据id获取数据
+- 创建MyRepository类 实现上面的接口 完成上述两个方法的具体实现 ( 注意 id是整数类型 从0开始自增 是数据的唯一标识 )
+- 提示: 可以使用hashMap
+
+```java
+public class MyRepository
+```
+
+给出下述User类
+
+```java
+public class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{name='" + name + "', age=" + age + "}";
+    }
+}
+```
+
+- 要求分别在你的MyRepository储存String User Integer类型的三组数据 并调用你写的遍历方法 在main函数中打印出仓库中所有元素的内容 给出你的完整代码 以及输出截图
+
+***
+
+## Task4.练习
+
+学习了集合的知识之后 我们来体会一下它的强大之处吧!
+
+Java的数据结构很简单 集合已经为我们封装好了很多可以直接调用的方法 以排序算法为例 这意味这我们不需要自己去手写一个排序算法了 但是学会灵活运用这些集合的排序算法是很重要的
+
+**Q5. 给出下面模拟案例的代码和运行结果截图**
+
+假设你现在是一名负责管理酒吧点唱机的程序员，你的任务是负责将收到的歌曲数据进行排序，其他人会负责将数据封装到一个List中。而你现在有一个模拟类来测试你的代码：
+
+```java
+public class MockSongs {
+    public static List<String> getSongStrings(){
+        List<String> songs = new ArrayList<>();
+        //模拟将要处理的列表
+        songs.add("sunrise");
+        songs.add("thanks");
+        songs.add("$100");
+        songs.add("havana");
+        songs.add("114514");
+        //TODO
+        //在这里完成你的代码
+        //END
+        return songs;
+    }
+}
+```
+
+要求你根据**字符串的长度**进行排序 长度短的排在前面 如果长度相同 则字母排在数字前面 数字排在其他符号前面 
+
+你可以选择下面的任意一种方法调用
+
+```java
+songs.sort();
+Collections.sort();
+```
+
+重写他们的排序规则即可 使用匿名内部类或lambda表达式均可 这道题是对上面知识点的巩固
+
+
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+>**出题人QQ: 3322640054**

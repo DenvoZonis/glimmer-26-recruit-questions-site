@@ -1,0 +1,100 @@
+---
+title: 3：数据类型与数据结构
+description: 微光工作室2026招新——后端：3：数据类型与数据结构
+
+prev:
+  link: /recruit/archives/25/backend/2/
+  label: 2：程序运行
+next:
+  link: /recruit/archives/25/backend/4/
+  label: 4：控制流
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/backend/banner.png';
+
+<Image src={banner} alt="后端Banner" width="640" height="256" />
+
+## **Task1.变量和数据类型**
+
+变量用于存放数据。
+
+在Java中，变量分为基本类型和引用类型（类似于C语言中的指针变量）。
+
+基本类型有八种，都是Java语言预先定义好的关键字，分别是整型（4种），字符型（1种），浮点型（2种），布尔型（1种）
+
+1. 说出这八种基本数据类型，
+
+2. 说出四种整型数据类型占用的字节数和表示范围
+
+不同的基本数据类型之间进行计算，比如int类型和long类型的变量相加，需要进行类型转换，请了解隐式类型转换和显式类型转换。
+
+3. ```java
+   int a=4;
+   char c='0';
+   int b=a+c;
+   //请回答这个过程涉及到的是隐式类型转换还是显式类型转换，b的值是多少，为什么会是这个值。
+   ```
+
+4. [拓展]请了解包装类，引用类型和基本数据类型缓存池。给出下面代码的输出结果并解释原因。
+
+   ```java
+   Integer x = new Integer(18);
+   Integer y = new Integer(18);
+   System.out.println(x == y);
+   
+   Integer z = Integer.valueOf(18);
+   Integer k = Integer.valueOf(18);
+   System.out.println(z == k);
+   
+   Integer m = Integer.valueOf(300);
+   Integer p = Integer.valueOf(300);
+   System.out.println(m == p);
+   ```
+
+## **Task2.运算符**
+
+运算符分为算数运算符、关系运算符、位运算符、逻辑运算符、赋值运算符、三元运算符。请了解上述运算符后回答下列问题。
+
+5. 算数运算符除了我们熟知的加减乘除（+ - * /）外，还有取余（%），自增（++），自减（--）。为了加深你对于自增运算符的理解，请执行下列代码，给出结果，并大概解释计算的过程。
+
+```java
+int a = 5 ;
+int b = 7 ;
+int c= (++a) + (b++)
+System.out.println( c );
+System.out.println(a+" "+b);
+```
+
+对初学者来说，位运算符比较难理解。其实位运算就是对数字背后的二进制形式进行操作。比如5\<\<1，表示把5往左移一位，就是先将5转化为二进制101，把101往左移动1位，不够的位用0补位，得到1010，还原为十进制的大小就是10。
+
+6.你知道int、float在计算机是怎么储存的吗，为什么会发生两个正数相加结果为负数的事情？
+
+## **Task3.数据结构**
+
+import { Badge } from '@astrojs/starlight/components';
+
+为了高效地组织，利用数据来完成程序的设计，人们发明了一系列的数据结构，java的官方库已经实现了如<Badge text="ArrayList" />,<Badge text="HashMap" />,<Badge text="HashSet" />等数据结构，请你熟悉了解这些数据结构，完成以下问题：
+
+1.小明想要快速统计考试科目的错题，请你根据给定的数据完成要求
+
+```
+math:5,English:10,Chinese:10,math:20,English:10,chemistry:30,math:10,math:20
+```
+
+你需要对原始数据进行建模，再进行处理
+
+2.统计完数据之后，小明想要排序找到错的最多的科目来加强学习
+
+3.小明想不仅仅只是自己划定的数据，他还想要后续考试的错题也能加入，你需要为他设计一个能够让小明输入数据的程序
+
+4.小明想统计自己的，同时也想统计小红的错题，请你设计一个程序能够兼容二者
+
+
+## **本题提交方式**
+
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+
+## 出题人联系方式
+
+>**出题人QQ：3425282590**

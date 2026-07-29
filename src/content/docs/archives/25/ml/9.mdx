@@ -1,0 +1,245 @@
+---
+title: 9：BERT
+description: 微光工作室2026招新——机器学习：9：BERT
+
+prev:
+  link: /recruit/archives/25/ml/8/
+  label: 8：Transformer
+next: false
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/ml/banner.png';
+
+<Image src={banner} alt="机器学习Banner" width="640" height="256" />
+
+## 🎉 恭喜抵达终点线！
+
+哇！恭喜你坚持到了最后一题！这一路走来，从线性回归的小白，到现在能够挑战BERT这样的经典模型，你的成长有目共睹！
+
+这道题不仅是对你学习成果的检验，更是一次**站在巨人肩膀上**的体验。BERT作为NLP领域的里程碑之作，它的设计思想至今仍在影响着整个AI界。
+
+> 🎯 **最后的挑战**: 让我们一起探索这个改变了整个自然语言处理格局的传奇模型！
+
+## 📚 第一部分：BERT论文深度解读
+
+### 论文研读任务
+
+**论文链接**: [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805)
+
+> 💡 **阅读指南**: 这是**芝麻街系列**的经典之作！作者巧妙融合前人成果，取得了惊艳效果。这种"站在巨人肩膀上"的做法很值得我们学习！
+
+### 核心问题解析
+
+**必答题清单：**
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. **论文结构分析** 
+
+   - 论文分为几个部分？
+
+   - 每部分主要解决什么问题？
+
+   - 各部分之间的逻辑关系如何？
+
+2. **Input Embedding策略** 
+
+   - BERT采用了什么embedding方法？
+
+   - 你认为这样做有什么好处？
+
+   - 相比传统方法有什么创新？
+
+3. **Tokenization谜题** 在附录A.1的例子中：
+
+   ```
+   为什么是 "flight ##less" 而不是直接写 "flightless"？
+   ```
+
+   - 这个"##"符号有什么特殊含义？
+   
+   - 这种设计解决了什么问题？
+
+4. **模型架构解析** 
+
+   - BERT的基本架构是怎样的？
+
+   - 它与Transformer的关系如何？
+
+   - 有哪些关键的改进和创新？
+
+5. **Pre-train & Fine-tune策略** 
+
+   - **预训练(Pre-train)**的含义是什么？
+
+   - **微调(Fine-tune)**又是什么？
+
+   - BERT是如何巧妙利用这两个阶段的？
+
+6. **GLUE评估基准** 
+
+   - GLUE分数是什么？
+
+   - 它评估了模型的哪些能力？
+
+   - 为什么它在NLP领域这么重要？
+
+7. **BERT家族谱系** *(需要自行搜集资料)*
+
+   - BERT衍生出了哪些"后代"模型？
+
+   - 这些模型的发展趋势是什么？
+
+   - 你觉得未来的发展方向在哪里？
+
+</Steps>
+
+### 拓展研究（进阶挑战）
+
+<Steps>
+
+1. **实验设计精髓** 
+
+   - 作者如何设计实验证明方法有效性？
+
+   - **消融实验(Ablation Study)**的巧思在哪里？
+
+   - 实验结果如何支撑核心论点？
+
+2. **GPT vs BERT对比研究** 推荐阅读：[《Improving Language Understanding by Generative Pre-Training》](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
+
+   - GPT和BERT在思路上有何本质区别？
+
+   - 各自的优势和局限性是什么？
+
+   - 为什么后来GPT系列"逆袭"了？
+   
+3. **阅读感悟** 
+
+   - 读完这几篇经典论文后，你最大的收获是什么？
+
+   - 对AI研究有了哪些新的认识？
+
+   - 对你未来的学习和研究有什么启发？
+
+</Steps>
+
+------
+
+## 💻 第二部分：自然语言推理实战
+
+### 任务背景
+
+**自然语言推理(NLI)**，也叫**文本蕴含识别(RTE)**，是NLP的核心任务之一！
+
+**任务定义**: 给定两个句子：
+
+- **前提(Premise)** 
+
+- **假设(Hypothesis)** 
+
+判断它们的关系：
+
+- **矛盾(Contradiction)**: 前提与假设冲突
+
+- **蕴含(Entailment)**: 前提支持假设
+
+- **中立(Neutral)**: 前提与假设无关
+
+### 数据集示例
+
+```plaintext
+前提: A person on a horse jumps over a broken down airplane.
+假设: A person is training his horse for a competition.
+关系: neutral
+
+前提: Children smiling and waving at camera  
+假设: They are smiling at their parents
+关系: neutral
+
+前提: A boy is jumping on skateboard in the middle of a red bridge.
+假设: The boy does a skateboarding trick.
+关系: entailment
+```
+
+### 🎯 实战目标
+
+**核心任务**: 训练一个分类模型，准确判断句子对之间的逻辑关系！
+
+**评价指标**: 测试集上的**准确率(Accuracy)**
+
+**实现策略**:
+
+- **模型选择**: 不限制架构和参数量，选择最适合的！
+
+- **数据处理**: 预处理、训练技巧、超参数调优都很重要！
+
+- **创新设计**: 充分发挥想象力！
+
+### 数据获取
+
+**数据集链接**: [Kaggle Datasets](https://www.kaggle.com/datasets/qiqiyiyiguo/glimmer-2025-ml-9)
+
+- **文件名**: `dataset/classification.txt`
+
+- **任务**: 自行按合适比例划分训练集和测试集
+
+### 实战笔记要求
+
+**笔记文档内容应包括**:
+
+- **项目实现逻辑**: 你的整体思路和架构设计
+
+- **问题与解决方案**: 实现中遇到的坑和填坑经验
+
+- **收获与思考**: 在项目中的成长和感悟
+
+- **实验结果分析**: 模型性能和改进方向
+
+> **LaTeX公式**: 内部公式建议使用LaTeX格式，让文档更专业！
+
+## ⚠️ 注意事项
+
+### AI工具使用政策
+
+**适度使用AIGC工具**是被允许的，但是！**不仅要知其然，更要知其所以然！** 
+
+### 学习建议
+
+<Steps>
+
+1. 经典文献不可不读
+   - 虽然技术贴很有用，但原始论文更重要！
+
+2. 保持探索精神
+   - 读不懂时多查资料，多思考
+
+3. 相信自己，勇敢尝试
+   - 你已经走到这里了，一定可以的！
+
+</Steps>
+
+## 提交要求
+
+### 提交内容
+
+import { Badge } from '@astrojs/starlight/components';
+
+- **理论部分**: <Badge text="ml-9-姓名-学号.md" /> (第1题答案 + 第2题实战笔记)
+
+- **代码文件**: <Badge text="ml-9-姓名-学号.py" /> (或完整项目文件夹)
+
+- 所有文件压缩后提交
+
+### 提交方式
+
+- **邮箱**: <Badge text="gimmerml401@163.com" />
+
+- **主题**: <Badge text="9-姓名-学号" />
+
+>出题人：百事可乐
+>
+>QQ：2465800571

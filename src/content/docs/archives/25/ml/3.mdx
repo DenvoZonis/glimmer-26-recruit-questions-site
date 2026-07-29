@@ -1,0 +1,143 @@
+---
+title: 3：多层感知机实战
+description: 微光工作室2026招新——机器学习：3：多层感知机实战
+
+prev:
+  link: /recruit/archives/25/ml/2/
+  label: 2：多层感知机理论
+next:
+  link: /recruit/archives/25/ml/4/
+  label: 4：卷积神经网络理论
+---
+
+import { Image } from 'astro:assets';
+import banner from '../../../../../assets/ml/banner.png';
+
+<Image src={banner} alt="机器学习Banner" width="640" height="256" />
+
+经过基础理论的学习之后最重要的就是实践，本题目是对理论的应用，have fun
+
+## 🎯数据集
+
+[Glimmer-2025-ml-2](https://www.kaggle.com/datasets/renecardoso/national-survey-on-school-dropout)
+
+## 🌟任务流程
+
+>同时也是几乎所有深度学习任务的基本流程
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 下载并加载数据
+
+2. 进行数据预处理和数据集的划分
+
+3. 搭建模型架构（本次为MLP）
+
+4. 进行模型训练
+
+5. 用验证集对模型训练结果进行评估
+
+</Steps>
+
+## 💡核心任务
+基于数据集，实现一个**学生是否辍学的分类器**
+
+### 📦MLP
+
+```python
+class DropoutClassifier(nn.Module):
+    def __init__(self, input_size):
+        super(DropoutClassifier,self).__init__()
+        # TODO:
+    def forward(self,X):
+        # TODO:
+```
+
+### 🟢训练和验证
+
+```python
+
+def train(model,train_loader,test_loader,loss,epoch,lr):
+    # TODO:
+    # 做到训练模型和验证训练准确率
+```
+
+## ⏳数据处理
+
+建议使用pandas库（pd）进行数据的读取，随后再进行数据的归一化等操作
+
+## 其他：
+
+推荐使用matplotlib进行可视化
+
+如果可以，使用gpu训练
+
+## ✅思考
+
+<Steps>
+
+1. 本次任务中数据处理的方式有？
+
+2. 有哪些方法可以使你的模型的泛化性提高？
+
+3. 对于过拟合和欠拟合现象我们应该如何避免，或者当已经出现这种现象时，应该怎么解决
+
+</Steps>
+
+## 报告内容
+
+1. 模型实现
+
+2. 训练过程
+
+3. 改进策略
+
+* 使用的方法
+
+* 达到的效果
+
+4. 收获
+
+## ⚠️注意事项：
+
+<Steps>
+
+1. **手写核心代码**：模型定义和训练循环必须手写，不能直接使用AI生成。
+
+2. **理解提供代码**：充分理解提供的数据处理和评估代码，能够解释其工作原理。
+
+3. **详细记录过程**：在报告中详细记录你的实现过程、思考过程和改进过程。
+
+4. **代码注释**：为你实现的代码添加详细注释，说明每部分的作用。
+
+5. **实验记录**：记录不同超参数设置的实验结果，分析其影响。
+
+</Steps>
+
+## 提交要求
+
+### 提交内容
+
+import { Badge } from '@astrojs/starlight/components';
+
+- **代码文件**
+
+  ：将代码部分的.ipynb文件作为邮件附件，命名格式：<Badge text="ml-03-姓名-学号.ipynb" />
+
+- **文档报告**
+
+  ：将写有这道题目文本解答的.md文件作为邮件附件，命名格式：<Badge text="ml-03-姓名-学号.md" />
+
+- 将两个文件压缩成压缩包<Badge text="ml-03-姓名-学号.zip" />
+
+### 提交方式
+
+- **邮箱**: <Badge text="gimmerml401@163.com" />
+
+- **主题**: <Badge text="3-姓名-学号" />
+
+>出题人：鹁霖
+>
+>QQ：2046193615
