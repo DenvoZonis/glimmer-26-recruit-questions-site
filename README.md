@@ -4,19 +4,25 @@
 
 构建后的dist文件夹请放到[前端部署仓库](https://github.com/DenvoZonis/glimmer-26-recruit-frontend)中。
 
-以前的归档题目放在这里，访问这个endpoint： `/recruit/archives/`。在已部署的网站上，URL是https://www.glimmer.org.cn/recruit/archives/。
+以前的归档题目放在这里，访问这个endpoint： `/recruit/archives/` 。在已部署的网站上，URL是 https://www.glimmer.org.cn/recruit/archives/ 。
 
 ## 构建和调试
 
 Clone此仓库，然后cd到项目根目录，通过`npm install`安装依赖。
 
-然后即可运行以下命令：
+### 调试
+
+可运行以下命令：
 
 | 命令 | 解释 |
 | --- | --- |
 | `npm run dev` | 启动本地开发服务器 |
 | `npm run build` | 构建网站 |
 | `npm run preview` | 预览构建后的网站（需要之前已执行`npm run build`） |
+
+### 构建
+
+执行`npm run build`后，把整个dist文件夹复制到网站根目录，并把`dist`文件夹重命名为`recruit`即可。
 
 ## 上一届留存的东西
 

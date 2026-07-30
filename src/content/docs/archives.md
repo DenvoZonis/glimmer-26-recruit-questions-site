@@ -56,7 +56,7 @@ description: 往届招新题目归档索引
 ### 计算机系统
 
 - [CS-Total-00 计算机系统方向总述](24/cs/)
-  - [CS-Hard-01 Dynamic Memory Allocation](24/cs/cs-hard-01-dynamic-memory-allocation)
+  - [CS-Hard-01 Dynamic Memory Allocation](24/cs/cs-hard-01--dynamic-memory-allocation)
   - [CS-HARD-02 Network Programming](24/cs/cs-hard-02-network-programming)
   - [CS-MEDIUM-03 ls命令](24/cs/cs-medium-03-ls命令)
 
