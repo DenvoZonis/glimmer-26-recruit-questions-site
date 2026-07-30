@@ -7,7 +7,7 @@ prev:
   label: 3：数据的表示
 next:
   link: /recruit/daily/5/
-  label: 5：AI Agent的使用
+  label: 5：如何用好AI
 ---
 
 import { Image } from 'astro:assets';
@@ -21,11 +21,25 @@ import { Badge } from '@astrojs/starlight/components';
 >
 > 还在用QQ传代码？试试git吧
 
+## 你会学到什么
+
+- 搞清楚 Git 是干什么的，以及为什么要用它🫵
+- 认识工作区、暂存区、仓库区这些常见概念
+- 学会本地提交、分支切换、合并和解决冲突
+- 把代码放到 GitHub 或 Gitee 上，真正完成一次远程协作
+
 ## 题目描述
 
 学会使用Git等代码管理工具🫵，并将自己的代码上传至远程仓库。
 
-## 题目要求
+## Git 是什么？
+
+- Git 是什么？为什么大家都在用它？
+- 工作区、暂存区、仓库区分别是什么？
+- Git 的基本工作流程是什么？
+- 为什么提交历史、分支管理对团队开发很重要？
+
+## 先学会本地仓库
 
 * 安装git🛠️
 	* Windows平台[Git - Downloading Package (git-scm.com)](http://git-scm.com/download/win)
@@ -40,15 +54,68 @@ import { Badge } from '@astrojs/starlight/components';
 	* 学会创建，切换，合并分支
 	* 尝试解决分支冲突
 
-* 使用远程仓库🗝️
+## 再学会远程仓库🗝️
+
 	* 注册[GitHub](https://github.com/)或[Gitee](https://gitee.com/)账号
 	* 创建远程仓库
 	* 将远程仓库克隆到本地
 	* 将代码上传至远程仓库
 
+> 如果你只是想体验一遍使用git的流程，可以先把本地提交做好，再把本地仓库推到远程仓库。
+
+### 相关命令行
+
+#### 创建远程仓库
+
+如果你用的是 GitHub CLI，可以直接使用命令行创建仓库：
+
+先在你项目对应的文件夹下点击鼠标右键打开 Windows 终端，再执行下面的命令即可。
+
+```bash
+gh auth login
+gh repo create 你的仓库名 --public --confirm
+```
+
+如果你已经有一个本地项目，并且想顺手创建远程仓库、绑定远程地址并推送第一次提交，也可以这样：
+
+```bash
+gh repo create 你的仓库名 --public --source=. --remote=origin --push
+```
+
+#### 将远程仓库克隆到本地
+
+```bash
+git clone https://github.com/用户名/仓库名.git
+```
+
+#### 将代码上传至远程仓库
+
+```bash
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/用户名/仓库名.git
+git push -u origin main
+```
+
+如果远程仓库已经绑定过了，后面更新代码一般只需要：
+
+```bash
+git add .
+git commit -m "update"
+git push
+```
+
+
+## 小结
+
+- Git 不是单纯的“上传工具”，它更像是帮你管理代码变化历史的工具
+- 本地仓库解决的是“怎么保存和回退”，远程仓库解决的是“怎么协作和同步”
+- 先把基本流程跑顺，再去理解分支和冲突，会更容易上手
+
 ## 拓展
 
-Git在Vscode中的使用
+Git在Vscode中的使用（当你熟悉在vscode中使用git后，可以直接使用vscode的终端远程push你的项目！）
 
 [Git操作详解以及在VScode中的使用](https://zhuanlan.zhihu.com/p/276376558)
 

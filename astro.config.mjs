@@ -87,7 +87,7 @@ export default defineConfig({
 						{ label: '2: markdown', slug: 'daily/2' },
 						{ label: '3: 数据的表示', slug: 'daily/3' },
 						{ label: '4: 代码管理', slug: 'daily/4' },
-						{ label: '5: AI Agent的使用', slug: 'daily/5' },
+						{ label: '5: 如何用好AI', slug: 'daily/5' },
 						{ label: '6: loafer想打派(网络)', slug: 'daily/6' }
 					],
 				},{
