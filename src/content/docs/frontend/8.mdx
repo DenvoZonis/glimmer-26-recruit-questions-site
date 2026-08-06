@@ -4,7 +4,7 @@ description: 微光工作室2026招新——前端：8：VitePress
 
 prev:
   link: /recruit/frontend/7/
-  label: 7：Node.js
+  label: 7：Node.js初体验
 next:
   link: /recruit/frontend/9/
   label: 9：Vue的学习
@@ -16,35 +16,49 @@ import banner from '../../../assets/frontend/banner.png';
 <Image src={banner} alt="前端Banner" width="640" height="256" />
 
 > ```
-> 难度系数：简单
+> 难度系数：稍难
 > ```
 >
->这道题比较轻松
+>这道题比较轻松。
+>
+>写了很多HTML页面之后，你可能会想：每次新增一篇文章都要手动写一个HTML文件，有没有更简单的方法？有没有一种工具，让我专注于写内容，它自动帮我生成好看的网页？
 >
 >你可以使用这个名叫VitePress的框架，搭建一个自己的网站。
 >
 >无需服务器！！
 
+## **故事背景**
+
+> 微光娘最近在整理工作室的培训资料，一学期下来积攒了一大堆文档，有些在Notion里，有些在Typora里，有些干脆写在纸上。新成员想看某个知识点，翻来翻去头都大了。
+>
+> "你有没有想过把这些整理成一个网站？"你提议道。
+>
+> 微光娘眼睛一亮："可是建网站好麻烦……"
+>
+> "不麻烦！VitePress就是专门用来把Markdown变成网站的。来，试试看。"
 
 ## **任务**
 
 VitePress 是一个静态网站生成器(SSG)，专为构建快速、以内容为中心的网站而设计。简而言之，VitePress 会获取Markdown编写的源内容，应用主题，然后生成可以轻松部署到任何地方的静态 HTML 页面。
 
-**要求：**简单做一个自己的网站，并部署VitePress站点。
+**要求**：简单做一个自己的网站，并部署VitePress站点。
 
+import { Badge } from '@astrojs/starlight/components';
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. 尽量多的进行修改，让你的网站美观且方便浏览.
-2. 网站内容自定，可以是你喜欢的明星介绍、自己的各科学习笔记、旅游日志、喜欢的文章等等。
-3. （附加）这是一个专用于静态页面的网站生成器，然而你有没有办法让它具备一些**动态内容**？试着调用一些已经用过的API，让你的网站活起来！
+1. 按照官方教程创建你的第一个VitePress项目，启动开发服务器，在浏览器中看到你的网站。了解一下项目的目录结构：<Badge text=".vitepress/" />文件夹放什么？<Badge text="index.md" />对应网站的什么位置？<Badge text="config.mjs" />用来做什么？
+
+2. 创建至少3个页面，内容自定，可以是你喜欢的明星介绍、自己的各科学习笔记、旅游日志、喜欢的文章等等。内容页用Markdown编写，配置侧边栏和导航栏，让网站方便浏览。
+
+3. 尽量多的进行修改，让你的网站美观且方便浏览。修改网站标题、导航栏、侧边栏、主题色、首页布局……让它成为"你的"网站，而不是默认模板。
+
+4. 部署你的VitePress站点到GitHub Pages、Netlify或Vercel（都是免费的）。想一想：部署和"在本地用浏览器打开HTML文件"有什么本质区别？
+
+5. （附加）这是一个专用于静态页面的网站生成器，然而你有没有办法让它具备一些**动态内容**？试着调用一些已经用过的API，让你的网站活起来！提示：VitePress基于Vue，你可以在页面中嵌入Vue组件。
 
 </Steps>
-
-import VitePress from '../../../assets/frontend/8-1.png';
-
-<Image src={VitePress} alt="8-1" />
 
 ## **攻略**
 
@@ -57,6 +71,9 @@ import VitePress from '../../../assets/frontend/8-1.png';
 - 路由是什么？命令行怎么使用？
 - 如何部署？部署之后如何添加内容？
 - 如果部署失败，为什么会部署失败，怎么解决？
+- 改了配置但页面没变化——试试重启开发服务器（<Badge text="Ctrl+C" />停掉，重新<Badge text="npm run dev" />）
+- 部署后页面白屏或样式丢失——检查<Badge text="config.mjs" />里的<Badge text="base" />选项，部署到GitHub Pages通常需要设置为<Badge text="/<仓库名>/" />
+- ......
 
 ## **本题提交方式**
 
@@ -65,4 +82,8 @@ import VitePress from '../../../assets/frontend/8-1.png';
 
 ## **出题者Q&A方式**
 
-> QQ：3352859153
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3625607718&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;> 1</p>
+>
+> QQ：3625607718
+>
+> 邮箱：[3625607718@qq.com](mailto:3625607718@qq.com)

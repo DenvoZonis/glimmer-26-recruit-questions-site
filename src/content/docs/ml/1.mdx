@@ -4,7 +4,7 @@ description: 微光工作室2026招新——机器学习：1：基础的线性�
 
 prev:
   link: /recruit/ml/0/
-  label: 0：跨出机器学习的第一步
+  label: 0：迈出机器学习的第一步
 next:
   link: /recruit/ml/2/
   label: 2：多层感知机理论
@@ -15,102 +15,342 @@ import banner from '../../../assets/ml/banner.png';
 
 <Image src={banner} alt="机器学习Banner" width="640" height="256" />
 
-## 🔍 背景回顾​：还记得高中用直线拟合散点图吗？
+## 💙 从一条直线开始理解机器学习 💙
 
-在高中学习统计时，老师肯定提过用不同的函数去拟合散点图，现在，你将利用梯度下降的基础知识来实现这个过程！
+～(∠・ω< )⌒☆ ciallo~
 
-## 无需提交部分
+在上一部分，你已经迈出了机器学习的第一步，熟悉了Python、NumPy和PyTorch的基本操作。现在，让我们正式进入机器学习最基础也最核心的模型——**线性回归**。
 
-* 你之前了解过什么衡量平均误差的方法？均方误差是什么？
+线性回归是机器学习中最简单的模型之一，但它蕴含的思想却贯穿整个深度学习领域：**定义模型 → 定义损失函数 → 梯度下降优化参数**。如果把神经网络比作一座摩天大楼，那么线性回归就是这栋大楼最底层的砖石。理解透彻线性回归，你就掌握了通往复杂模型的钥匙。
 
-* 什么是**损失函数**？MSE损失如何计算？并且去了解其他损失函数如**交叉熵损失**。
-
-* **学习率**是什么？它在梯度下降中起到什么角色？
-
-* Matplotlib 库你会使用吗？
-
-## 需要提交部分
-
-现有函数:
-
-$$
-f(x,y)=3x^3+y^4+e^y+5+\epsilon
-$$
-
-$$
-x \sim \mathcal{U}(-2, 2), \quad
-y \sim \mathcal{U}(-2, 2), \quad
-\epsilon \sim \mathcal{N}(0, 0.01)
-$$
-
-其中：
-
-x\~U(-2,2)表示随机变量 x 服从 -2 到 2 的均匀分布，$\epsilon$为人为构造的噪声，
-
-$$
-\epsilon\sim N(0,0.01)
-$$
-
-表示随机变量,e服从均值为 0，方差为 0.01 的正态分布
-
-1. 在x,y的分布区域内均匀取点(x,y)计算对应函数值
-
-2. 使用Matplotlib库绘制出函数
-
-$$
-f(x,y)=3x^3+y^4+e^y+5
-$$
-
-
-**在第一小问中，你构造的散点图就是接下来需要拟合的数据**
-
-3. 现在，使用函数 $\hat{f}(x, y) = \hat{a}x^3 + \hat{b}y^4 + \hat{c}e^y + \hat{d}$ 来拟合 $f(x, y)$。
-
-   需要注意：
-
-   - 机器学习库只能用 Numpy
-   - $f(x, y)$ 是标签， $\hat{f}(x, y)$ 是预测
-   - 应用**梯度下降法**，采用MSE损失，也就是说：求出恰当的 $\hat{a}, \hat{b}, \hat{c}, \hat{d}$ ，使每个数据点到平面 $\hat{f}(x, y) = \hat{a}x^3 + \hat{b}y^4 + \hat{c}e^y + \hat{d}$ 的**竖直方向距离（Z轴方向）的平方之和**最小。
-   - 训练过程中，要求每 20 次迭代打印当前损失（点到平面的竖直距离）。
-   - 如果你正确的使用了梯度下降法，那么求得的 $\hat{a}, \hat{b}, \hat{c}, \hat{d}$ 将与你预先设定的 $a, b, c, d$ 非常接近。
-
-4. 调整学习率，看看有什么变化。
-
-5. 大概画出损失函数图像，试想一下，你未来遇到的所有损失函数都能画出来吗。
-
-6. （简单拓展）把 $\begin{matrix} x \sim U(-2, 2) \\ y \sim U(-2, 2) \end{matrix}$ 修改为 $\begin{matrix} x \sim U(-2, 2) \\ y \sim U(0, 4) \end{matrix}$ 之后，是否出现问题？若有问题，思考原因并且给出解决方案。
-
-7. 写一个小总结。在小总结中，用梯度下降法实现拟合函数的过程（简单推导），还需要看到你的解决思路和学习收获，不需要长篇大论。
-
-## 注意事项
+在本节中，你将：
 
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. 源代码（必要的注释和良好的规范）
+1. 理解梯度、反向传播和梯度下降等核心概念
+2. 动手实现线性回归的各个组件
+3. 使用PyTorch完成一个完整的线性回归任务
 
-2. 每小问代码运行结果截图
+</Steps>
 
-3. Matplotlib 库绘制出的函数图像截图
+---
+
+## Part 1: 核心概念理解（简答题）
+
+> 在你动手写代码之前，请先回答以下问题。这些概念是整个深度学习的基石，花时间理解它们，后面的路会顺畅很多。
+
+### 1.1 什么是梯度？
+
+在微积分中，梯度是一个向量，它由多元函数对所有变量的偏导数组成。请结合你的理解回答：
+
+- **梯度的数学定义是什么？**（可结合二元函数 $f(x, y)$ 进行说明）
+- **梯度的几何意义是什么？**（提示：梯度方向与函数值变化的关系）
+- **梯度在机器学习中扮演什么角色？**
+
+### 1.2 什么是梯度下降？
+
+- **请简述梯度下降算法的基本思想。**
+- **梯度下降中的"学习率"是什么？它过大或过小会带来什么问题？**
+- **常见的梯度下降变体有哪些？**（至少列举两种，如批量梯度下降、随机梯度下降、小批量梯度下降等）
+
+### 1.3 什么是反向传播？
+
+- **反向传播算法解决了什么问题？**
+- **请简要描述反向传播的计算过程（可以结合计算图进行说明）。**
+- **反向传播与链式求导法则之间有什么关系？**
+
+### 1.4 什么是损失函数？
+
+- **损失函数的作用是什么？**
+- **请列举至少三种常见的损失函数，并说明它们通常用于什么类型的任务。**（提示：回顾均方误差、交叉熵损失等）
+- **对于线性回归任务，通常使用什么损失函数？为什么？**
+
+### 1.5 线性回归的数学表达
+
+对于线性回归模型 $y = w x + b$（简单的一元情况），其中 $w$ 为权重，$b$ 为偏置：
+
+- **请写出均方误差损失函数 $L$ 的表达式（假设有 $n$ 个样本）。**
+- **请推导出损失函数 $L$ 对参数 $w$ 和 $b$ 的梯度（即 $\frac{\partial L}{\partial w}$ 和 $\frac{\partial L}{\partial b}$）。**
+- **请写出参数更新的公式。**
+
+---
+
+## Part 2: 线性回归——代码补全
+
+import { Badge } from '@astrojs/starlight/components';
+
+> 在这一部分，你需要根据提示补全代码，实现一个简单的线性回归模型。所有的代码框架已经给出，你只需要在标记了 <Badge text="______" /> 的地方填入正确的代码。
+>
+> 请仔细阅读每个代码块的注释，理解每一行代码的作用。
+
+### 2.1 导入必要的库
+
+```python
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+```
+### 2.2 生成模拟数据
+我们首先创建一组简单的模拟数据，用于训练线性回归模型。
+```python
+# 设置随机种子，保证结果可复现
+torch.manual_seed(42)
+
+# 生成100个样本点，真实关系为 y = 2x + 1 + 噪声
+def generate_data(n_samples=100):
+    # 生成 x，范围在 [0, 10] 之间
+    x = torch.linspace(0, 10, n_samples).reshape(-1, 1)
+    # 真实的权重和偏置
+    w_true = 2.0
+    b_true = 1.0
+    # 生成 y，加上高斯噪声
+    noise = torch.randn(n_samples, 1) * 0.5
+    y = w_true * x + b_true + noise
+    return x, y
+
+x_data, y_data = generate_data()
+
+print(f"x 的形状: {x_data.shape}")
+print(f"y 的形状: {y_data.shape}")
+print(f"前5个样本点:\n x: {x_data[:5].flatten()}\n y: {y_data[:5].flatten()}")
+```
+### 2.3 初始化模型参数
+```python
+# TODO: 初始化参数 w 和 b
+# 提示：使用 torch.tensor 创建张量
+
+# 初始化权重 w，形状为 (1, 1)，初始值为 0
+w = ______
+# 初始化偏置 b，形状为 (1,)，初始值为 0
+b = ______
+
+print(f"初始 w: {w.item():.4f}, 初始 b: {b.item():.4f}")
+```
+### 2.4 定义模型
+```python
+# TODO: 定义线性回归模型的前向计算
+def linear_model(x, w, b):
+    """
+    线性回归模型: y = w * x + b
+    
+    参数:
+        x: 输入数据，形状为 (n_samples, 1)
+        w: 权重，形状为 (1, 1)
+        b: 偏置，形状为 (1,)
+    
+    返回:
+        预测值，形状为 (n_samples, 1)
+    """
+    return ______
+```
+### 2.5 定义损失函数
+```python
+# TODO: 定义均方误差损失函数
+def mse_loss(y_pred, y_true):
+    """
+    均方误差损失函数: L = (1/n) * Σ(y_pred - y_true)²
+    
+    参数:
+        y_pred: 预测值，形状为 (n_samples, 1)
+        y_true: 真实值，形状为 (n_samples, 1)
+    
+    返回:
+        损失值，一个标量
+    """
+    return ______
+```
+### 2.6 定义梯度计算函数（手动推导 + 代码实现）
+这是最关键的一步！请根据你在 Part 1 中推导出的梯度公式，实现梯度计算。
+```python
+# TODO: 手动计算损失函数对 w 和 b 的梯度
+def compute_gradients(x, y_true, y_pred):
+    """
+    计算损失函数对 w 和 b 的梯度。
+    注意：这里我们不使用 PyTorch 的自动求导，而是手动实现梯度计算。
+    
+    提示：
+        - 均方误差 L = (1/n) * Σ(y_pred - y_true)²
+        - ∂L/∂w = (2/n) * Σ[(y_pred - y_true) * x]
+        - ∂L/∂b = (2/n) * Σ[(y_pred - y_true)]
+    
+    参数:
+        x: 输入数据，形状为 (n_samples, 1)
+        y_true: 真实值，形状为 (n_samples, 1)
+        y_pred: 预测值，形状为 (n_samples, 1)
+    
+    返回:
+        grad_w: 损失函数对 w 的梯度
+        grad_b: 损失函数对 b 的梯度
+    """
+    n = x.shape[0]  # 样本数量
+    
+    # 计算预测值与真实值的差值
+    diff = ______
+    
+    # 计算梯度（注意形状匹配）
+    grad_w = ______
+    grad_b = ______
+    
+    return grad_w, grad_b
+```
+### 2.7 定义参数更新函数
+```python
+# TODO: 实现梯度下降的参数更新
+def update_parameters(w, b, grad_w, grad_b, learning_rate):
+    """
+    使用梯度下降更新参数
+    w_new = w - lr * grad_w
+    b_new = b - lr * grad_b
+    
+    参数:
+        w: 当前权重
+        b: 当前偏置
+        grad_w: w 的梯度
+        grad_b: b 的梯度
+        learning_rate: 学习率
+    
+    返回:
+        更新后的 w 和 b
+    """
+    w_new = ______
+    b_new = ______
+    return w_new, b_new
+```
+### 2.8 训练循环
+```python
+# TODO: 补全训练循环
+def train(x, y, w, b, learning_rate, num_epochs):
+    """
+    训练线性回归模型
+    
+    参数:
+        x: 训练数据
+        y: 目标值
+        w: 初始权重
+        b: 初始偏置
+        learning_rate: 学习率
+        num_epochs: 训练轮数
+    
+    返回:
+        训练过程中的损失记录, 训练好的 w 和 b
+    """
+    losses = []
+    
+    for epoch in range(num_epochs):
+        # 1. 前向传播：计算预测值
+        y_pred = ______
+        
+        # 2. 计算损失
+        loss = ______
+        losses.append(loss.item())
+        
+        # 3. 计算梯度
+        grad_w, grad_b = ______
+        
+        # 4. 更新参数
+        w, b = ______
+        
+        # 5. 每100轮打印一次损失
+        if (epoch + 1) % 100 == 0:
+            print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.6f}, w: {w.item():.4f}, b: {b.item():.4f}')
+    
+    return losses, w, b
+```
+### 2.9 开始训练
+```python
+# 设置超参数
+learning_rate = 0.01
+num_epochs = 1000
+
+# 开始训练
+losses, w_trained, b_trained = train(x_data, y_data, w, b, learning_rate, num_epochs)
+
+print("\n===== 训练完成 =====")
+print(f"真实的 w: 2.0, 学习到的 w: {w_trained.item():.4f}")
+print(f"真实的 b: 1.0, 学习到的 b: {b_trained.item():.4f}")
+```
+### 2.10 绘制损失曲线和拟合结果
+```python
+# 绘制损失下降曲线
+plt.figure(figsize=(10, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(losses)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.title('Training Loss Curve')
+plt.grid(True)
+
+# 绘制拟合结果
+plt.subplot(1, 2, 2)
+plt.scatter(x_data.numpy(), y_data.numpy(), alpha=0.6, label='Training data')
+plt.plot(x_data.numpy(), (w_trained * x_data + b_trained).numpy(), 
+         color='red', linewidth=2, label='Fitted line')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Linear Regression Fit')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.savefig('./images/linear_regression_manual_result.png', dpi=150)
+plt.show()
+```
+## Part 3: 实战——用 PyTorch 拟合二元函数
+> 恭喜你完成了手动实现的线性回归！现在，让我们使用 PyTorch 的自动求导机制和优化器来完成一个更复杂的任务：拟合一个二元函数 
+$z=f(x_1,x_2)$。
+
+### 任务描述
+给定一个二元函数:  
+$z=3x_1+2x_2+1+ϵ$  
+其中 ϵ 是均值为0、标准差为0.3的高斯噪声。  
+你需要：
+
+<Steps>
+
+1. 生成训练数据集
+2. 使用 PyTorch 构建线性回归模型（使用 nn.Module）
+3. 使用均方误差损失函数
+4. 训练模型
+5. 使用 matplotlib 绘制训练损失曲线，并可视化模型拟合效果
+6. 将结果保存为图片
+
+</Steps>
+
+### 思考题（选做，加分）
+
+<Steps>
+
+1. 线性回归的局限性：如果真实的数据关系是 $z=x_1^2+x_2^2+1$，线性回归能很好地拟合吗？如果不能，你觉得可以用什么方法解决？
+2. 梯度下降的收敛性：观察你的损失曲线，它是单调递减的吗？如果不是，可能的原因是什么？
 
 </Steps>
 
 ## 提交要求
 
-### 提交内容
+### 关于AI使用
 
-import { Badge } from '@astrojs/starlight/components';
+与第0部分保持一致，我们鼓励你聪明地使用AI，但请确保：
+
+<Steps>
+
+1. 所有代码必须自己理解，并添加足够的注释说明你的理解
+2. 简答题请用自己的语言回答，不要直接复制粘贴
+3. 在代码注释或文档中标注你在哪些地方使用了AI的帮助
+
+</Steps>
+
+### 提交内容
 
 - **代码文件**
 
-  ：将代码部分的.ipynb文件作为邮件附件，命名格式：<Badge text="ml-01-姓名-学号.ipynb" />
+  将 Part 2 和 Part 3 的代码整合到一个 .ipynb 文件中，命名格式：<Badge text="ml-1-姓名-学号.ipynb" />
 
 - **文档报告**
 
-  ：将写有这道题目文本解答的.md文件作为邮件附件，命名格式：<Badge text="ml-01-姓名-学号.md" />
-
-- 将两个文件压缩成压缩包<Badge text="ml-01-姓名-学号.zip" />
+  将 Part 1 的简答题答案以及 Part 3 的思考题（如果做的话）写入 .md 文件，命名格式：<Badge text="ml-1-姓名-学号.md" />
 
 ### 提交方式
 
@@ -118,6 +358,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 - **主题**: <Badge text="1-姓名-学号" />
 
->出题人：鹁霖
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2078306188&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Taffy</p>
 >
->QQ：2046193615
+> QQ：2078306188
+>
+> 邮箱：[2078306188@qq.com](mailto:2078306188@qq.com)

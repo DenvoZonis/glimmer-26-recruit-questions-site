@@ -15,146 +15,202 @@ import banner from '../../../assets/ml/banner.png';
 
 <Image src={banner} alt="机器学习Banner" width="640" height="256" />
 
-## 🌟 欢迎来到神经网络的核心世界！
-你将开启深度学习之旅的关键一步——掌握多层感知机(MLP)​的理论基础！作为神经网络的基石，MLP不仅是最简单的深度学习模型，更是理解更复杂架构（如CNN、RNN）的钥匙。
+## 🧠 从线性到非线性——走进深度学习的核心
 
-## 📚1解释下列概念：
+线性回归给了你一条直线，但现实中绝大多数问题都不是一条直线能解决的。**多层感知机（MLP）** 通过在输入和输出之间插入隐藏层与非线性激活函数，让模型拥有了"弯曲"的表达能力——它是所有现代深度神经网络（CNN、RNN、Transformer）的构建基础。这一节，你要彻底搞懂它的原理。
+
+你需要完成：
 
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. 隐藏层，激活函数，全连接层
-
-2. 过拟合，欠拟合，暂退法，权重衰减
-
-3. 前向传播，反向传播，梯度爆炸，梯度消失
+1. 解释 MLP 涉及的核心概念
+2. 回答有关 XOR、参数量、激活函数和 Dropout 的关键问题
+3. 手写一个 MLP 类，并在双月数据集上训练验证
 
 </Steps>
 
-建议回答加上一些图片，多加入自己的理解，不要简单的复制粘贴
+---
 
-## 📦2回答问题：
+## 📚 Part 1：解释下列概念
 
-<Steps>
+**1. 基础结构：**
+- 隐藏层
+- 全连接层
+- 激活函数（Sigmoid、Tanh、ReLU、Leaky ReLU、Softmax）
+- 权重矩阵与偏置
 
-1. 为什么单层感知机无法解决异或问题？MLP如何解决
+**2. 训练机制：**
+- 前向传播
+- 反向传播
+- 损失函数（MSE、Binary Cross Entropy、Cross Entropy）
+- 梯度下降与优化器（SGD、SGD+Momentum、Adam）
 
-2. 给定输入维度d，隐藏层维度h，输出维度o
+**3. 常见问题与对策：**
+- 过拟合、欠拟合
+- 梯度消失、梯度爆炸
+- 暂退法（Dropout）
+- 权重衰减（L1 / L2 正则化）
+- 批归一化（Batch Normalization）
+- 权重初始化（Xavier、He 初始化）
+- Dead ReLU 问题
 
-     (1)参数数量是多少？(注意偏置参数)
+---
 
-     (2)根据参数量，计算以Float32，INT8方式存储的情况下参数所占内存空间？
+## 📦 Part 2：回答问题
 
-     (3)前向传播的计算复杂度是？
+1. **XOR 问题与 MLP 的意义**
+   - 为什么单层感知机（线性模型）无法解决 XOR 异或问题？请从几何角度分析。
+   - MLP 是如何解决 XOR 问题的？最少需要几个隐藏层、几个隐藏神经元？
 
-3. 比较不同激活函数：ReLU vs Sigmoid vs Tanh
+2. **参数与计算量分析**
+   
+   给定一个 MLP，结构为：输入维度 $d$，一个隐藏层维度 $h$，输出维度 $o$。
+   - (1) 该网络共有多少可训练参数？（请写出公式，注意偏置项）
+   - (2) 在 (1) 的基础上，若参数以 Float32 存储，占多少内存？以 INT8 存储呢？
+   - (3) 前向传播的计算复杂度（乘加运算次数）是多少？写出表达式。
+   
+3. **激活函数对比：ReLU vs Sigmoid vs Tanh**
+   - (1) 从梯度特性角度对比三者的优缺点。
+   - (2) 什么是 Dead ReLU 问题？它是如何产生的？如何缓解？
+   - (3) Sigmoid 的计算涉及指数运算，前向传播和反向传播中通常用什么方法简化计算？
 
-     (1)梯度特性对比
+4. **暂退法（Dropout）如何防止过拟合？**
+   - 请从集成学习（Ensemble）和特征共适应的角度解释 Dropout 的工作原理。
+   - 为什么训练时使用 Dropout，测试时却需要关闭它？
 
-     (2)死ReLU问题分析
+---
 
-     (3)sigmoid的计算比较复杂，请分析在前向传播和反向传播中通常会采用什么方法简化计算？
+## 🔥 Part 3：动手实现 MLP 基础架构
 
-4. 暂退法如何防止过拟合
+import { Badge } from '@astrojs/starlight/components';
 
-</Steps>
-
-## 🔥3动手实现MLP基础架构：
+补全以下 MLP 类的代码。你需要实现 <Badge text="__init__" />、激活函数、以及 <Badge text="forward" /> 方法。
 
 ```python
+import torch
+import torch.nn as nn
+
 class MLP(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         """
         初始化多层感知机
-        input_size: 输入特征维度
-        hidden_size: 隐藏状态维度  
-        output_size: 输出维度
-        """
         
-    
-    def relu(self, x):
-        """激活函数实现
-           这里只给出了relu
+        参数:
+            input_size:  输入特征维度
+            hidden_size: 隐藏层神经元数量
+            output_size: 输出维度
         """
+        super(MLP, self).__init__()
+        # TODO: 定义全连接层和激活函数
+        self.fc1 = ______      # 输入层 → 隐藏层
+        self.fc2 = ______      # 隐藏层 → 输出层
+        self.relu = ______
+        self.sigmoid = ______
     
-    def forward(self, X):
-        """前向传播实现"""
-```
-## 📚4简单的MLP实验：
-
-二分类边界：圆形数据分离​
-
-​实验目标​：生成内外两个圆形分布的数据点，训练MLP划分边界。
-
-​关键步骤​：生成数据：内圆（半径\<0.4，标签0），外圆（半径>0.6，标签1）
-
-使用单隐藏层
-
-***可视化***训练后权重对决策边界的影响
-
-​预期效果​：验证简单隐藏层处理圆形边界的能力。
-
-1. 生成一个人造数据集
-
-2. 使用你自己写的MLP进行训练
-
-```python
-
-def generate_circles(n_samples=1000, noise=0.05):
-    """随机生成圆形数据集"""
-
+    def forward(self, x):
+        """
+        前向传播
+        
+        参数:
+            x: 输入数据，形状为 (batch_size, input_size)
+        
+        返回:
+            输出值，形状为 (batch_size, output_size)
+        """
+        # TODO: 补全前向传播过程
+        x = ______              # fc1 + relu
+        x = ______              # fc2 + sigmoid
+        return x
 ```
 
-3. **训练完成之后统计参数的分布情况（画出频率分布图）**
+---
 
-## 🎉5让你的模型效果更好
+## 🧪 Part 4：MLP 分类实验——双月数据集
+
+### 实验目标
+
+生成**双月（Two Moons）**形状的二分类数据，训练 MLP 学习非线性决策边界。
+
+> 双月数据集由两个交织的新月形数据簇组成，是一个经典的非线性二分类问题。双月数据的决策边界是一条蜿蜒的 S 形曲线，单层线性模型完全无法分割。
+
+### 关键步骤
 
 <Steps>
 
-1. **深度与宽度**：
+1. **生成数据**：使用 <Badge text="sklearn.datasets.make_moons" />（或手动实现）生成双月形分布数据，补全以下函数：
 
-   - 分析增加深度 vs 增加宽度的效果
+    ```python
+    def generate_moon_data(n_samples=1000, noise=0.15, test_size=0.2):
+        """
+        生成双月数据集并划分训练/测试集
+        
+        返回:
+            X_train, X_test, y_train, y_test (均为 numpy 数组)
+        """
+        from sklearn.datasets import make_moons
+        from sklearn.model_selection import train_test_split
+        
+        # TODO: 生成数据、标准化、划分训练/测试集
+        ______
+        
+        return X_train, X_test, y_train, y_test
+    ```
 
-   - 计算效率对比
+2. **构建模型**：使用 Part 3 中你实现的 MLP 类（或基于它修改），构建一个适用于双月分类的网络。
 
-2. **初始化方法**：
+3. **训练与评估**：自行编写训练循环，记录训练集和测试集的损失与准确率。
 
-   - 零初始化的问题
-
-   - Xavier初始化原理
-
-   - He初始化的优势
-
-3. **优化困境分析**：
-
-   - 局部最优与鞍点问题
-
-   - 学习率设置策略
-
-   - 批量大小的影响
+4. **可视化**（使用 matplotlib）：
+   - 绘制训练/测试损失曲线和准确率曲线
+   - 绘制决策边界图（将数据点与模型预测的区域一同展示）
 
 </Steps>
 
-## ⚠️注意事项：
+---
 
-可以合理借助AI，但是不能照抄，必须要有自己的理解
+## 🎉 Part 5：深入探索（选做，加分）
+
+<Steps>
+
+1. **深度与宽度**：尝试不同的隐藏层数量和每层神经元数量，分析增加深度 vs 增加宽度对模型效果的影响。
+
+2. **激活函数对比**：将 ReLU 替换为 Sigmoid 或 Tanh，观察训练过程有何不同？是否出现了梯度消失的迹象？
+
+3. **过拟合与正则化**：增大模型参数量使其过拟合，然后尝试加入 Dropout 或 L2 正则化，观察测试集准确率的变化。
+
+4. **优化器对比**：尝试 SGD、SGD+Momentum、Adam 三种优化器，比较收敛速度和最终效果。
+
+</Steps>
+
+---
 
 ## 提交要求
 
-### 提交内容
+### 关于 AI 使用
 
-import { Badge } from '@astrojs/starlight/components';
+我们鼓励你借助 AI 工具学习，但请注意：
+
+<Steps>
+
+1. 代码必须自己理解并添加注释说明，不要原封不动地粘贴
+2. 简答题请用自己的语言组织，直接复制 AI 输出既没意义也容易被识破
+3. 在代码或文档中注明你在哪些地方使用了 AI 的帮助
+
+</Steps>
+
+### 提交内容
 
 - **代码文件**
 
-  ：将代码部分的.ipynb文件作为邮件附件，命名格式：<Badge text="ml-02-姓名-学号.ipynb" />
+  将 Part 3 和 Part 4 的代码整合到一个<Badge text=".ipynb" />文件中，命名格式：<Badge text="ml-2-姓名-学号.ipynb" />
 
 - **文档报告**
 
-  ：将写有这道题目文本解答的.md文件作为邮件附件，命名格式：<Badge text="ml-02-姓名-学号.md" />
+  将 Part 1、Part 2 的解答以及 Part 5 的探索（如做）写入<Badge text=".md" />文件，命名格式：<Badge text="ml-2-姓名-学号.md" />
 
-- 将两个文件压缩成压缩包<Badge text="ml-02-姓名-学号.zip" />
+- 将两个文件压缩为<Badge text="ml-2-姓名-学号.zip" />提交
 
 ### 提交方式
 
@@ -162,6 +218,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 - **主题**: <Badge text="2-姓名-学号" />
 
->出题人：鹁霖
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2078306188&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Taffy</p>
 >
->QQ：2046193615
+> QQ：2078306188
+>
+> 邮箱：[2078306188@qq.com](mailto:2078306188@qq.com)

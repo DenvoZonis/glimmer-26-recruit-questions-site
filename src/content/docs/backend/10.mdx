@@ -1,13 +1,11 @@
 ---
-title: 10：项目挑战
-description: 微光工作室2026招新——后端：10：项目挑战
+title: 10：初窥后端世界
+description: 微光工作室2026招新——后端：10：初窥后端世界
 
 prev:
   link: /recruit/backend/9/
-  label: 9：IO流
-next:
-  link: /recruit/backend/plus-introduction/
-  label: 附加题说明
+  label: 9：网络编程基础
+next: false
 ---
 
 import { Image } from 'astro:assets';
@@ -15,309 +13,236 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
-## Task1.maven
+import { Badge } from '@astrojs/starlight/components';
 
-### 1.什么是maven？
+> 在前面几个题目中，你已经掌握了Java核心语法、SQL基础、网络与HTTP协议，甚至在上一题中通过<Badge text="HttpClient" />/<Badge text="OkHttp" />作为“客户端”去请求了别人的接口。
+>
+> 现在，角色对调！我们将进入现代Java后端开发的核心——使用**Spring Boot**作为“服务端”，为别人提供HTTP接口。这是一道压轴的综合实践题，只要顺着思路一步步尝试，你会发现做出一个真正的后端项目并没有那么难！
+
+在本题中，你需要使用Maven来管理和构建你的项目，java版本使用**21**或更高版本（新版SpringBoot默认要求jdk21+）。
+
+Java有一个原生的HTTP服务器实现：<Badge text="com.sun.net.httpserver.HttpServer" />，而你已经在[第五题](/recruit/backend/5/#服务端)中使用过它了。而在实际开发中，<Badge text="SpringBoot" />、<Badge text="Quarkus" />、<Badge text="Micronaut" />等第三方框架更为常用，而其中SpringBoot是应用最广泛的一个框架。本题我们将试着使用SpringBoot来搭建我们的后端应用。
+
+## 部分一：概念与思维转变（思考题）
+
+SpringBoot是基于Spring的扩展框架，而Spring是一个开源的Java企业级开发框架，它的核心包括**依赖注入（DI）**、**控制反转（IoC）** 和 **面向切面编程（AOP）**。为了更好的学习SpringBoot，让我们先了解一下依赖注入与控制反转。
+
+[参考文章](https://zhuanlan.zhihu.com/p/688670724)
+
+尝试用**自己的话**简单回答一下（简短清晰即可，拒绝成段复制粘贴）：什么是依赖注入和控制反转？和我们以前写 Java 代码时直接 <Badge text="new Object()" /> 有什么区别与好处？
+
+## 部分二：任务实践
+
+> 本题作为本次招新的最后一道题，会有很多实践内容，需要用到的相关知识可能需要你自行上网或通过AI学习解决。
+
+### 任务1：Hello World
 
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. 请你自行上网查阅资料，了解一下什么是maven
-2. 什么是jar包？
-3. maven和jar包有关系吗？有什么关系？
-4. 我们为什么要用maven？
+1. 试着使用[Spring Initializr](https://start.spring.io/)或IDE的应用生成工具，快速创建一个SpringBoot工程。其中Project选择Maven，Spring Boot选不带SNAPSHOT字样的最新版，Packaging选择Jar，需要的依赖如下：
+
+   - Web
+     - Spring Web
+   - SQL
+     - Spring Data JPA
+     - MySQL Driver
+   - Developer Tools
+     - Lombok
+
+   然后在<Badge text="pom.xml" />中先注释掉<Badge text="spring-boot-starter-data-jpa" />、<Badge text="mysql-connector-j" />、<Badge text="spring-boot-starter-data-jpa-test" />这三条依赖项。
+
+2. SpringBoot将后端拆分成了三层架构：<Badge text="Controller" />、<Badge text="Service" />、<Badge text="Repository" />。请你了解一下这三层架构中每一层的作用。
+
+3. 学习编写你的第一个<Badge text="Controller" />，提供一个GET请求接口：
+
+   - 访问<Badge text="/hello" />时，后端返回字符串<Badge text="&quot;Hello glimmer!&quot;" />。
+   - 打开浏览器或使用curl、亦或使用Postman、Apifox等工具测试，确保接口正常联通。
+   - 学习使用Lombok的注解<Badge text="@slf4j" />，试着在访问<Badge text="/hello" />时，通过<Badge text="log.info()" />打印一条日志并输出到控制台。
 
 </Steps>
 
-### 2. 试着下载maven吧！
+参考：
 
-- 你的java环境配置好了吗？
-- 别忘了配置环境变量
-- 看看你的maven是什么版本
+- [Slf4j注解](https://zhuanlan.zhihu.com/p/662809686)
 
-### 3.什么是maven仓库？
+### 任务2：数据库联动与RESTful CRUD
+
+结合你之前学到的SQL与HTTP知识，设计并实现一套简单的后端数据接口。比如，你可以设计一个用户管理系统，你的API应该至少能够支持新增用户、删除用户、修改用户信息和查询用户几种功能。
+
+完成本任务，你需要在<Badge text="pom.xml" />中取消注释掉<Badge text="spring-boot-starter-data-jpa" />、<Badge text="mysql-connector-j" />、<Badge text="spring-boot-starter-data-jpa-test" />这三条依赖项。
+
+#### 任务要求
 
 <Steps>
 
-1. 怎么配置你自己的本地仓库位置？
-2. 需要的jar包本地仓库没有？让我们去看看远程仓库！
-3. 远程仓库不止一种！你知道中央仓库是什么吗？
-4. 私服又是什么？
+1. 结合前几题的知识，请你部署一个MySQL数据库，并自行设计其中的表和数据字段。
+
+2. 尝试使用JPA让你的SpringBoot项目连接上你的MySQL数据库。
+
+3. 尝试在你的SpringBoot项目中设计RESTful API接口，结合HTTP动词，实现一个完整的增、删、改、查（CRUD）逻辑。
+
+    - **新增**：<Badge text="POST /api/users" />（接收 JSON body）
+    - **查询列表/单个**：<Badge text="GET /api/users" /> 或 <Badge text="GET /api/users/{id}" />
+    - **修改**：<Badge text="PUT /api/users/{id}" />（更新指定内容）
+    - **删除**：<Badge text="DELETE /api/users/{id}" />
+
+4. 现代接口通常不会直接返回纯文本或裸数据，请保证你的所有 API 接口返回统一的JSON数据结构，以达到统一响应格式的规范要求。
+
+    以下为一个示例：
+
+    ```json
+    {
+      "code": 200,
+      "message": "操作成功",
+      "data": {
+        "id": 1,
+        "name": "Atri",
+        "gender": "female",
+        "birthday": "8.28"
+      }
+    }
+    ```
 
 </Steps>
 
-### 4.创建你自己的maven项目！
+**加分项（选做）**：简单的基础参数校验
 
-<Steps>
+尝试使用Spring Validation（如<Badge text="@NotNull" />,<Badge text="@NotBlank" />等）去校验用户调用POST请求时传来的 JSON 参数是否合法（例如：创建用户时，用户名不能为空）。
 
-1. 你的IDEA关联maven了吗？
-2. 一个maven项目都需要配置什么参数？你能说说看吗？
-3. 你的项目结构是什么样的？你知道你的代码、配置文件、测试代码、测试配置文件、maven项目配置文件都在哪里吗？
-4. pom.xml文件？
-   1. 这是什么？
-   2. 它有什么用？
-   3. 它的基本配置有哪些？
-   4. 你能通过这个文件管理你的jar包版本、项目类型吗？
-5. 怎么导入你需要的jar包？去找到答案吧！
+Spring Validation的依赖已给出，请在<Badge text="pom.xml" />中加入此依赖：
 
-</Steps>
-
-### 5.启动你的maven！
-
-<Steps>
-
-1. maven的常用命令有哪些你知道吗？
-2. 图形化界面是非常方便的，去观察IDEA中的maven面板，看看可以快速执行哪些maven指令吧！
-
-</Steps>
-
-### 6.恭喜你~你已经对maven有初步的了解了！现在，向着最终项目进发吧！
-
-## Task2.快递取件码查询系统
-
-李华成功通过高考考进了UESTC，开学第一天他发现他的宿舍在校外，如果要拿快递的话要去到校内的菜鸟驿站，比较远。所以他决定手搓一个快递柜，请你帮他编写一个客户端和服务端的程序，实现通过快递单号查询取件码的功能。
-
-### 知识准备
-
-**maven**
-
-**HTTP（HyperText Transfer Protocol）**：应用层协议，用于客户端（浏览器/APP）与服务端之间的数据传输。
-
-特点
-
-- 无状态（每个请求独立，默认不记录历史）
-- 基于请求-响应模型
-- 支持明文（HTTP）和加密（HTTPS）传输
-
-请求报文样例：
-
-~~~http
-POST /login HTTP/1.1
-Host: api.example.com
-Content-Type: application/json
-User-Agent: Mozilla/5.0
-Content-Length: 45
-
-{"username": "admin", "password": "123456"}
-~~~
-
-响应报文样例：
-
-```http
-HTTP/1.1 200 OK
-Content-Type: application/json
-Set-Cookie: sessionid=abc123; Path=/
-Content-Length: 30
-
-{"status": "success", "token": "xyz"}
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
 ```
 
-<u>需要了解常见的请求方式，以及常见的响应状态码</u>（404 应该是最熟悉的状态码了）
+## 部分三：无侵入的魔法——面向切面编程
 
+有的时候，我们希望记录每一个接口是谁调用的、耗费了多长时间，但**不希望在每个方法里面手动写<Badge text="System.currentTimeMillis()" />这样的重复代码**。你有什么想法吗？你可能会想到上一题中提到的责任链模式和Okhttp的Interceptor。幸运的是，SpringBoot也有类似的设计。不过今天，我们不用它们，让我们换一种方法来试一试。
 
+**面向切面编程（AOP）** 是Spring的核心特性之一。如果说面向对象（OOP）是把业务逻辑按照“对象”切分成一个个模块，那么AOP就是把各个模块中共同需要的非业务逻辑（横切关注点）抽取出来，像一块“切面”一样统一织入到业务代码中。
 
-**JSON数据格式**
+请了解一下面向切面编程，思考一下，在什么场景下你会推荐使用AOP？它解决了传统面向对象（OOP）编程中的什么痛点？
 
-json本质来说就是一个字符串，是一种轻量级的数据交换格式，易于人阅读和编写，也易于机器解析和生成。
+参考文章：
 
-类似Java中的HashMap，通过键值的匹配来读取数据
+- [AOP科普版](https://cloud.tencent.com/developer/article/2513231)
+- [AOP概念理解](https://liaoxuefeng.com/books/java/spring/aop/index.html)
+- [AOP详细讲解](https://zhuanlan.zhihu.com/p/421999882)
 
-键名必须用双引号包裹，值的类型多种多样，还可以嵌套，例如：
+接下来就来尝试一下，在你上面的CRUD的代码基础上使用AOP来统一记录一下每次执行方法的耗时，并打印当前请求的URL和HTTP方法（GET、POST等）吧！
 
-~~~json
-{
-  "key1": "value1",
-  "key2": 123,
-  "key3": true,
-  "key4": null,
-  "key5": { "nestedKey": "nestedValue" },
-  "key6": [1, 2, 3]
-}
-~~~
+请在你的<Badge text="pom.xml" />中添加依赖：
 
-如果遇到很复杂的json字符串，还可以用这个网站帮助分析结构
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-aspectj</artifactId>
+</dependency>
+```
 
-[JSON Formatter & Validator (curiousconcept.com)](https://jsonformatter.curiousconcept.com/#)
+任务要求：
 
-TCP/IP 通信
+<Steps>
 
-### 项目实现
+1. 编写一个切面类，用于拦截你的所有Controller接口。注意，此任务中你**不能**直接修改你的Controller代码。
+2. 通过你编写的切面类，打印方法执行的耗时，以及当前请求的URL和HTTP方法。
+3. 打印方法请使用slf4j，不能使用<Badge text="System.out.println()" variant="danger" />等方法。
 
-### 客户端
+</Steps>
 
-先要在pom.xml中导入解析json格式的依赖
+以下是一个示例，但仅实现了打印方法执行的耗时。你可以自己从头编写一个切面类，或者修改和补全下面的示例，并把这个实例类放到你的SpringBoot项目中的合适位置。
 
-~~~xml
-		<dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>2.0.51</version>
-        </dependency>
-~~~
+```java
+package com.example.demo.aspect;
 
-**用fastjson构造json格式**
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
-~~~java
-//fastjson这个库需要定义一个类作为映射
-public class User {
-    private String name;
-    private int age;
-    // 必须有无参构造函数
-    // 必须提供 getter/setter (Fastjson 依赖它们)
-}
-//然后通过给这个类实例化具体数据构建json
-User user = new User("Alice", 25);
-String json = JSON.toJSONString(user);
-// 结果: {"age":25,"name":"Alice"}
-~~~
+import java.util.Arrays;
 
-解析json格式
+@Aspect
+@Component
+@Slf4j
+public class LogAspect {
+    @Pointcut("within(com.example.demo.controller..*)")
+    public void logLayer() {}
 
-~~~java
-//{"age":25,"name":"Alice"}
-String json = "{\"name\":\"Alice\",\"age\":25}";
-User user = JSON.parseObject(json, User.class);
-//这时候user这个对象就保存了对应字段的内容
-~~~
-
-
-
-代码实现部分
-
-~~~java
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
-public class Client {
-    private static final String SERVER_URL = "http://localhost:8000/query";
-
-    public static void main(String[] args) {
-        while (true) {
-            //读取用户输入的快递单号和手机号
-            
-            
-            try {
-                /*
-                用fastjson这个依赖构造json格式，构造的样例为
-                {"trackingNumber":"SF123456789","phone":"19867653558"}
-                */
-            
-                // 将这个json格式的数据写入请求体并发送HTTP POST请求
-                
-
-                // 读取响应，状态码是200才是响应成功
-                if (connection.getResponseCode() == 200) {
-                   /*
-                   解析服务端响应的json格式，拿到取件码，拿不到就显示msg的内容
-                   样例：
-                   例如：{"pick_code":4096,"msg":"success"}
-                   		{"pick_code":null,"msg":"手机号不正确"}
-                   */
-                    
-                    
-                   }
-                } else {
-                    System.out.println("查询失败，状态码: " + connection.getResponseCode());
-                }
-            } catch (IOException e) {
-                System.out.println("请求发生错误: " + e.getMessage());
-            }
-        }
-
-        scanner.close();
-        System.out.println("客户端已退出");
+    @Around("logLayer()")
+    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        String targetClass = joinPoint.getTarget().getClass().getSimpleName();
+        String methodName = joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        log.info("即将执行{}.{}(), args={}", targetClass, methodName, Arrays.toString(args));
+        long startTime = System.currentTimeMillis();
+        Object result = joinPoint.proceed();
+        log.info("执行结束: {}.{}(), 耗时{}ms, result={}", targetClass, methodName,
+                System.currentTimeMillis() - startTime, result);
+        return result;
     }
 }
-~~~
+```
 
-### 服务端
+如果你能够很好地完成以上内容，可以尝试挑战一下（非必须，仅作为加分项）：
 
-~~~java
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
+使用自定义注解改造你的AOP，并修改你的AOP切面规则：不再拦截所有接口，而是**哪个接口方法加上了你的自定义注解，才为这个接口打印相关日志**。
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+## 写在最后
 
-public class Server {
-    private static final int PORT = 8000;
-    private static final Map<String, String> expressMap = new HashMap<>();
+### 致敬一路坚持的你
 
-    public static void main(String[] args) throws IOException {
-        // 初始化一些测试数据
-        initializeExpressData();
-        // 创建HTTP服务器，监听指定端口
-        HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0);
-        // 设置路由和处理程序
-        server.createContext("/query", new QueryHandler());
-        // 启动服务器
-        server.start();
-        System.out.println("Server started on port " + PORT);
-    }
+从最基础的Java语法、面向对象，到计算机网络、SQL、Linux，再到现在手握**Spring Boot**独立跑通一套Web增删改查——能够一口气完成这十道题，你已经超越了绝大多数同龄人。
 
-    private static void initializeExpressData() {
-        // 添加一些测试数据
-        //键的构成是  快递单号_手机号
-        expressMap.put("SF123456789_13005433678", "1234");
-        expressMap.put("JD987654321_19805433168", "5678");
-        expressMap.put("YT456789123_13905479698", "9012");
-        expressMap.put("ZT789123456_18505433664", "3456");
-    }
+请一定要给一路坚持到这里的自己鼓个掌！遇到报错时的迷茫、翻阅文档时的枯燥、反复调试接口直至看到<Badge text="&quot;code&quot;: 200" />那一刻的喜悦，都是软件工程师真实生活的一部分。**无论你完成了多少题，这份动手解决问题的勇气和耐心，已经是你最大的收获。**
 
-    static class QueryHandler implements HttpHandler {
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            if ("POST".equals(exchange.getRequestMethod())) {
-                // 读取请求体
-                
+### 如果你想在后端开发走得更远...
 
-                try {
-                    // 解析JSON请求（例如：{"trackingNumber":"SF123456789"}）获得单号
-                    
-                    
-                    // 在expressMap中查询取件码，
-                    
-                    
-                    /*
-                    构建响应的json
-                    例如：{"pick_code":4096,"msg":"success"}
-                    如果找不到快递则是{"pick_code":null,"msg":"根据各种情况写提示信息"}
-                    */
-                    
+压轴题实现一个简单的CRUD只是**后端体系的起点**。现代服务端工程体系庞大而浪漫，未来如果你想在后端工程开发这条路上继续深耕，这些有趣而强大的工具/技术正等着你去探索：
 
-                    // 发送响应
-                    
-                } catch (Exception e) {
-                    // 处理异常，返回400状态码(Bad Request)
-                   
-                }
-            } else {
-                // 非POST请求返回405 Method Not Allowed
-                exchange.sendResponseHeaders(405, -1);
-            }
-        }
-    }
-}
-~~~
+- **持久层进阶**：从JPA走到底层，去探究**MyBatis/MyBatis-Plus**的灵活性，学习MySQL的底层索引优化与事务处理。
+- **高并发与缓存**：为系统加上**Redis**缓存，体验在内存中达到每秒数十万次读写操作的极速。
+- **解耦与异步**：引入消息队列（如**RabbitMQ/Kafka**），看看淘宝双十一的秒杀体系是如何靠异步削峰来拯救服务器的。
+- **分布式与架构**：走进**Spring Cloud/微服务**与**Docker/Kubernetes**的世界，体会如何像搭积木一样管理成百上千台服务器。
 
+> 不要被庞大的技术体系吓到！**没有任何一个工程师是把它学完了才开始干活的，在项目中动手实践，才是成长最快的方式。**
 
+### 彩蛋环节：展示你心中的“火花”（自由交流项）
 
-## **本题提交方式**
+我们相信，一个优秀的工程师往往是一个**爱折腾的实践者**。除了上面规定的题目，**如果你曾经自己鼓捣过任何有趣的“小玩意”，欢迎在本部分尽情向我们炫耀/展示！**
 
-> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+无论它看起来多么微小、无论技术栈是什么，我们都超级期待看到：
+- 你用 **Python** 写的某个自动化的爬虫或小工具、批量修改文件的脚本；
+- 你自己搭建过的个人网页、小博客，或者是尝试过的小游戏；
+- 甚至是你在硬件/物联网领域的DIY作品（比如有趣的Arduino控制器、树莓派小设备等）。
 
-## 出题人联系方式
+*(附上你的项目介绍、代码链接、截图或心得均可！)*
 
->**出题人QQ：1507015236**
+> **我们期待在面试环节与你见面，交流你的技术成长之路！加油！🚀**
+
+## 提交要求
+
+<Steps>
+
+1. **源码提交**：保留完整的工程代码（不要包含<Badge text="target/" />等编译产物），提交至你的Git仓库。
+2. **测试证据**：利用**Curl/Postman/Apifox**对你实现的所有接口分别进行调测，附带成功调用和完整JSON响应结果的截图。
+3. **AOP日志截图**：附带一张控制台输出统计耗时与请求地址的日志截图。
+4. **README说明**：用简单明了的语言介绍你的表结构设计，同时在上面记录任何需要你回答和思考的问题的答案。
+5. **提交URL**：向我们提交仓库的URL地址。[提交点这里](https://www.glimmer.org.cn/submit/)
+
+</Steps>
+
+**祝你编码愉快，我们期待在提交列表中看到你的优秀答案！**
+
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3580235054&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;moriko</p>
+>
+> QQ：3580235054
+>
+> 邮箱：[3580235054@qq.com](mailto:3580235054@qq.com)

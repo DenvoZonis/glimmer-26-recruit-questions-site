@@ -24,11 +24,34 @@ Clone此仓库，然后cd到项目根目录，通过`npm install`安装依赖。
 
 执行`npm run build`后，把整个dist文件夹复制到网站根目录，并把`dist`文件夹重命名为`recruit`即可。
 
+### 特殊内容
+
+写mdx可能会用到的：
+
+```mdx
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+</Steps>
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="" />
+<Badge text="" variant="success" />
+<Badge text="" variant="danger" />
+
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=123&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;xxx</p>
+>
+> QQ：123
+>
+> 邮箱：[123@qq.com](mailto:123@qq.com)
+```
+
 ## 上一届留存的东西
 
 ### 表情
 
-![](./src/assets/frontend/confusion.png)
+![](./src/assets/archives/frontend/confusion.png)
 
 ### 图床
 

@@ -74,3 +74,9 @@ main[data-pagefind-body] > .content-panel:last-child,
 .custom-footer {
   padding-bottom: 2rem;
 }
+
+/* 出题最下方的出题人头像与昵称放在同一行 */
+.nickname-avatar-panel {
+  display: flex;
+  align-items: center;
+}

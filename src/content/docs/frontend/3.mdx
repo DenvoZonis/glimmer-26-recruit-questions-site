@@ -7,7 +7,7 @@ prev:
   label: 2：了解网页F12开发者工具
 next:
   link: /recruit/frontend/4/
-  label: 4：Javascript入门和进阶
+  label: 4：Javascript入门与进阶
 ---
 
 import { Image } from 'astro:assets';
@@ -19,44 +19,79 @@ import banner from '../../../assets/frontend/banner.png';
 > 难度系数：简单
 > ```
 >
-> 前端三件套之一的CSS(层叠样式表)是网页设计的基石，是负责控制网页的视觉表现和布局的样式语言，可以让HTML的内容更美观易读。
+> 在前端三件套中，CSS（层叠样式表）负责控制网页的视觉表现、排版布局和交互反馈，让原本朴素的HTML内容变得生动、美观且易于阅读。
+>
+> 在完成了"1：初识HTML"的任务后，你已经搭建了一个属于自己的线上主题展览馆。现在，是时候用CSS为它增添一些有趣的视觉板块了。
 
 ## **任务：**
 
 #### 题目背景
 
-> 青子同学最近迷上了一款名为“明日方舟”的游戏，在游戏中干员的攻击范围多样，以格子为单位覆盖一部分战场。
+> 你决定在展览馆中设计一面5×5的"图片展示墙"，用于展示与主题相关的图片。
 >
-> 正好你刚刚了解了CSS在网站中是如何工作的，那么能不能通过CSS，运用一些经典的布局与样式，在网页上表现出一些具有特色的干员攻击范围呢？
+> 使用CSS的布局与样式能力，将这图片格子整齐排列，并在标蓝位置用"微光工作室"的LOGO进行标记，打造一个既有秩序又富有特色的展示区域。
 
-**要求图片如下：**
+**最终效果示意如下：**
 
 import T3_1 from '../../../assets/frontend/3-1.png';
 
 import T3_2 from '../../../assets/frontend/3-2.png';
 
-<Image src={T3_1} alt="3-1" />
+<Image src={T3_1} alt="3-1" width="300" />
 
-<Image src={T3_2} alt="3-2" />
+<Image src={T3_2} alt="3-2" width="300" />
+
+*(示意图：5×5网格，蓝色格子为微光LOGO)*
 
 ## **要求：**
 
-每个小方格长宽均为30px，互相之间间隔5px，干员本体位置用蓝色标记。两图分别置于有边界的框里居中。最后让它们并排显示。
-展示在你的网页中即可，尽可能的如图片所示。当然，如果你有完成要求之后更多的想法请随意施展。
+import { Badge } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
 
-## **可能遇到的问题**
+<Steps>
 
-- 什么是盒子模型？
-- 如何让元素水平居中？如何让两个div并排显示？
-- 了解一个CSS的布局方式。
-- 如何定位？CSS的样式有哪些都用用看。
+1. **创建5×5网格**：在网页中构建一个5行5列的网格布局，每个小格子代表一个展示位。
+
+2. **中心位置标记**：将网格中蓝色格子内容替换为"微光工作室"的LOGO。
+
+3. **格子样式与间距**：
+   - 每个小格子的长宽和相互之间的间隔（gap）由你**自由设定**，但要保证整体视觉效果协调且清晰。
+
+4. **并排展示**：你需要创建**两组**展示墙，并将它们**水平并排**显示在页面中。两组展示墙应各自置于一个有边界的框（容器）中，并整体居中。
+
+5. **CSS美化**：在完成基本布局后，请运用CSS为你的展示墙增添更多视觉趣味。至少使用以下两种或以上的样式属性：
+   - <Badge text="border" />
+   - <Badge text="border-radius" />
+   - <Badge text="background-color" />
+   - <Badge text="box-shadow" />
+   - <Badge text="font-family" /> / <Badge text="color" />
+   - <Badge text="hover" />
+
+   例如，你可以让每个格子带有圆角和阴影，鼠标悬停时颜色变化或轻微放大。
+
+</Steps>
+
+## **可能遇到的问题与学习资源**
+
+- 什么是盒子模型（Box Model）？
+- 如何让一个元素（如整个展示墙的容器）在页面中水平居中？
+- 如何让两个 <Badge text="div" /> 容器并排显示？（提示：<Badge text="display: inline-block;" />，<Badge text="float" />，或 <Badge text="flex" /> 布局）
+- 了解并尝试一种CSS布局方式：**Flexbox** 或 **Grid**，哪一种更适合实现规则的网格布局？
+- 如何精确控制元素的位置？（<Badge text="position" /> 属性的简单应用）
 - [菜鸟教程 CSS](https://www.runoob.com/css/css-tutorial.html)
+- [CSS Flexbox 布局教程 | 菜鸟教程](https://www.runoob.com/w3cnote/flex-grammar.html)
+- [CSS Grid 网格布局教程 | 菜鸟教程](https://www.runoob.com/css/css-grid.html)
 
 ## **本题提交方式**
 
-> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+> 提交完整可运行的 HTML + CSS  源码文件（或单页 HTML）即可。
 >
+> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
 
 ## **出题者Q&A方式**
 
-> QQ：3352859153
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2191131478&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Xx</p>
+>
+> QQ：2191131478
+>
+> 邮箱：[2191131478@qq.com](mailto:2191131478@qq.com)
