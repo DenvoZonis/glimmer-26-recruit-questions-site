@@ -175,7 +175,8 @@ const activityImages = [
         template: 'splash',
     }}
 >
-    <div class="md3-home not-content">
+    <!-- ========== 关键改动：给首页内容容器添加唯一 ID ========== -->
+    <div id="custom-homepage" class="md3-home not-content">
         <!-- ============ 自定义浮动品牌条（替代 Starlight 默认导航栏） ============ -->
         <div class="md3-topbar">
             <a class="md3-brand" href="/">
@@ -345,7 +346,6 @@ const activityImages = [
         </section>
 
         <!-- ============ 方向简介（基础方向） ============ -->
-        <!-- 原本有 md3-section-alt，现在去掉，变成无深色背景 -->
         <section class="md3-section" id="services">
             <div class="md3-container">
                 <p class="md3-eyebrow">我们在做什么</p>
@@ -364,7 +364,6 @@ const activityImages = [
         </section>
 
         <!-- ============ 方向简介（光点计划扩展方向） ============ -->
-        <!-- 原本没有 md3-section-alt，现在加上，变成深色背景 -->
         <!-- <section class="md3-section md3-section-alt">
             <div class="md3-container">
                 <p class="md3-eyebrow">光点计划</p>
@@ -423,43 +422,36 @@ const activityImages = [
 
 <style is:global>
     /*
-     * 只在首页生效的覆盖样式。
-     * Astro 会按"哪些页面用到了这个组件"来打包 CSS，这个 <style> 只写在
-     * src/pages/index.astro 里，所以不会影响 /docs/ 下的其他文档页面。
-     *
-     * 这里的规则都没有包在 @layer 里 —— CSS 层叠层的规则是：没有 @layer 的
-     * 普通样式，优先级永远高于任何写在 @layer 里的样式（不管后者的选择器
-     * 权重多高）。Starlight 自身和 md3 主题的样式全部包在 @layer 里
-     * （starlight.core / md3.layout 等），所以下面这些选择器不需要堆
-     * !important 也能生效；这里仍然加上 !important，是为了防止将来
-     * Starlight 升级后把这部分样式移出 @layer 导致覆盖失效。
+     * 关键修复：利用 :root:has(#custom-homepage) 作为条件前缀。
+     * 即使 Vite 将这段 CSS 打包进公共样式，非首页因没有 #custom-homepage 元素，
+     * 选择器不会命中，从而避免污染文档页。
      */
 
-    /* 隐藏 Starlight 默认顶部导航栏（Logo / 搜索 / 主题切换） */
-    .header {
+    /* 隐藏 Starlight 默认顶部导航栏（仅在首页） */
+    :root:has(#custom-homepage) .header {
         display: none !important;
     }
 
     /* 顶栏隐藏后，取消 main-frame 为顶栏预留的顶部内边距 */
-    .main-frame {
+    :root:has(#custom-homepage) .main-frame {
         padding-top: 0 !important;
         padding-inline-start: 0 !important;
     }
 
-    /* 取消 Starlight 内容区默认的左右内边距 / 最大宽度，让首页可以做到全屏出血 */
-    .content-panel {
+    /* 取消 Starlight 内容区默认的左右内边距 / 最大宽度 */
+    :root:has(#custom-homepage) .content-panel {
         padding: 0 !important;
     }
-    .content-panel + .content-panel {
+    :root:has(#custom-homepage) .content-panel + .content-panel {
         border-top: none !important;
     }
-    .sl-container {
+    :root:has(#custom-homepage) .sl-container {
         max-width: 100% !important;
         margin-inline: 0 !important;
     }
 
-    /* 隐藏 splash 模板下仍会渲染的默认 <h1>，首页标题由 hero 里的 <h1> 承担 */
-    #_top {
+    /* 隐藏 splash 模板下仍会渲染的默认 <h1> */
+    :root:has(#custom-homepage) #_top {
         display: none !important;
     }
 </style>
