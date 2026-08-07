@@ -3,14 +3,14 @@ title: "Java - 10 网络编程"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/backend/java09-流与文件/
+  link: /archives/24/backend/java09-流与文件/
   label: Java - 09 流与文件
 next:
-  link: /recruit/archives/24/backend/java项目-网络服务器/
+  link: /archives/24/backend/java项目-网络服务器/
   label: 项目——搭建一个web服务器
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ## web socket
 

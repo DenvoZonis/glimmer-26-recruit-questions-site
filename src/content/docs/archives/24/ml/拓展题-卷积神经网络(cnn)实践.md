@@ -3,15 +3,15 @@ title: "拓展题"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/ml/
+  link: /archives/24/ml/
   label: 机器学习招新
 
 next:
-  link: /recruit/archives/24/ml/进阶题1论文阅读/
+  link: /archives/24/ml/进阶题1论文阅读/
   label: 进阶题1.论文阅读
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ## 1.卷积神经网络(CNN)实践
 

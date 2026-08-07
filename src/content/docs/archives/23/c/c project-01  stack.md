@@ -3,14 +3,14 @@ title: "C Project-01  Stack"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/c/c-project--00-manual/
+  link: /archives/23/c/c-project--00-manual/
   label: C Project- 00 Manual
 next:
-  link: /recruit/archives/23/c/c-project-02-management-and-testing/
+  link: /archives/23/c/c-project-02-management-and-testing/
   label: C project-02 Management and Testing
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 <img src="https://pic.imgdb.cn/item/64fdc2b6661c6c8e543d9600.png" alt="C.png">
 

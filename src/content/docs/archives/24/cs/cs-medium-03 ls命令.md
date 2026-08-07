@@ -3,11 +3,11 @@ title: "CS-MEDIUM-03 实验：Linux命令行实现"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/cs/cs-hard-02-network-programming/
+  link: /archives/24/cs/cs-hard-02-network-programming/
   label: CS-HARD-02 Network Programming
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![标题](./img/CS.PNG)
 

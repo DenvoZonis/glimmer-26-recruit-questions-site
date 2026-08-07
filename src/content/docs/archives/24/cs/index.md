@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/24/cs/cs-hard-01--dynamic-memory-allocation/
+  link: /archives/24/cs/cs-hard-01--dynamic-memory-allocation/
   label: CS-Hard-01  Dynamic Memory Allocation
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![标题](./img/CS.PNG)
 

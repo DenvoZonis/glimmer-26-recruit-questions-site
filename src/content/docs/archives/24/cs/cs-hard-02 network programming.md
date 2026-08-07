@@ -3,14 +3,14 @@ title: "CS-HARD-02 Network Programming"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/cs/cs-hard-01--dynamic-memory-allocation/
+  link: /archives/24/cs/cs-hard-01--dynamic-memory-allocation/
   label: CS-Hard-01  Dynamic Memory Allocation
 next:
-  link: /recruit/archives/24/cs/cs-medium-03-ls命令/
+  link: /archives/24/cs/cs-medium-03-ls命令/
   label: CS-MEDIUM-03 实验：Linux命令行实现
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![img](./img/CS.PNG)
 

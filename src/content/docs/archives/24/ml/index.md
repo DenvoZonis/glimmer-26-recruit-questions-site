@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/24/ml/拓展题-卷积神经网络cnn实践/
+  link: /archives/24/ml/拓展题-卷积神经网络cnn实践/
   label: 拓展题
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![9olqLl7-x6XtWyNUssHvLGkRzM5cj2_KAPAYU4vaHIw](images/9olqLl7-x6XtWyNUssHvLGkRzM5cj2_KAPAYU4vaHIw.png)欢迎选择微光的机器学习方向！
 

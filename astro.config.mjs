@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
 	site: 'https://www.glimmer.org.cn',
-	base: '/recruit',
+	//base: '/recruit',
 	// Markdown插件
   	markdown: {
     	remarkPlugins: [remarkMath],

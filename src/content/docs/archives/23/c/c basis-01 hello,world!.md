@@ -3,14 +3,14 @@ title: "C Basis-01 Hello,world!"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/c/
+  link: /archives/23/c/
   label: C方向介绍
 next:
-  link: /recruit/archives/23/c/c-basis-02-来邂逅语句吧/
+  link: /archives/23/c/c-basis-02-来邂逅语句吧/
   label: 'C Basis-02 来邂逅"语句"吧'
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 <img src="https://pic.imgdb.cn/item/64fdc2b6661c6c8e543d9600.png" alt="C.png">
 

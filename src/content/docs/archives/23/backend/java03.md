@@ -3,14 +3,14 @@ title: "java03 - 异常、网络"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/backend/java02/
+  link: /archives/23/backend/java02/
   label: java02 - 语言特性
 next:
-  link: /recruit/archives/23/backend/后端综合数据库出题/
+  link: /archives/23/backend/后端综合数据库出题/
   label: 后端综合-01-快来看看常见的关系型数据库
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 
 >提醒：学习了上一题的封装等等概念，请你在本题尽可能注意自己的代码的结构条理哦！

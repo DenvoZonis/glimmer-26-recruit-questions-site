@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/23/frontend/前端-01-welcome/
+  link: /archives/23/frontend/前端-01-welcome/
   label: 前端-01 Welcome！
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 > 估计有很多小伙伴根本没听过前端这个词，那么前端到底是什么呢？我们该如何入门前端呢？前端当下和未来前景如何呢？别着急，接下来我将依次为大家解释这些问题。
 

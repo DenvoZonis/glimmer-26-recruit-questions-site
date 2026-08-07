@@ -3,14 +3,14 @@ title: "Java02 - 语言特性"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/backend/java01/
+  link: /archives/23/backend/java01/
   label: Java01 - Java基础
 next:
-  link: /recruit/archives/23/backend/java03/
+  link: /archives/23/backend/java03/
   label: Java03 - 异常、网络
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
     难度系数：比较简单
 
