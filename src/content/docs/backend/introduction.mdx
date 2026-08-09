@@ -3,15 +3,19 @@ title: 后端简介
 description: 微光工作室2026招新——后端简介
 
 prev: false
-next:
-  link: /backend/1/
-  label: 1：环境搭建与程序运行
+next: false
 ---
 
 import { Image } from 'astro:assets';
 import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="提示">
+	招新将于开学之后、宣讲会结束之后开放！请耐心等待！你可以先看看[日常基础](/daily/introduction/)部分。
+</Aside>
 
 > 一个好看的皮囊固然重要😋，但里面有趣的灵魂也绝不可缺少😭。如果说前端是那好看的皮囊，那么后端便是那其中有趣的灵魂，负责着设计程序架构、管理数据库以控制前端所展示的内容。不同于前端，后端做的更多的是与**服务器**以及**数据库**进行交互以处理相应的业务逻辑，需要考虑的是如何实现相应的功能、数据的存取和平台的性能与稳定性等等。
 >
