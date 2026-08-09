@@ -14,10 +14,10 @@ export default defineConfig({
   	},
 	integrations: [
 		starlight({
-			title: '微光工作室',
-			logo: {
-        		src: './src/assets/glimmer_logo.png',
-      		},
+			title: 'Glimmer',
+			// logo: {
+        	// 	src: './src/assets/glimmer_logo.png',
+      		// },
 			social: [
 				{
 					icon: 'email',
