@@ -1,13 +1,13 @@
 ---
-title: 3：数据类型与数据结构
-description: 微光工作室2026招新——后端：3：数据类型与数据结构
+title: 3：面向对象、封装继承与多态
+description: 微光工作室2026招新——后端：3：面向对象、封装继承与多态
 
 prev:
   link: /backend/2/
-  label: 2：程序运行
+  label: 2：数据类型、控制流与异常处理
 next:
   link: /backend/4/
-  label: 4：集合、泛型与Stream流
+  label: 4：集合、泛型与设计模式
 ---
 
 import { Image } from 'astro:assets';
@@ -15,81 +15,226 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
-## **Task1.变量和数据类型**
+> 在这一任务中你将从“定义一个类”逐步走到“用类去建模一个真实问题”。如果说前两题更偏语法和流程控制，那么这一题更偏工程思维：如何组织代码、隐藏实现细节、复用已有逻辑，以及设计可扩展的结构😸
 
-变量用于存放数据。
-
-在Java中，变量分为基本类型和引用类型（类似于C语言中的指针变量）。
-
-基本类型有八种，都是Java语言预先定义好的关键字，分别是整型（4种），字符型（1种），浮点型（2种），布尔型（1种）
-
-1. 说出这八种基本数据类型，
-
-2. 说出四种整型数据类型占用的字节数和表示范围
-
-不同的基本数据类型之间进行计算，比如int类型和long类型的变量相加，需要进行类型转换，请了解隐式类型转换和显式类型转换。
-
-3. ```java
-   int a=4;
-   char c='0';
-   int b=a+c;
-   //请回答这个过程涉及到的是隐式类型转换还是显式类型转换，b的值是多少，为什么会是这个值。
-   ```
-
-4. [拓展]请了解包装类，引用类型和基本数据类型缓存池。给出下面代码的输出结果并解释原因。
-
-   ```java
-   Integer x = new Integer(18);
-   Integer y = new Integer(18);
-   System.out.println(x == y);
-   
-   Integer z = Integer.valueOf(18);
-   Integer k = Integer.valueOf(18);
-   System.out.println(z == k);
-   
-   Integer m = Integer.valueOf(300);
-   Integer p = Integer.valueOf(300);
-   System.out.println(m == p);
-   ```
-
-## **Task2.运算符**
-
-运算符分为算数运算符、关系运算符、位运算符、逻辑运算符、赋值运算符、三元运算符。请了解上述运算符后回答下列问题。
-
-5. 算数运算符除了我们熟知的加减乘除（+ - * /）外，还有取余（%），自增（++），自减（--）。为了加深你对于自增运算符的理解，请执行下列代码，给出结果，并大概解释计算的过程。
-
-```java
-int a = 5 ;
-int b = 7 ;
-int c= (++a) + (b++)
-System.out.println( c );
-System.out.println(a+" "+b);
-```
-
-对初学者来说，位运算符比较难理解。其实位运算就是对数字背后的二进制形式进行操作。比如5\<\<1，表示把5往左移一位，就是先将5转化为二进制101，把101往左移动1位，不够的位用0补位，得到1010，还原为十进制的大小就是10。
-
-6.你知道int、float在计算机是怎么储存的吗，为什么会发生两个正数相加结果为负数的事情？
-
-## **Task3.数据结构**
+## 任务说明
 
 import { Badge } from '@astrojs/starlight/components';
 
-为了高效地组织，利用数据来完成程序的设计，人们发明了一系列的数据结构，java的官方库已经实现了如<Badge text="ArrayList" />,<Badge text="HashMap" />,<Badge text="HashSet" />等数据结构，请你熟悉了解这些数据结构，完成以下问题：
+- <Badge text="Task 1" />、<Badge text="Task 2" />、<Badge text="Task 5" /> 较为基础。
+- <Badge text="Task 3" />、<Badge text="Task 4" /> 更能体现你的抽象能力和建模能力。
+- 回答时请尽量说明：你为什么这样设计，而不是只给最后一份代码。
 
-1.小明想要快速统计考试科目的错题，请你根据给定的数据完成要求
+## Task 1. 类、对象与构造方法（必做）
 
+先来看一个简单的 <Badge text="Person" /> 类：
+
+```java
+public class Person {
+    private String name;
+    private int age;
+    private int sex;
+
+    private void eat() {
+        System.out.println(name + "正在吃东西");
+    }
+
+    private void sleep() {
+
+    }
+
+    private void dadoudou() {
+
+    }
+}
 ```
-math:5,English:10,Chinese:10,math:20,English:10,chemistry:30,math:10,math:20
+
+请你创建一个 Java 项目，其中至少包含：
+
+- 一个主类，里面有 <Badge text="main" /> 方法作为程序入口
+- 一个 <Badge text="Person" /> 类
+
+然后完成下面的问题：
+
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
+1. 为 <Badge text="Person" /> 类添加构造方法，并实现“复制对象”的效果。
+2. 请说明你的构造方法是否用到了 <Badge text="this" />，如果用了，它在这里起什么作用。
+3. 在 <Badge text="main" /> 方法中创建至少一个 <Badge text="Person" /> 对象，并给对象赋值。
+4. 请用自己的话解释“类”和“对象”的关系。
+
+</Steps>
+
+## Task 2. 访问修饰符、实例成员与静态成员（必做）
+
+一个类不仅有字段和方法，还涉及“谁可以访问它”“它属于对象还是属于类”。
+
+请继续围绕 <Badge text="Person" /> 类完成下面的练习：
+
+<Steps>
+
+1. 为字段和方法补上你认为合适的访问修饰符。
+2. 尝试在以下位置访问它们，并总结访问范围：
+   - 当前类内部
+   - 同一个包下的其他类
+   - 不同包下的类
+3. 说明 <Badge text="public" />、<Badge text="private" />、<Badge text="protected" />、默认访问权限分别代表什么。
+4. 给 <Badge text="Person" /> 增加一个静态变量，例如“当前已创建对象数量”。
+5. 再增加一个静态方法，并解释：
+   - 为什么静态方法可以直接通过类名调用
+   - 为什么实例方法通常需要先创建对象
+
+</Steps>
+
+这一问重点不是把定义背下来，而是你能否通过实验总结出访问控制和静态成员的行为差异。
+
+## Task 3. 继承与代码复用（推荐完成）
+
+继承是面向对象建模的重要方式之一。下面给出一个父类：
+
+```java
+public class Animal {
+    private String name;
+    private int id;
+
+    public Animal(String myName, int myId) {
+        name = myName;
+        id = myId;
+    }
+
+    public void eat() {
+        System.out.println(name + "正在吃");
+    }
+
+    public void sleep() {
+        System.out.println(name + "正在睡");
+    }
+
+    public void introduction() {
+        System.out.println("大家好！我是" + id + "号" + name + "。");
+    }
+}
 ```
 
-你需要对原始数据进行建模，再进行处理
+请完成以下内容：
 
-2.统计完数据之后，小明想要排序找到错的最多的科目来加强学习
+<Steps>
 
-3.小明想不仅仅只是自己划定的数据，他还想要后续考试的错题也能加入，你需要为他设计一个能够让小明输入数据的程序
+1. 创建 <Badge text="Penguin" /> 和 <Badge text="Mouse" /> 两个子类，并继承 <Badge text="Animal" />。
+2. 使用 <Badge text="super" /> 调用父类构造方法。
+3. 尝试在子类中重写至少一个父类方法，体现不同对象的行为差异。
+4. 解释：为什么 Java 不支持类的多继承？
 
-4.小明想统计自己的，同时也想统计小红的错题，请你设计一个程序能够兼容二者
+</Steps>
 
+如果你能说清“多继承会带来什么问题”，例如菱形继承冲突，那会更好。
+
+## Task 4. 多态与抽象设计（推荐完成）
+
+请对几何图形进行建模，并完成圆形、三角形、矩形的周长和面积计算。
+
+要求：
+
+<Steps>
+
+1. 至少用一种面向对象方式完成。
+2. 你可以选择：
+   - 抽象类方案
+   - 接口方案
+3. 如果两种方案都完成，请说明它们各自适合什么场景。
+
+</Steps>
+
+建议你至少体现以下几点：
+
+- 统一的调用方式
+- 不同图形对同一行为的不同实现
+- 使用 <Badge text="@Override" /> 重写方法
+
+如果你已经理解了多态，可以进一步演示：把多种图形放进同一个集合里，循环调用它们的面积或周长方法。
+
+## Task 5. 封装与接口设计（必做）
+
+封装不是简单地“把字段改成 private”，而是把对象的内部状态保护起来，并通过合理接口对外提供能力。
+
+请先说明 <Badge text="public" />、<Badge text="private" /> 等关键字在封装中的作用，再完成下面这段代码：
+
+```java
+public class BankAccount {
+    // TODO: 修改属性的可见性
+    String accountNumber;
+    String accountHolder;
+    double balance;
+    String password;
+
+    BankAccount(String accountNumber, String accountHolder, double initialBalance, String password) {
+        // TODO
+    }
+
+    void deposit(double amount) {
+        // TODO
+    }
+
+    boolean withdraw(double amount, String inputPassword) {
+        // TODO
+    }
+
+    boolean transfer(BankAccount recipient, double amount, String inputPassword) {
+        // TODO
+    }
+
+    double getBalance() {
+        // TODO
+    }
+
+    String getAccountInfo() {
+        // TODO
+    }
+
+    // 只需修改可见性
+    boolean validatePassword(String inputPassword) {
+        return true;
+    }
+
+    // 只需修改可见性
+    boolean validateAmount(double amount) {
+        return true;
+    }
+}
+```
+
+建议你至少考虑这些规则：
+
+<Steps>
+
+1. 金额不能是负数或零。
+2. 取款和转账前需要校验密码。
+3. 余额不能被外部代码随意直接修改。
+4. 敏感信息不应该被完整暴露出去。
+
+</Steps>
+
+这一问想看的是：你是否能把“封装”真正落到接口设计上。
+
+## 提交要求
+
+请至少提交以下内容：
+
+<Steps>
+
+1. <Badge text="Person" /> 相关代码与说明。
+2. 访问修饰符和静态成员的实验结论。
+3. <Badge text="BankAccount" /> 的完整实现。
+
+</Steps>
+
+如果你完成了继承、多态建模，也请一并提交运行结果。尤其欢迎你附上：
+
+- 你的类图思路
+- 你在设计时做过的取舍
+- 你觉得自己写得还不够好的地方
 
 ## **本题提交方式**
 
@@ -98,3 +243,9 @@ math:5,English:10,Chinese:10,math:20,English:10,chemistry:30,math:10,math:20
 ## 出题人联系方式
 
 >**出题人QQ：3425282590**
+
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3916627528&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;coco</p>
+>
+> QQ：3916627528
+>
+> 邮箱：[3916627528@qq.com](mailto:3916627528@qq.com)

@@ -1,13 +1,13 @@
 ---
-title: 6：封装继承与多态
-description: 微光工作室2026招新——后端：6：封装继承与多态
+title: 6：Linux的使用
+description: 微光工作室2026招新——后端：6：Linux的使用
 
 prev:
   link: /backend/5/
   label: 5：IO流与项目挑战
 next:
   link: /backend/7/
-  label: 7：Linux的使用
+  label: 7：概念补充
 ---
 
 import { Image } from 'astro:assets';
@@ -15,124 +15,173 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
-## Task1.继承
+> 如果你看到这里，说明你对于前面java语言的学习已经掌握的不错了，首先，让我们给自己点个赞！
+>
+> 但是，对于编程语言的学习只是后端开发的冰山一角。接下来，让我们踏上新的旅程，开始对于Linux操作系统的学习。
 
-继承是java面向对象编程技术的一块基石.
+## TASK 0：前言
 
-继承就是子类继承父类的特征和行为，使得子类对象（实例）具有父类的实例域和方法，或子类从父类继承方法，使得子类具有父类相同的行为。
+你可能会觉得，我们平时使用的Windows操作系统已经够方便了，我们已经习惯了它提供的图形化操作界面,为啥还要费心思去学Linux呢？其实，在计算机世界的另一端，Linux才是当之无愧的主角。当前全球近90%的服务器都运行在Linux系统上，从你使用的安卓手机，到SPACEX的大火箭，其中无处没有Linux的身影。
 
-```java
-public class Animal { 
-    private String name;  
-    private int id; 
-    public Animal(String myName, int myid) { 
-        name = myName; 
-        id = myid;
-    } 
-    public void eat(){ 
-        System.out.println(name+"正在吃"); 
-    }
-    public void sleep(){
-        System.out.println(name+"正在睡");
-    }
-    public void introduction() { 
-        System.out.println("大家好！我是"         + id + "号" + name + "."); 
-    } 
-}
-```
+但是，我们的电脑原生的操作系统就是Windows，如果强行更换主机的操作系统，过程麻烦不说，还可能导致数据的丢失。为了解决这个问题。我们一般采用虚拟机内安装Linux系统，以达到方便日常使用的目的。
 
-这个Animal类就作为一个父类，企鹅类和老鼠类继承这个类之后，就具有父类当中的属性和方法，子类就不会存在重复的代码，维护性也提高，代码也更加简洁，提高代码的复用性（复用性主要是可以多次使用，不用再多次写同样的代码）
+什么是虚拟机呢？简而言之，它就是在你的Windows里，模拟出一台独立的“虚拟”电脑，它就像一个可以随意摆弄的沙盒，你在里边进行的任何工作都不会影响到你的主机系统，即使虚拟机内部崩溃了也只要删掉重建甚至恢复快照即可，而不会影响你的Windows。此外，虚拟机本质上就是一个“文件夹”，你可以随时拷贝出来带到其他宿主机上进行使用，而且，虚拟机的快照功能可以记录任意时刻虚拟机的状态，方便你（万一手滑把系统搞崩了）恢复数据，好处多多啊！
 
-```java
-public class Penguin extends Animal { 
-    public Penguin(String myName, int myid) { 
-        super(myName, myid); 
-    } 
-}
-```
+在本次考核中，我们选择的虚拟机软件是VMware Workstation，并采用Ubuntu发行版。这是目前对新手最友好，社区资源丰富，功能多样的一版，推荐使用。
 
-```java
-public class Mouse extends Animal { 
-    public Mouse(String myName, int myid) { 
-        super(myName, myid); 
-    } 
-}
-```
+闲话少叙，让我们正式开始吧。
 
-请注意，java并不支持多继承，这是为什么？
+## TASK 1：安装并配置VMware
 
-## Task2.多态
+VMware Workstation有多种途径可以下载。如果想在官网进行下载的话，则需要访问 https://www.vmware.com/products/workstation-player.html ，第一次登录的话需要用自己的qq邮箱注册账号。在官网中找到VMware Workstation Player，注意选择Windows版本的，接下来只要下载即可，选用默认配置（但是遇到“Install Windows Hypervisor Platform (WHP)”选项和"将 VMware Workstation Player 添加到系统 PATH"选项，一定要记着勾选上）。如果觉得在官网下载太慢，也可以在联想应用商城或者是火绒自带的应用商城进行下载，都可以正常使用。
 
-多态是同一个行为具有多个不同表现形式或形态的能力。
+接下来就要下载Ubuntu的镜像文件。什么是镜像呢？我们可以把它理解成一个光盘，你要是给一个白板电脑装Windows系统，需要用U盘或是光盘里存着的Windows操作系统文件，这里的镜像也是一个道理，VMware会用这个“光盘”给虚拟机装上操作系统。
 
 import { Badge } from '@astrojs/starlight/components';
 
-你知道<Badge text="@Override" />吗，他负责在子类重写父类的方法来实现不同类的运算逻辑，请完成以下问题：
+我们选择在清华大学官方的镜像网站下载文件。访问 https://mirrors.tuna.tsinghua.edu.cn/ubuntu-releases/ ，并选择24.04版本的Ubuntu镜像（24.04 表示24年4月发布的版本，是一个长周期支持版本，比较稳定）。点进24.04文件夹之后，在列表里找到<Badge text="ubuntu-24.04-desktop-amd64.iso" />文件并下载。这样，我们的准备工作就完成了！
 
-对几何图形进行建模并完成圆，三角形，矩形的周长，面积计算
+现在就可以进行新虚拟机的配置工作。由于内容较多，这里我提供一篇CSDN博客，里边详细介绍了虚拟机的初始配置流程，大家只需要按图索骥，一步一步来即可完成。（这篇博客是以22.04版本为例子，但是步骤是大差不差的，可以参考）
 
-其实还有另一种做法，使用接口来完成，请你给出使用接口的解答
+CSDN博客：https://blog.csdn.net/qq_62888264/article/details/145102532
 
-## Task3.封装
+你需要提交的任务结果：
 
-在面向对象程式设计方法中，封装是指一种将抽象性函式接口的实现细节部分包装、隐藏起来的方法。
+import { Steps } from '@astrojs/starlight/components';
 
-封装可以被认为是一个保护屏障，防止该类的代码和数据被外部类定义的代码随机访问。
+<Steps>
 
-要访问该类的代码和数据，必须通过严格的接口控制。
+1. 上述安装完成后的Ubuntu桌面截图一张
+2. 了解一下什么是Linux发行版，写一下你对不同发行版的理解
+3. 了解虚拟机的三种网络连接方式（NAT，桥接，仅主机），谈谈他们的区别
 
-封装最主要的功能在于我们能修改自己的实现代码，而不用修改那些调用我们代码的程序片段。
+</Steps>
 
-请你说明public,private等关键词的用法
+注意：在我的任务区块中，你可以使用AI进行辅助工作，但一定，一定不要直接复制粘贴AI生成内容！学长们也是这样走过来的，脚踏实地学习才会有收获！
 
-并完成以下代码
+## TASK 2：了解Linux的基本命令和结构
 
-```java
-public class BankAccount {
-    // TODO 修改属性的可见性
-    String accountNumber;
-    String accountHolder;
-    double balance;
-    String password; // 敏感信息，需要严格保护
-    
-   BankAccount(String accountNumber, String accountHolder, double initialBalance, String password) {
-        //TODO
-    }
-    
-    void deposit(double amount) {
-        //TODO
-    }
-    
-    boolean withdraw(double amount, String inputPassword) {
-        //TODO
-    }
-    
-    boolean transfer(BankAccount recipient, double amount, String inputPassword) {
-        //TODO
-    }
-    
-    double getBalance() {
-        //TODO
-    }
-    
-    String getAccountInfo() {
-        //TODO
-    }
-    // 只需修改可见性
-    boolean validatePassword(String inputPassword) {
-        return true;
-    }
-    // 只需修改可见性
-   boolean validateAmount(double amount) {
-        return true;
-    }
-}
-```
+上回书说到，我们使用Linux操作系统时，不像Windows那样会频繁使用图形化操作界面，大部分的工作都是在终端中通过各种命令来完成的。这一节我们就来了解一下Linux操作系统的各种命令。
+
+不过，在敲指令之前，我们要先面对一个问题：Linux的文件系统是什么样的？
+
+打开Windows的“我的电脑”，你会看到Windows中的文件散布在各个盘中，C盘，D盘等等，在盘里边又有各种文件夹，其中存储着各种文件。但是你要是打开虚拟机桌面那个本地文件夹，里边是找不到盘符的。这是因为Linux的文件结构区别于Windows，它是一个树状的结构，所有文件夹都挂在一个叫“/”的目录下，这个目录也叫做根目录。在这个根目录下，有etc,usr,tmp等等文件夹，它们各司其职，撑起了Linux这棵大树。
+
+你的任务：
+
+- 了解Linux的目录结构，简单写写这些文件夹的作用。
+
+了解了Linux的目录结构，现在我们就可以学习命令了！下面是一些常用的文件相关指令的速查表，大家可以在终端打一下试试（进入终端：ctrl+alt+p）。
+
+import p_6_1 from '../../../assets/backend/6-1.png';
+
+<Image src={p_6_1} alt="Linux命令速查表" />
+
+你的任务：
+
+import p_6_2 from '../../../assets/backend/6-2.png';
+
+<Steps>
+
+1. 在你的home目录中，运用之前学过的指令，创建如下文件结构并截图：
+
+    <Image src={p_6_2} alt="目录结构" />
+
+    注意区别使用mkdir和touch
+
+2. 在test-files/文件夹里创建一个叫hello.txt的文本文件，运用指令向其中写入“HelloWorld”，并利用指令查看文件内容，截图。
+3. Linux指令复杂多样，上边的指令基本只局限于对文件的操控。你需要自行查找还有什么可用的指令，它们的语法结构是什么？可以做成一个速查表方便以后使用。
+
+</Steps>
+
+## TASK 3：vim文本编辑器
+
+现在，你已经对Linux系统的命令有了初步了解，也已经尝试过用命令在终端写入文本内容。但是你是否想过，如果我想正儿八经的编辑一个文本文件，就像在Windows系统里用记事本那样，该怎么办？其实，在Linux终端里自带了一个叫vim的文本编辑器，我们都是使用它完成文本编辑工作的。
+
+当你想要用vim给一个文件编辑文本内容时，在终端输入vim + 文件路径 ，即可进入vim命令模式。如果这个文件路径不存在，那么这个命令是会自动创建该文件的。接下来我们用一个简单的例子尝试一下吧！
+
+第一步，在终端输入vim hello.txt 如果你之前没创建过这个文件的话，vim会自动帮你创建。回车之后就进入了vim的命令模式，还不可以输入文件内容。
+
+第二步，按i键，即可进入输入模式，在文档中输入hello,world
+
+第三步，按esc键，退出输入模式，回到命令模式。
+
+第四步，按冒号，退出到底线命令模式。在底部输入wq，即可保存文件并退出vim编辑器
+
+在上边的例子中，我们体验了vim最基本的几个命令。但是vim之所以被认为是一款功能非常强大的文本编辑器，其核心就在于命令模式中多样且作用复杂的命令。比如a键，可以在当前光标后面一个位置进入输入模式，I键则可以在当前光标所在行的开头进入输入模式等等。（注意，这些按键都是在命令模式下才可以使用的，别在输入模式或底线命令模式这么干）
+
+你的任务：
+
+<Steps>
+
+1. 完成TASK3中的小例子，截图保存一些关键步骤并上传。
+2. vim的命令多种多样，请自己查找一些其他的vim命令，制作一个简易速查表。（只要找一些你觉得可能常用的就好了，说实话我也觉得有些命令确实没有设置的必要）
+
+</Steps>
+
+## TASK 4：认识IP与端口
+
+在这一节中，我们将去了解网络世界最基本的单元门：IP地址与端口，并且利用这些知识进行Windows和Linux的远程连接。
+
+首先，什么是IP地址呢？我们可以把它理解成网络世界的门牌号，计算机之间想要相互通信需要这样一个“地址”才能够进行。在你的Linux终端输入命令 ip addr就可以查看你的虚拟机的IP地址了。这时候你会看到终端跳出了一堆信息，别慌，真正的IP地址就在ens33那一行的后面，一般来说都是192.168开头，这就是你的虚拟机的地址。
+
+那什么又是端口呢？端口可以理解成一个地址上开的不同的门。我们的计算机里同时运行着成千上万个程序，它们需要的信息各不相同，如果这些信息都是通过IP这个大地址来配送，未免太过混乱。端口则像是给这些程序分别开的小门，某个程序需要的信息都从这个门进行传递，效率自然会高不少。
+
+端口号的范围为0-65535，其中前1024个是“知名端口”，是系统默认预留给操作系统和核心服务的，比如ssh远程连接默认的就是22号端口，网页服务默认的是80号端口。如果以后我们要写一个服务，一般不要占用这些知名端口。了解这些基本信息后，我们就可以借助你得到的IP信息来建立Linux远程连接了。
+
+我们在本TASK中采用FinalShell进行远程连接。不过这个程序不是Windows系统自带的，你可以在应用商城或是直接找官网进行下载。配置过程并不复杂，如果有不明白的地方，可以查看B站视频或是询问AI解决。这里提供一个教程视频：https://www.bilibili.com/video/BV1n84y1i7td/?spm_id_from=333.788.videopod.episodes&vd_source=25ee6491b64b6e35a8ff8306e8e50b4c&p=8  
+
+你的任务：
+
+<Steps>
+
+1. 进一步学习，了解IP地址和端口，写写你的理解
+2. 把完成配置的FinalShell界面截图并上传，谈谈远程连接可以带来什么方便之处
+
+</Steps>
+
+## TASK 5：用户与权限
+
+恭喜你，来到了Linux部分的最后一节。在开始之前，我想问你几个问题：你在之前开荒Linux，下载各种文件的时候，是否注意过教程会经常让你切进root用户，或是用sudo命令借用root权限？当你用ls命令查看文件夹内容时，有没有看到在文件夹前边有一串rwx之类的不可名状“乱码”？其实这就涉及到了Linux中用户与权限方面的内容。
+
+你可能会感到奇怪：我在Windows上下游戏，找资料的时候，也没人让我输入密码，切换用户啊，为什么Linux需要我这么干呢？其实，比起Windows中你的“一家独大”，Linux是一个“多人合租”的系统。比如要维护一个跑在Linux上的服务器，有的人负责管理数据库，有的人只是看看系统日志，如果他们都获取了最高权限，可以随意更改工作内容，岂不是乱了套？为了避免这种情况，Linux包含的用户和权限系统就有了作用。
+
+你的任务：
+
+<Steps>
+
+1. 学习什么是root用户，什么是用户组，该怎样配置新的用户和用户组？
+2. 既然root这么强大，我能不能一直开着root呢？会有什么危害吗？谈谈你的看法
+
+</Steps>
+
+讲完了用户，我们来看看权限相关的内容。在终端输入ls -l 命令，你会看到一长串的文件和文件夹，前边都带着rwx之类的字符串。这其实代表着这个文件/文件夹的使用权限。r是“读”权限，你可以用cat或是vim命令查看文件内容，对于文件夹，则是可以通过ls命令查看其中的内容但无法通过cd进入。w是“写”权限，你可以修改，删除，覆盖文件的内容。x是“执行”权限，对于程序是可以执行它，对于文件夹则是可以cd进入其中。
+
+看完这个你可能还是会有疑问。既然这三个就能表示全部权限，为什么还要写一长串呢？还记得刚才提到的用户和用户组吗？一个文件可不止是给你看的，那一长串内容就是为了确定不同用户对于该文件的使用权限而设置的。第一组rwx规定的是主人的权限，第二组是和主人在同一用户组的用户的权限，第三组则是其他人的权限。
+
+那么，这些权限也是可以修改的吗？当然可以！通常来说，root和主人可以通过chmod命令修改一个文件或文件夹的权限，这就是你需要自己学习的内容了。
+
+你的任务：
+
+<Steps>
+
+1. 自己学习chmod命令，尝试修改一个文件的权限，把你输入的命令截图保存
+2. 天天打rwx还是太吃操作了，有什么简单又强势的方法来简化呢？有的兄弟有的，去学习怎么用数字简化权限表述吧。
+
+</Steps>
+
+> 恭喜你，完成了Linux板块的全部任务，希望你能顺利完成接下来的题目，欢迎成为微光的一员。
 
 ## **本题提交方式**
 
 > [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
 
 ## 出题人联系方式
+
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2917738313&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;勃艮第公爵铁头查理</p>
+>
+> QQ：2917738313
+>
+> 邮箱：[2917738313@qq.com](mailto:2917738313@qq.com)
 
 >**出题人QQ：3425282590**

@@ -1,10 +1,10 @@
 ---
-title: 4：集合、泛型与Stream流
-description: 微光工作室2026招新——后端：4：集合、泛型与Stream流
+title: 4：集合、泛型与设计模式
+description: 微光工作室2026招新——后端：4：集合、泛型与设计模式
 
 prev:
   link: /backend/3/
-  label: 3：数据类型与数据结构
+  label: 3：面向对象、封装继承与多态
 next:
   link: /backend/5/
   label: 5：IO流与项目挑战
@@ -15,7 +15,9 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
-> 提交题目时 提交Q1至Q6的答案 附上你的思考与心得可以加分哦~
+> 经过前面内容的学习，相信你已经对**面向对象**具有了一定的了解。现在让我们深入面向对象：从集合存储到泛型约束，再到工厂模式创建对象，这份任务带你从基础语法迈向设计，逐步构建后端思维 (๑•̀ㅂ•́)و✧
+>
+> 提交题目时 提交Q1至Q5的答案 附上你的思考与心得可以加分哦~
 
 ## Task1. 集合与遍历
 
@@ -165,99 +167,7 @@ public class User {
 
 ------
 
-## Task3. Stream流
-
-**Stream流**可以帮我们更便捷的筛选和获取数据，体现了函数式的编程风格，代码更加简洁 
-
-Stream流的方法大致分为下面三类：
-
-- 获取Stream流
-
-  我们可以通过Collection的静态方法：从集合创建流，也可以使用Arrays工具类的stream方法：从数组创建流等等等等
-
-- 中间方法
-
-  创建了流之后，我们可以通过中间方法对元素进行转换，过滤等操作。有趣的是，这些方法的返回值仍然为流，就像一条流水线一样—— 我们可以不断使用中间方法，返回新的流，经过层层筛选，最后只在流上保留你需要的元素。filter map sorted等都是常见的中间方法
-
-- 终结方法
-
-  常见的终结方法有forEach遍历 count计数 collect收集 等等
-
-**Q5. 完成下述题目**
-
-- 定义一个学生类
-
-```java
-public class Student {
-    String name;
-    int score;
-
-    public Student(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-}
-```
-
-- 初始代码
-
-```java
-public class Main {
-
-    public static void main(String[] args) {
-        // 测试数据：学生列表
-        List<Student> students = Arrays.asList(
-                new Student("Alice", 85),
-                new Student("Bob", 58),
-                new Student("Charlie", 90),
-                new Student("David", 45),
-                new Student("Eve", 72),
-                new Student("Frank", 60),
-                new Student("Grace", 55),
-                new Student("Heidi", 95)
-        );
-
-        // 请在这里补充代码，完成以下任务：
-        // 1. 过滤分数≥60的学生
-        // 2. 姓名转换成大写
-        // 3. 按姓名字母顺序排序
-        // 4. 收集成 List<String> 返回并打印
-
-        // --- 你的代码开始 ---
-
-        List<String> passingStudents = students.stream()
-        // TODO: 补充流操作链
-
-        // --- 你的代码结束 ---
-
-        // 打印结果
-        System.out.println(passingStudents);
-    }
-}
-```
-
-* 给出你的主方法（main method）代码以及输出截图
-
-
-------
-
-## Task4. 面向对象设计模式
+## Task3. 面向对象设计模式
 
 设计模式是软件工程中针对特定问题的可复用解决方案，它并非具体的代码实现，而是一种经过验证的设计思想。合理运用设计模式可以提高代码的可维护性、可扩展性和复用性。
 
@@ -281,7 +191,7 @@ public class Main {
 
 ---
 
-**Q6. 完成下述题目**
+**Q5. 完成下述题目**
 
 假设你正在开发一款二次元抽卡游戏，游戏中有多种角色类型，每种角色都有不同的技能和定位。你需要设计一个角色创建系统，根据玩家选择的角色类型来创建对应的角色对象，未来还可能扩展新的角色类型。
 

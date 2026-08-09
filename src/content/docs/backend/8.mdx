@@ -1,10 +1,10 @@
 ---
-title: 8：异常处理与Stream流
-description: 微光工作室2026招新——后端：8：异常处理与Stream流
+title: 8：部署服务器
+description: 微光工作室2026招新——后端：8：部署服务器
 
 prev:
   link: /backend/7/
-  label: 7：Linux的使用
+  label: 7：概念补充
 next:
   link: /backend/9/
   label: 9：网络编程基础
@@ -15,183 +15,146 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
-> 提交题目时 提交Q1-Q5的答案 附上你的思考与心得可以加分哦~
+上一届的武学长毕业前把这个项目丢给了我。他说大部分代码已经写完了，不过还没有部署到服务器上。
 
-***
+由于种种原因。我接下来有别的事要忙，部署这个项目的重任就交给你了😁
 
-## Task1.异常
+# 任务说明
 
-当你写好了代码 IDE检查没有语法错误 仔细检查过没有bug 程序一开始也能正常运行 是否就意味着万事大吉了呢? 
+------
 
-当然不是 程序在运行的过程中会遇到很多不确定的情况 比如程序试图打开一个不存在的文件 程序遇到了网络连接问题 程序在运算时把0作为了除数 等等等等
+本题目所涉及文件为一个小型留言板项目，其中包含前端静态页面、已经编译完成的 Java 后端 jar 包以及数据库初始化脚本。由于项目缺少完整的部署配置，目前无法直接运行。你需要补全部署相关文件，完成 Docker 容器化部署，最终使系统能够正常提供服务。
 
-比如以下代码
-
-```java
-public class Example {
-    public static void main(String[] args) {
-        System.out.println(10/0);
-        System.out.println("test");
-    }
-}
-```
+首先，从Github仓库拉取项目文件。
 
 import { Badge } from '@astrojs/starlight/components';
 
-当程序运行到<Badge text="System.out.println(10/0)" />时就会**抛出**ArithmeticException异常 也不会执行后面的打印语句。
+>仓库地址：<Badge text="https://github.com/Carinsay/Glimmer08.git" />
 
-实际上 Exception和Error都是Throwable的子类，所以它们才能够被抛出(throw)和捕获(catch)
+本项目的后端代码已整合为jar包，前端代码也已提供，现在需要你使用在前一道题学到的技术,把项目真正部署到服务器上并成功运行。
 
-**Q1. 请你简单概述一下Error与Exception的区别 当发生Exception和Error时 程序的处理态度分别应该是什么?**
+你可以选择如下几个方案完成本题：
 
-异常Exception可以分为两类 一类是继承了RuntimeException的异常 我们称之为运行时异常 也称unckecked异常
+### 方案 A：云服务器部署（加分项）
 
-对应的 另一类称为checked异常 继承了Exception 但不继承RuntimeException
+如果你拥有云服务器，可以直接部署：
 
-**Q2. 你知道这两种异常有什么区别吗 他们发生的原因分别是什么?**
-
-***
-
-## Task2.处理
-
-了解了异常的基础知识 那么 当异常发生时 我们应该如何处理呢?
-
-常见的处理方法有两种 一种是用try-catch捕获处理 另一种是在方法签名中用throws关键字抛出该异常 让调用该方法的上一层代码进行处理 ( 上一层代码同样可以选择用try-catch捕获或者再向上一层抛出 ) 如果一个异常一直没有被catch捕获 直到被抛到main方法仍然未被处理 则会由JVM来终止程序运行
-
-实际上 在日常开发中 我们并不需要总是在方法体内部使用try-catch进行异常处理 在spring等框架中 提供了更为便捷的全局异常处理机制 我们只需要简单的在方法标签上用throws关键字声名抛出的异常 统一交给全局异常处理类处理即可
-
-具体的练习题目
-
-**Q3. 题目: 文件读取和数据处理**
-
-> 此题设计IO流的部分知识 可以再学习了下一章节之后再来完成本题
-
-编写一个Java程序，要求完成以下功能：
-
-1. 读取文件: 在当前目录下，从一个文本文件中读取内容。假设文件名为<Badge text="data.txt" />，其中每一行包含一个整数。
-
-2. 数据处理: 计算这些整数的平均值。
-
-3. 异常处理
-   - 如果文件不存在，抛出自定义异常<Badge text="FileNotFoundException" />，提示文件未找到。
-   - 如果文件为空，抛出自定义异常<Badge text="EmptyFileException" />，提示文件为空。
-   - 如果文件中包含无法解析为整数的内容，捕获<Badge text="NumberFormatException" />，并提示读取到的内容格式错误。
-   - 最后，使用<Badge text="finally" />块确保文件资源被正确关闭。
+- 腾讯云 / 阿里云 / 华为云学生服务器（腾讯云和阿里云的学生身份能分别免费领取1个月和3个月的免费服务器）（推荐）
+- GitHub Student Pack 提供的相关资源
+- 其他 Linux 服务器（Azure.microsoft）
 
 要求：
 
-- 创建自定义异常类<Badge text="EmptyFileException" />。
-- 使用<Badge text="try-with-resources" />语句或者<Badge text="finally" />语句来管理文件的读取。
-- 捕获并处理可能发生的所有异常，并给出相应的提示信息。
+- Ubuntu （推荐） 或其他 Linux 发行版均可
+- 最终能够通过公网 IP 访问项目
 
-提示：
+------
 
-- 使用<Badge text="BufferedReader" />来读取文件内容。
-- 计算平均值时，可以在读取数据的同时进行累计和计数。
+### 方案 B：本地虚拟机部署
 
-***
+如果没有服务器，可以使用 VMware + Ubuntu
 
-## Task3.Stream流
+部署流程与服务器一致。
 
-Stream流可以帮我们更便捷的筛选和获取数据 体现了函数式的编程风格 代码更加简洁 Stream流的方法大致分为下面三类
+要求：
 
-- 获取Stream流
+- 项目能够在虚拟机内部正常访问
+- 提供浏览器访问截图即可
 
-  我们可以通过Collection的静态方法 从集合创建流 也可以使用Arrays工具类的stream方法 从数组创建流 等等等等
+例如：
 
-- 中间方法
-
-  创建了流之后 我们可以通过中间方法对元素进行转换 过滤等操作 有趣的是 这些方法的返回值仍然为流 就像一条流水线一样 我们可以不断使用中间方法 返回新的流 经过层层筛选 最后只在流上保留你需要的元素 filter map sorted等都是常见的中间方法
-
-- 终结方法
-
-  常见的终结方法有forEach遍历 count计数 collect收集 等等
-
-```java
-List<String> strings = List.of("I", "am", "a", "list", "of", "Strings");
-//获取stream流
-Stream<String> stream = strings.stream();
-//调用中间方法
-Stream<String> limit = stream.limit(4);
-//最后我们打印结果
-System.out.println("limit = " + limit);
+```
+宿主机浏览器
+      |
+      ↓
+Ubuntu 虚拟机
+      |
+      ↓
+Docker Compose
+      |
+      ↓
+留言板服务
 ```
 
-**Q4. 尝试执行上面代码 会得到什么结果? 这和你预想的一样吗? 为什么会出现这种结果?**
+------
 
-**Q5. 完成下述题目**
+### 方案 C：Windows WSL 部署
 
-- 定义一个学生类
+如果没有 Linux 环境，也可以使用：
 
-```java
-public class Student {
-    String name;
-    int score;
+- Windows Subsystem for Linux (WSL2)
 
-    public Student(String name, int score) {
-        this.name = name;
-        this.score = score;
-    }
+要求：
 
-    public String getName() {
-        return name;
-    }
+- 在 WSL 环境启动项目
+- 浏览器能够访问：
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
-    }
-}
+```
+http://localhost
 ```
 
-- 初始代码
+目标：让它能在你的服务器上正常跑起来，各项功能都正常运行
 
-```java
-public class Main {
+---
 
-    public static void main(String[] args) {
-        // 测试数据：学生列表
-        List<Student> students = Arrays.asList(
-                new Student("Alice", 85),
-                new Student("Bob", 58),
-                new Student("Charlie", 90),
-                new Student("David", 45),
-                new Student("Eve", 72),
-                new Student("Frank", 60),
-                new Student("Grace", 55),
-                new Student("Heidi", 95)
-        );
+后端 jar 包、前端页面、数据库脚本都已经给你了，但 **Docker 和 Nginx 的配置文件好像被武学长弄丢了，需要你自己写**。
 
-        // 请在这里补充代码，完成以下任务：
-        // 1. 过滤分数≥60的学生
-        // 2. 姓名转换成大写
-        // 3. 按姓名字母顺序排序
-        // 4. 收集成 List<String> 返回并打印
+### ToDo
 
-        // --- 你的代码开始 ---
+你需要独立编写三个核心配置文件。
 
-        List<String> passingStudents = students.stream()
-        // TODO: 补充流操作链
+首先是后端目录下的 Dockerfile。
 
-        // --- 你的代码结束 ---
+> 要求基于Java 17基础镜像，完成jar包的容器化打包与启动配置。
 
-        // 打印结果
-        System.out.println(passingStudents);
-    }
-}
-```
+其次是Nginx的配置文件
+
+> 需要完成反向代理设置，将根路径正确指向并返回前端静态页面文件，同时将接口路径准确转发至后端容器服务。
+
+最后是根目录下的docker-compose.yml文件
+
+> 需要统一编排数据库、后端和Nginx三个服务。
+> 在编排时，必须配置正确的启动依赖关系，例如通过健康检查确保后端在数据库就绪后启动，并通过环境变量正确配置容器间的数据库连接。特别注意的是，必须为MySQL服务挂载数据卷以实现数据持久化。
+
+在验收阶段，你需要进行基础功能测试。
+
+> 启动服务后，在浏览器中访问应用，确认能够正常显示留言列表，并且可以成功发送新留言以及删除已有留言。完成增删操作后，将进入核心的持久化验收环节。你需要执行命令停止并彻底销毁所有容器，等待十秒后重新拉起所有服务。再次访问页面时，必须保证刚才新增的留言依然存在，且删除的留言没有恢复，以此证明持久化配置成功。
+
+最后，请在 GitHub 创建项目仓库，将修复完善后的完整项目代码提交至远程仓库，并按照工程规范进行版本管理，保证提交记录清晰、合理。
+
+------
+
+## 提交要求：
+
+请将下面内容整理为一份markdown文档提交。
+
+1. 你的 GitHub 仓库链接
+2. 网页成功访问与功能演示截图
+
+>选其中一个提交：
+>
+>- 公网访问地址以及访问成功的截图
+>- 虚拟机浏览器访问截图
+>- WSL  运行后浏览器访问截图
+
+3. 修改说明
+
+列出你写过的配置文件：
+
+| 文件               | 修改内容         |
+| :----------------- | ---------------- |
+| backend/Dockerfile | 编写后端镜像配置 |
+| docker-compose.yml | 编写服务编排配置 |
+| nginx.conf         | 编写反向代理配置 |
 
 ## **本题提交方式**
 
 > [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
->
+
 ## 出题人联系方式
 
->**出题人QQ: 3322640054**
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3624089541&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;王府井</p>
+>
+> QQ：3624089541
+>
+> 邮箱：[3624089541@qq.com](mailto:3624089541@qq.com)

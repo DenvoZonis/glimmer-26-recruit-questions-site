@@ -1,5 +1,5 @@
 ---
-title: MEDIUM-3：Read From Memory
+title: MEDIUM-3：初识Linux系统
 description: 微光工作室2026招新——计算机系统：MEDIUM-3：Read From Memory
 
 prev:
@@ -15,588 +15,402 @@ import banner from '../../../assets/cs/banner.png';
 
 <Image src={banner} alt="计算机系统Banner" width="600" height="188" />
 
-> 欢迎各位同学从这里逐步迈入计算机系统的大门。
+> 前情提要的前情提要：这部分内容硬性要求在**Linux系统下**完成，请电脑里还没有Linux系统的同学速速安装！！！
 
->这一道题目将会带着你“上天入地”，从几乎最底层的计算机组成原理，到抽象层的计算机操作系统，都会有介绍。不过不用担心，本题目是科普向，虽然知识面很广，但是难度不会大大，诸位可以放心食用。本题的问答部分主要起引导作用，掌握如何我们当面便知～（所以不要急着糊题目完成度，扎实一点哦～）
+## 前情提要
 
-**题目做出了多少并不是第一重要的，重要的是你有没有从中学到一些东西～**
+“我要出去玩了，你们在宿舍不要偷偷内卷哦。”出门之前，作为宿舍里隐藏最深，但最爱学习之人，你如是说到。然而，空空如也的桌面和背包里的笔记本电脑已经出卖了你，你此行的目的地，不是别处，正是一个名叫图书馆的地方。当你摆好电脑，正襟危坐，觉得再也没有人能阻止你学习时，桌子上却凭空多出来一本旧书。等等，哪来的书？我来的时候没看到有书啊？你疑惑地拿起那本封皮已经旧得软榻了，封面上的字也模糊得难以辨认的书，翻开第一页就想看看有没有丢失者的名字，却看到如下内容：
 
-## Step 1 救救电脑小白
+> 第一章：陨落的天才
+> 
+> “算之力，三段！级别：低级！”
+> 
+> 跑分机器之旁，一位中年男子看了一眼显示器上的信息，颇为错愕地将之公布了出来。中年男子话刚说完，人头汹涌的广场上便响起了一阵阵骚动。
+>
+> "三段？怎么可能，这家伙不是觉醒了最顶级的Linux系统算魂吗？怎么会连萧家小子算盘算魂的算力都不如！”
+>
+> 听到这番话，这位来自林家的“天才”—— 林睨柯司，不由得握紧了双拳。为什么算力这么低，只有他自己知道：他的Linux系统是残缺的！
+>
+> 他越想越气，居然晕了过去......
+>
+> 本书完。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;刚刚高考完的小双来到了大名鼎鼎～远近闻名～的电脑城，想要为自己的大学生活购置一台电脑，想要能畅玩 3 A 游戏，轻松处理大学四年的专业需求。老板一听可来劲了，拍出了一张堪称豪华～的配置单：
+看到这里，你嘴角不由得抽动了两下，然后被气晕了......再醒来时，你发现你居然穿越成了陨落的天才林睨柯司：
 
-import info from '../../../assets/cs/medium-3-1.png';
+>“这一世，我要用我的Linux知识，把失去的一切都夺回来！！！”
 
-<Image src={info} alt="豪华配置单" />
+---
 
-电脑城老板人还怪好的诶，这么好的东西只卖你 3000，远远低于网上动辄上万的笔记本。他还说带着一部 2000￥ 128 G 内存的手机一起卖，便宜 500 块钱。
+## 第一境：算者—— 命令行参数与路径
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双转念一想：电脑都是 16 G 内存，这 128 G 内存的手机得多厉害，还这么便宜，于是痛快地准备付钱。但是他突然想起你作为他的好朋友，正好对着一块有了解，于是他决定先问问你，咨询一下你的意见。
+>命令行功能没有丢失，在此我们先简要介绍一下命令行:
+>
+>不同于Mac、Windows等系统方便的图像化操作界面，Linux系统下的操作主要依靠终端实现。
+>
+>Linux终端的操作主要依赖于各类命令，它们的功能包括但不限于文件管理、文档编辑、文件传输、磁盘管理、磁盘维护、网络通讯等内容。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;他于是问道：
+经过日夜吐纳代码，你终于迎来了突破“算者境”的契机。为了冲破瓶颈，你必须先修复体内残缺的 Linux 系统底层回路。
 
-- *<u>电脑 16 G 内存是不是有点少，我手机都有 128 G 内存诶……</u>*
-- *<u>756 G 硬盘是什么啊，这个东西怎么看起来有点太多了啊？</u>*
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你看了看这一张配置单，陷入了沉默……作为已经学习了一个暑假的计算机方向的大学生，你觉得有必要为他好好科普一下：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、CPU、GPU、主板是什么，他们分别提供什么，有什么功能？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、什么是内存、主存、存储，在电脑手机上分别的命名习惯是怎么样的？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、**电源要注意什么**？（重要安全问题）
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、CPU、GPU 的性能怎么看呢
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5、这张配置单里还隐藏了什么很重要的没有说呢，请你好好想想哦
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双听完了你的分析，又追问了电脑城老板，而后补充道，这个手机是 24 G 内存。你挠了挠头，这个配置貌似有点不太合理，仔细追问下，才知道是 8 + 16 G，你摸了摸下巴，思考起来：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*<u>该怎么向小双解释这个 16 G 是什么呢？这个东西貌似电脑里面也在使用，要不就顺便一起科普了吧～</u>*
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在你耐心的科普下，小双终于明白这是家坑人的店，他转头走出这家电脑城，决定去网上选购电脑。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双在你的指导下购买了一台符合需求的电脑（9950HX X3d），开心地玩起来了想玩的 3 A 大作。他玩的太投入了，家里断电都没能注意到。很快啊很快，随着突如其来的黑屏，小双再一次慌了神，给你打来了紧急的求助电话，向你询问该怎么办。在大致判断出问题之后，小双突然反应过来，他玩的时候貌似并没有存档！！！他悲号着问你，有没有什么办法能让电脑恢复到之前开机时候的状态，你遗憾地摇了摇头，为他耐心地解释起来：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>*所以为什么不能呢？*</u>（此处有非常多关联的考量，可以先写一个初步的答案，在完成整一道题目之后补充更加完善的回答）
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在一年之后，小双在玩游戏的时候，突然电脑蓝屏了。所幸卡的很久，在他打过来电话之后，依然卡在蓝屏的位置。你连忙让他把错误代码报给你，错误代码显示：“停止0x0000007F（0x00000008、0x00000000、0x00000000、0x00000000）UNEXPECTED_KERNEL_MODE_TRAP“。在你仔细搜索解决方案之后，你接触到了一个名为“ESP 寄存器”的东西。小双看见你的电脑屏幕，突然询问：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>*这是个什么东西？有什么用？*</u>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你思考了一下，不仅为他讲解了这一个寄存器，还为他讲解了<u>*与存储有关的几个寄存器*</u>。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;但是电脑这个问题貌似与它无关。你突然意识到一个问题：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**你清灰没有？**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双挠了挠头，不再言语，只是一味地看着你，眼神就是清澈的大学生的眼神。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你叹了口气，来到了他家里，为他清理了一次灰尘，并且一步一步给他讲解如何拆机清灰。最后你着重嘱咐：**实在没把握，就去售后花点钱。**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;清灰之后，问题解决。安抚机魂是对的(x)，灰尘堵住出风口导致积热 / 灰尘损伤元件 / …… 进一步导致电脑出现奇怪的异常(✔)
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;故事由现实生活改编，其中的大部分可能对你使用电脑有一定帮助（
-
-
-
-科普虽然结束了，但是你的学习之路可不能就此结束啊，请你完成以上对小双的科普之后，回答以下问题：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、寄存器、高速缓存、只读存储器是什么，存在于电脑的哪个部分？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、什么是 SRAM、NAND、HDD、DRAM？他们的特性分别是什么？为什么有这样的特性？分别在什么领域有应用？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、DRAM 的物理结构长什么样子？工作原理是什么？它是如何实现读取、保存、修改的？（此处请着重考虑DRAM的部分）请你配上详细的图文说明。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、为什么9950HX X3d 很多时候表现甚至不如 9800X3d ? ---> 为什么我的高速缓存不能说越多就一定越好？这之中有什么限制吗？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5、请你介绍一下 cache 最根本的原理，并且思考一下，如何把它在代码中应用起来：实现一个符合规则的矩阵乘法程序。矩阵乘法可参考线性代数的基本公式。顺便请了解一下 cache 的替换部分的内容。
-
-
-
-## Step 2: 让我看看你的内存
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;时间过得飞快，小双的大学生活又过去了一年。在你的熏陶下，他对计算机的兴趣愈发浓厚，甚至在学校的C语言课程中取得了不错的成绩。一天，他兴致勃勃地尝试编写一个稍微复杂的程序，但程序总是在运行中途神秘地崩溃，屏幕上冷冰冰地显示着一行他从未见过的错误：“**Segmentation fault**”。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“段错误？这是什么意思？”小双百思不得其解，再一次向你打来了求助电话。你意识到这是一个绝佳的机会，可以带他进入一个更深、更抽象，也更有趣的世界——操作系统的内存管理。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你决定先从这个最核心的概念讲起：**虚拟内存 (Virtual Memory)**。
+**【任务 1.1：不同的路】**
 
 import { Badge } from '@astrojs/starlight/components';
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你向小双解释道：“你程序中使用的每一个地址，比如你定义一个变量 <Badge text="int a" />，它的地址 <Badge text="&a" />，都不是它在物理内存条上的真实地址。这叫做虚拟地址。而这个变量实际存储在内存条上的地址，叫做物理地址。”
+根据这具身体原主“林睨柯司”的残存记忆，无上备份秘典文件就藏在  <Badge text="/var/backups/turing/" /> 目录下。而他最后一次操作的目录是 <Badge text="/home/lin/workspace/" />。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双挠挠头，问道：<u>*“为什么需要虚拟内存&虚拟地址？这里面是如何进行组织的呢？”*</u>
+import { Steps } from '@astrojs/starlight/components';
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你笑了笑，仔细地回答了他的问题，并且画出了两幅图
+<Steps>
 
-import memory from '../../../assets/cs/medium-3-2.jpg';
+1. 请解释什么是**绝对路径**，什么是**相对路径**？
+2. 假设你现在正处于 <Badge text="/home/lin/workspace/" />，请分别写出前往 <Badge text="/var/backups/turing/" /> 的绝对路径命令和相对路径命令（假设 <Badge text="cd" /> 命令还能用）。
 
-<Image src={memory} alt="memory" style="zoom:33%;" />
+</Steps>
 
-import memory2 from '../../../assets/cs/medium-3-3.png';
+请回答以上问题并提交至**markdown文档**中。
 
-<Image src={memory2} alt="memory2" />
+**【任务 1.2：何处启程】**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>*借助这个描述 32 位系统的图，你非常顺畅地为他描述了 64 位系统下的样子，详细地讲述了每一个段都存放了些什么东西，顺便用 "cat /proc/[PID]/maps" 随便抽选了一个幸运进程展示了一下。*</u>
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双于是问道：“还有一个问题，那我虚拟内存空间和实际的空间是怎么对应上的呢？它总不能随便拿一块吧？万一和别人冲突打架了怎么办啊？“
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你微微一笑，正好之前你学习过这一块关于<u>*“页表管理”*</u>的知识，可以好好地为他讲一讲了。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;……
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“所以，小双，”你总结道，“你遇到的‘Segmentation fault’，从OS层面来看，就是你的程序试图访问一个虚拟地址，但MMU在查询页表时，发现这个虚拟页要么根本没有被映射到任何物理帧，要么你对它的操作（比如写入一个只读页）违反了页表里规定的权限。这时，MMU就会产生一个**缺页异常 (Page Fault)**，报告给操作系统。操作系统检查后，发现这是一个非法的访问，于是就终止了你的程序，并告诉你——‘段错误’！”
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“我们还可以写一个程序，来尝试一下手动进行翻译”你如是说，打开了从网页上下载下来的一份半成品代码，完成了它，**有着优秀的差错控制**，并且附上了详细的注释，递给了小双。
+为了重写丢失的命令，你打开了 C 语言编辑器。你想起所有的终端命令本质上都是用 C 语言写出的程序，而程序的入口往往是这样定义的：
 
 ```c
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdbool.h>
+int main(int argc, char *argv[])
+```
 
-#define PAGE_DIR_BITS   10 // 页目录索引位数
-#define PAGE_TABLE_BITS 10 // 页表索引位数
-#define OFFSET_BITS     12 // 页内偏移位数
+<Steps>
 
-#define PAGE_TABLE_SIZE (1 << PAGE_TABLE_BITS) // 1024
-#define PAGE_DIR_SIZE   (1 << PAGE_DIR_BITS)   // 1024
-#define PAGE_SIZE       (1 << OFFSET_BITS)     // 4096 (4KB)
+1. 简要解释主函数参数 **argc** 与 **argv[]** 的含义是什么。
+2. 针对上述命令，请问 argc 的值是多少？argv[0]、argv[1]、argv[2] 分别指向什么字符串？
 
-// 页表项 (PTE - Page Table Entry)
-// 包含物理帧号和权限位
-typedef struct {
-    bool     present_bit; // 存在位：1表示该页在物理内存中，0表示不在
-    bool     rw_bit;      // 读写位：1表示可读可写，0表示只读
-    uint32_t frame_number; // 对应的物理帧号
-} PTE;
+</Steps>
 
-// 页目录项 (PDE - Page Directory Entry)
-// 包含指向页表的指针和存在位
-typedef struct {
-    bool present_bit; // 存在位：1表示该页目录项指向一个有效的页表，0表示无效
-    PTE* page_table_base; // 指向一个页表（PTE数组）的指针
-} PDE;
+请回答以上问题并提交至**markdown文档**中。
 
-// 模拟的页目录表（作为我们模拟的 "CR3寄存器" 指向的地址）
-PDE page_directory[PAGE_DIR_SIZE];
+---
 
+## 第二境：算王—— 重建 ls 命令与位运算
 
-/**
- * @brief 模拟MMU进行地址翻译和权限检查
- * * @param virtual_address 要翻译的32位虚拟地址
- * @param is_write_access 访问类型，true表示写操作，false表示读操作
- */
-void translate_address(uint32_t virtual_address, bool is_write_access) {//请你完成这个尚未完成的函数
-    printf("----------------------------------------\n");
-    printf("Translating Virtual Address: 0x%08X (%s access)\n", virtual_address, is_write_access ? "WRITE" : "READ");
+>我们同样先简单介绍一下**ls命令**：
+>
+>**ls**的全称是:list directory contents
+>
+>它的使用方法是，在命令行中输入：
+>
+> ```Bash
+> ls 参数 文件路径
+> ```
+>
+>并敲击回车。
+>
+>命令用于显示指定工作目录下之内容（列出目前工作目录所含的文件及子目录)。
+>
+>如果不写文件夹路径的，默认展示的是当前所位于的文件目录。
+>
+>还有其他辅助的命令参数：
+>
+>```Bash
+>-a 显示所有文件及目录 (. 开头的隐藏文件也会列出)
+>-d 只列出目录（不递归列出目录内的文件）。
+>-l 以长格式显示文件和目录信息，包括权限、所有者、大小、创建时间等。
+>-r 倒序显示文件和目录。
+>-t 将按照修改时间排序，最新的文件在最前面。
+>-A 同 -a ，但不列出目前目录及父目录
+>-F 在列出的文件名称后加一符号；例如可执行档则加 "*", 目录则加 "/"
+>-R 递归显示目录中的所有文件和子目录。
+>```
+>
+>如:
+>
+>```Bash
+>ls -a 文件夹路径
+>```
+>
+>对比使用<Badge text="ls" />的效果：
+>
+>```Bash
+>ATC1   ATC3   cf10   cf12   cf14   cf16   cf18   cf2    cf3    cf5    cf7    cf9    lutece test2
+>ATC2   cf1    cf11   cf13   cf15   cf17   cf19   cf20   cf4    cf6    cf8    luogu  test1
+>```
+>
+>使用<Badge text="ls -a" /> 的效果：
+>
+>```Bash
+>.         .DS_Store ATC1      ATC3      cf10      cf12      cf14      cf16      cf18      cf2       cf3       cf5       cf7       cf9       lutece    test2
+>..        .vscode   ATC2      cf1       cf11      cf13      cf15      cf17      cf19      cf20      cf4       cf6       cf8       luogu     test1
+>```
 
-    // --- 步骤1: 从虚拟地址中提取索引和偏移 ---
-    
+洞中方一日，世上已千年。随着体内算力如大江大河般澎湃，你深知，是时候补全 Linux 系统的下一块拼图，冲击“算王境”了。
 
-    printf(" -> Page Dir Index: %u (0x%X)\n", page_dir_index, page_dir_index);
-    printf(" -> Page Table Index: %u (0x%X)\n", page_table_index, page_table_index);
-    printf(" -> Offset: %u (0x%X)\n", offset, offset);
+**【任务 2.1：非同寻常之物】**
 
-    // --- 步骤2: 查询页目录表 ---
-    
+这一次，你将目标锁定在探查万物的 ls 命令上。你在识海深处搜寻，竟发掘出一枚名为 <Badge text="myls.c" /> 的上古文件。这似乎是林睨柯司坐化前留下的残篇，你决定补全程序中的辅助函数，以此完美替代残缺的 ls 命令。
 
-    // --- 步骤3: 查询页表 ---
+下面展示残缺（<Badge text="parse_permissions()" />函数未定义）的代码：
 
-    
-    // --- 步骤4: 检查访问权限 ---
-
-    printf("  [*] Checking access permissions...\n");
-    
-    // --- 步骤5: 计算最终的物理地址 ---
-
-    
-    printf("  [SUCCESS] Translation complete.\n");
-    printf("  Virtual Address 0x%08X  =>  Physical Address 0x%08X\n", virtual_address, physical_address);
-}
-
-/**
- * @brief 初始化模拟环境，预设一些页表和页目录项
- */
-void initialize_simulation() {
-    printf("Initializing MMU simulation environment...\n");
-
-    // 初始化整个页目录表
-    for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
-        page_directory[i].present_bit = false;
-        page_directory[i].page_table_base = NULL;
-    }
-
-    // 2. 创建并填充第一个页表 (用于虚拟地址 0x00000000 - 0x003FFFFF)
-    //    假设页目录索引为0
-    PTE* page_table_1 = (PTE*)malloc(sizeof(PTE) * PAGE_TABLE_SIZE);
-    
-    page_directory[0].present_bit = true;
-    page_directory[0].page_table_base = page_table_1;
-
-    for (int i = 0; i < PAGE_TABLE_SIZE; ++i) {
-        page_table_1[i].present_bit = false; // 默认所有PTE无效
-    }
-    // 设置几个有效的PTE
-    // VA 0x00001xxx -> PA 0x0001Axxx (可读可写)
-    page_table_1[1].present_bit = true;
-    page_table_1[1].rw_bit = true;
-    page_table_1[1].frame_number = 26; // 物理帧号 0x1A
-
-    // VA 0x00002xxx -> PA 0x0008Fxxx (只读)
-    page_table_1[2].present_bit = true;
-    page_table_1[2].rw_bit = false; // 只读页面
-    page_table_1[2].frame_number = 143; // 物理帧号 0x8F
-    
-    // 3. 创建并填充第二个页表 (用于虚拟地址 0x00400000 - 0x007FFFFF)
-    //    假设页目录索引为1
-    PTE* page_table_2 = (PTE*)malloc(sizeof(PTE) * PAGE_TABLE_SIZE);
-    page_directory[1].present_bit = true;
-    page_directory[1].page_table_base = page_table_2;
-
-    for (int i = 0; i < PAGE_TABLE_SIZE; ++i) {
-        page_table_2[i].present_bit = false;
-    }
-    // VA 0x00400xxx -> PA 0x00033xxx
-    page_table_2[0].present_bit = true;
-    page_table_2[0].rw_bit = true;
-    page_table_2[0].frame_number = 51; // 物理帧号 0x33
-
-    printf("Initialization complete.\n\n");
-}
-
-// --- 4. 主函数，运行测试用例 ---
-
-int main() {
-    initialize_simulation();
-
-    // --- 测试用例 ---
-
-    // 1. 成功读取: 访问一个有效的、可读写的地址
-    // 虚拟地址: 0x00001A2B
-    // -> 页目录索引: 0, 页表索引: 1, 偏移: 0xA2B
-    // -> 查找 PDE[0] -> PTE[1] -> 物理帧号 26 (0x1A)
-    // -> 物理地址: (26 << 12) | 0xA2B = 0x1A000 | 0xA2B = 0x1AA2B
-    translate_address(0x00001A2B, false);
-
-    // 2. 成功写入: 访问一个有效的、可读写的地址
-    // 与上面相同，但请求是写操作
-    translate_address(0x00001A2B, true);
-
-    // 3. 保护错误: 尝试写入一个只读页面
-    // 虚拟地址: 0x00002048
-    // -> 页目录索引: 0, 页表索引: 2, 偏移: 0x048
-    // -> 查找 PDE[0] -> PTE[2] -> rw_bit = 0, 触发保护错误
-    translate_address(0x00002048, true);
-
-    // 4. 缺页错误: 访问一个页表项(PTE)无效的地址
-    // 虚拟地址: 0x00003555
-    // -> 页目录索引: 0, 页表索引: 3, 偏移: 0x555
-    // -> 查找 PDE[0] -> PTE[3] -> present_bit = 0, 触发缺页错误
-    translate_address(0x00003555, false);
-
-    // 5. 段错误: 访问一个页目录项(PDE)无效的地址
-    // 虚拟地址: 0x00804000 (页目录索引=2)
-    // -> 页目录索引: 2
-    // -> 查找 PDE[2] -> present_bit = 0, 触发段错误
-    translate_address(0x00804000, false);
-
-    // --- 释放动态分配的内存 ---
-    // 在真实OS中，这部分内存管理会更复杂
-    free(page_directory[0].page_table_base);
-    free(page_directory[1].page_table_base);
-
-    return 0;
-}
-
-
-
+```c
+#include <stdio.h>  
+#include <dirent.h>  
+#include <sys/stat.h>  
+#include <string.h>  
+#include <stdlib.h>  
+#include <sys/types.h> // 可能不是必需的，但符合POSIX标准  
+#include <time.h>
 /*
-sample output:
-
-Initializing MMU simulation environment...
-Initialization complete.
-
-----------------------------------------
-Translating Virtual Address: 0x00001A2B (READ access)
- -> Page Dir Index: 0 (0x0)
- -> Page Table Index: 1 (0x1)
- -> Offset: 2603 (0xA2B)
-  [*] Checking Page Directory Entry 0...
-      -> PDE is present. Page table base address: 0x60000305c010
-  [*] Checking Page Table Entry 1...
-      -> PTE is present. Frame number: 26 (0x1A)
-  [*] Checking access permissions...
-      -> Access granted.
-  [SUCCESS] Translation complete.
-  Virtual Address 0x00001A2B  =>  Physical Address 0x0001AA2B
-----------------------------------------
-Translating Virtual Address: 0x00001A2B (WRITE access)
- -> Page Dir Index: 0 (0x0)
- -> Page Table Index: 1 (0x1)
- -> Offset: 2603 (0xA2B)
-  [*] Checking Page Directory Entry 0...
-      -> PDE is present. Page table base address: 0x60000305c010
-  [*] Checking Page Table Entry 1...
-      -> PTE is present. Frame number: 26 (0x1A)
-  [*] Checking access permissions...
-      -> Access granted.
-  [SUCCESS] Translation complete.
-  Virtual Address 0x00001A2B  =>  Physical Address 0x0001AA2B
-----------------------------------------
-Translating Virtual Address: 0x00002048 (WRITE access)
- -> Page Dir Index: 0 (0x0)
- -> Page Table Index: 2 (0x2)
- -> Offset: 72 (0x48)
-  [*] Checking Page Directory Entry 0...
-      -> PDE is present. Page table base address: 0x60000305c010
-  [*] Checking Page Table Entry 2...
-      -> PTE is present. Frame number: 143 (0x8F)
-  [*] Checking access permissions...
-  [!] FAULT: Write attempt on a read-only page. (Protection Fault)
-----------------------------------------
-Translating Virtual Address: 0x00003555 (READ access)
- -> Page Dir Index: 0 (0x0)
- -> Page Table Index: 3 (0x3)
- -> Offset: 1365 (0x555)
-  [*] Checking Page Directory Entry 0...
-      -> PDE is present. Page table base address: 0x60000305c010
-  [*] Checking Page Table Entry 3...
-  [!] FAULT: Page Table Entry not present. (Page Fault)
-----------------------------------------
-Translating Virtual Address: 0x00804000 (READ access)
- -> Page Dir Index: 2 (0x2)
- -> Page Table Index: 4 (0x4)
- -> Offset: 0 (0x0)
-  [*] Checking Page Directory Entry 2...
-  [!] FAULT: Page Directory Entry not present. (Segmentation Fault)
+    输出文件信息
 */
+void parse_permissions(mode_t mode, char *perms);
 
-```
-
-> 请注意，这段代码是在用户态下对地址翻译过程的一个软件模拟。在真实的系统中，地址翻译是由CPU内部的MMU硬件自动完成的，而页表本身则存放在受内核保护的物理内存中，用户程序无法直接访问或修改它们
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双挠了挠头，或许笨笨的他还需要一点时间消化一下。完成了为小双的科普，现在你或许还有一些知识可以再深入学习一下（别忘了写回答里面）：
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、与内存组织相关的寄存器有什么？他们分别有什么作用？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、请你仔细地描述你所学到的关于页表管理这一块知识。请注意描述的抽象层次，借助你画的图片，展现他们的逻辑关系，细细地描述描述呢。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	提示：你应该至少涉及到 MMU、页表、TLB、多级页表等内容的原理。从概念本身出发，介绍它的作用，介绍它与其他部分的联系。最后实际描述一次从虚拟内存到物理内存的过程。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3、一次从内存中完整读取数据的过程是怎么样的？一次从存储中完整读取数据的过程是什么样的？请借助图描述一下。
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4、缺页异常是什么？有什么种类，分别的典型例子有什么？分别是怎么处理的？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5、什么是页面替换？是怎么样进行的？先换掉什么？
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6、在缺页异常中，或许你会学到一个很符合直觉的词语：中断。但是这具体是什么呢？相信你会从这里迈向更广阔的 OS 世界～
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
-
-## Step 3 让我玩玩你的内存
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双继续学习着计算机的知识，他安装上了 linux 系统，了解到了命令行的相关操作。他对这个黑乎乎的东西来了兴趣，想知道这个是什么。一番搜索之后，才明白这其实是一个叫做 shell 的东西。它本身就是一个程序，用来调出其他的程序。小双接着搜索，了解到这个名叫 shell 的东西是通过 exec 实现的。他飞速摇来了你，想了解了解 exec 的相关特性。你写了一个简单的程序，运行了一下，对着结果非常轻松地<u>*解释了 exec 最为重要的特性*</u>。（代码后附）
-
-```c
-#include <stdio.h> 
-#include <unistd.h>     // 提供了对POSIX操作系统API的访问，如 getpid(), execlp()
-#include <stdlib.h> 
-
-int main() {
-    
-    // getpid() 是一个系统调用，会返回当前进程的ID (Process ID)
-    printf("--> Hello from exec_demo! My PID is %d.\n", getpid());
-    printf("--> I am about to call execlp() to transform into 'ls -l'...\n");
-    fflush(stdout); // 刷新标准输出
-
-    execlp("ls", "ls", "-l", NULL);
-    // execlp() 会在系统的PATH环境变量所指定的目录中，查找名为"ls"的可执行文件。
-    // 参数列表:
-    // 第一个 "ls": 要执行的程序名。
-    // 第二个 "ls": 作为新程序argv[0]的值（通常是程序名本身）。
-    // 第三个 "-l": 作为新程序argv[1]的值（一个参数）。
-    // NULL: 参数列表必须以NULL结尾。
-
-    printf("This message will be printed here.\n");
-
-    return 0;
+void print_file_info(const char *name, struct stat *statbuf) {
+    char buf[10];
+    parse_permissions( statbuf->st_mode, buf);
+    printf("%s\t", name);  //文件名
+    printf("%lld\t", (long long)statbuf->st_size); // 文件大小  
+    printf("%s\t", buf); // 文件权限  
+    // 最后修改时间  
+    char timebuf[80];  
+    strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %H:%M", localtime(&statbuf->st_mtime));  
+    printf("%s\n", timebuf);  
+}  
+/*
+    文件路径信息的处理
+*/  
+void list_directory(const char *path) {  
+    DIR *dir;  
+    struct dirent *entry;  
+    struct stat statbuf;  
+  
+    if (!(dir = opendir(path))) {  
+        perror("opendir");  
+        exit(EXIT_FAILURE);  
+    }  
+  
+    while ((entry = readdir(dir)) != NULL) {  
+        char full_path[1024];  
+        snprintf(full_path, sizeof(full_path), "%s/%s", path, entry->d_name);  
+  
+        if (stat(full_path, &statbuf) == -1) {  
+            perror("stat");  
+            continue;  
+        }  
+  
+        print_file_info(entry->d_name, &statbuf);  
+    }  
+    closedir(dir);  
+}  
+/*
+    程序的主函数部分
+*/
+int main(int argc, char *argv[]) {  
+    if (argc < 2) {  
+        list_directory("."); // 默认列出当前目录  
+    } else {  
+        for (int i = 1; i < argc; i++) {  
+            list_directory(argv[i]);  
+        }  
+    }  
+  
+    return 0;  
 }
 ```
 
+请结合你对 Linux 文件系统的了解，回答：
 
+<Steps>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;”在 exec 这样的特性之下，那 shell 作为一个能一直和你闲聊的黑框框是怎么实现的呢？“小双问道。
+1. 以上哪些头文件是你见过的，哪些是你没见过或者很少见到的？
+2. <Badge text="<dirent.h>" /> 和 <Badge text="<sys/stat.h>" /> 分别提供了哪些关键的结构体或函数？它们分别有什么作用?（简要回答即可，不用详细列举所有作用）
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你搓了搓手，为他介绍起了几乎所有 Unix 系统的基石： <u>*fork - exec 模型。*</u>
+</Steps>
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在了解了这个模型基础之后，小双迫不及待地想要和你一起<u>*尝试写一个 minishell*</u>，不过他代码能力比较糟糕，只有最基础的思路，请你帮帮他～ 
+请回答以上问题并提交至**markdown文档**中。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双 ：我们只需要创建一个无限的循环，不断等待着用户的输入。得到输入之后，使用 [fork](https://man7.org/linux/man-pages/man2/fork.2.html) 创建一个子进程，使用 exec 去执行对应的命令就可以了。在这里为了简化，我们假定命令不会携带参数，就是单独的一个字符串，例如 ls, pwd 之类的就可以了～
+**【任务 2.2：看看权限】**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**温馨提示：请关注 fork 的例子，这对于你完成这份代码有极大的帮助**
+你想要让补全的<Badge text="myls" />具有能展示文件权限的功能。
 
+文件的权限有三种，分别是**r —— read(读)**，**w —— write(写)**，**x —— execute(执行)**
 
+原生 <Badge text="ls -l" /> 命令能打印出文件的权限，如 <Badge text="rwxr-xr-x" />。但在底层，文件权限被存储在一个名为 <Badge text="st_mode " />的整数中。(请思考：整数如何表示文件的权限)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实现了这个 minishell 之后，小双十分高兴。你这个时候回想一路上带领小双学习的路径，想起了一个与内存相关的机制隐藏在 fork 中，这时候你提出了一个引导性的问题：
+其中最低的 9 位存储了权限信息：
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;“小双，你有没有想过，如果这个程序很大，那 fork 的时候的开销会非常恐怖啊，那如果遇到某些需要 fork 多个进程出来的， 是不是就不太能接受了呢？比如对于一个内存占了 1 G 的程序， fork 的时候是不是要频繁地复制，会狠狠地拖慢运行速度？但是你看我们这个 minishell 里面，都是直接 fork 之后选择 exec 一个新的程序，实际上对于原本的内存我们并不需要。 你想想，这个问题该怎么解决呢？”
+从高到低依次为：**用户(Owner)** 的 r, w, x；**组(Group)** 的 r, w, x；**其他(Other)** 的 r, w, x。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小双再度陷入了宕机的状态……
+为了让重写的 <Badge text="myls" /> 具备显示权限的功能，请用最少的代码和位运算，补全下方 C 语言函数，将**整数**形式的权限位转换为 9个字符的权限**字符串**。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;你于是为他介绍了一下 <u>*cow (copy on write) 机制*</u>，并且在上面的 minishell 中简单地加了一点东西，用<u>*程序的运行结果来证明*</u>这一回事。
+```c
+// mode即传入的存储权限信息的整数， 如0754（八进制表示）
+// 提示：传入的 mode 变量不仅包含权限信息，高位可能还包含文件类型。在进行位运算时，请注意屏蔽（Mask）掉不需要的高位数据。
+void parse_permissions(mode_t mode, char *perms) {
+    
+    // 权限字符对照表
+    char rwx[] = {'r', 'w', 'x'};
+    
+    // 请补全代码写在 TO DO 与 END OF TO DO 之间：
+    // TO DO
+    
+    
+    
+    // END OF TO DO
+    
+    perms[9] = '\0'; // 字符串结尾
+}
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;意见参考（或许有些信息你可以在 /proc/self-pid/statm 读取到）：
+```
+请将思考结果和正确的代码提交至**markdown文档**中。
 
-- 父子进程中的变量虚拟地址是否相同？
-- <Badge text="fork" /> 后，子进程能否读取到父进程的内存？
-- 当子进程写入共享内存后，它的内存占用（RSS/VSS）是否会发生变化？
+---
 
-- （还有什么很重要的东西呢？）
+## 第三境：算尊—— 深入理解 Inode 与文件树
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在了解了具体的细节之后，你也可以<u>*写一个 fork*</u> 啦～
+借由 <Badge text="myls" /> 洞察万物之能，你的修为一日千里，已隐隐触及“算尊境”的门槛。但修行之路切忌迷失本心，这一次，你决定以 C 语言重铸 pwd命令，彻底掌控自身在天地间的坐标。
+
+**【任务 3.1：万物皆 Inode】**
+
+在 Linux 文件系统中，文件名只是表象，真正标识文件灵魂的是 **Inode（索引节点）**。
+
+<Steps>
+
+1. 请简述 Inode 中存储了文件的哪些信息？
+2. Inode中**不包含**文件的什么信息？
+3. 每一个目录下必定存在两个隐藏的特殊目录：<Badge text="&quot;.&quot;" /> 和 <Badge text="&quot;..&quot;" />它们分别代表什么？它们的 Inode 编号在系统根目录<Badge text="&quot;/&quot;" />下有什么特殊规律？
+
+</Steps>
+
+请回答以上问题并提交至**markdown文档**中。
+
+**【任务 3.2：寻我来时路】**
+
+既然天地间现成的 <Badge text="getcwd()" /> 函数已被封印，你只能根据参悟<Badge text=" myls" /> 时的造化，以及近期的闭关成果，纯手工以 C 语言完成对 **pwd命令** 的推演重构，并将这份心血凝聚为 <Badge text="mypwd.c" /> 秘卷。
+
+>要求与提示：
+>
+>你无法使用<Badge text="getcwd()" /> 函数
+>
+>你目前只能使用 <Badge text="stat()" /> 获取文件的Inode 编号，使用 <Badge text="chdir()" /> 切换工作目录，以及使用 <Badge text="opendir()" />/<Badge text="readdir()" /> 读取目录内容。
+>
+>你该如何利用 <Badge text="&quot;.&quot;" /> 和 <Badge text="&quot;..&quot;" /> 一步步逆推，最终拼接出完整的当前绝对路径？
+>
+>整个工作路径均在同一个文件系统的挂载点下，无需考虑跨设备的情况。
+
+其中，获取指定文件Inode编号的函数和所需的头文件已给出，具体如下：
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
 
-// --- 预设的数据结构和模拟环境 ---
-
-#define NUM_PAGES 16    // 为了简化输出，我们假设一个进程最多16个虚拟页
-#define NUM_FRAMES 64   // 系统总共有64个物理帧
-
-// 模拟物理内存帧
-typedef struct {
-    bool in_use;        // 此物理帧是否已被分配
-    int share_count;    // 有多少个PTE指向此帧（用于COW）
-} PhysicalFrame;
-
-// 模拟页表项 (PTE)
-typedef struct {
-    bool present;       // 存在位
-    bool writable;      // 可写位
-    int frame_index;    // 指向的物理帧的索引
-} PTE;
-
-// 模拟进程控制块 (PCB)
-typedef struct {
-    int pid;
-    PTE page_table[NUM_PAGES]; // 每个进程有一个页表
-} Process;
-
-// 全局模拟环境
-PhysicalFrame G_physical_memory[NUM_FRAMES]; // G_ 前缀表示全局变量
-Process* G_process_list[10];                 // 最多10个进程
-int G_next_pid = 100;                        // 下一个要分配的PID
-int G_process_count = 0;
-
-// --- 框架提供的辅助函数 (无需修改) ---
-
-// 初始化模拟环境
-void init_simulation() {
-    for (int i = 0; i < NUM_FRAMES; ++i) {
-        G_physical_memory[i].in_use = false;
-        G_physical_memory[i].share_count = 0;
+ino_t get_inode(const char *path) {
+    struct stat statbuf;
+    if (stat(path, &statbuf) == -1) {
+        perror("stat failed");
+        exit(EXIT_FAILURE);
     }
-    printf("Simulation environment initialized.\n");
-}
-
-// 创建初始的父进程以供测试
-Process* create_initial_process() {
-    Process* parent = (Process*)malloc(sizeof(Process));
-    parent->pid = G_next_pid++;
-    G_process_list[G_process_count++] = parent;
-
-    // 初始化页表
-    for (int i = 0; i < NUM_PAGES; ++i) parent->page_table[i].present = false;
-
-    // 分配几个页面
-    // 页面0: 代码页 (只读)
-    parent->page_table[0] = (PTE){.present=true, .writable=false, .frame_index=10};
-    G_physical_memory[10] = (PhysicalFrame){.in_use=true, .share_count=1};
-    // 页面1: 数据页 (可写)
-    parent->page_table[1] = (PTE){.present=true, .writable=true, .frame_index=25};
-    G_physical_memory[25] = (PhysicalFrame){.in_use=true, .share_count=1};
-    // 页面2: 堆页面 (可写)
-    parent->page_table[2] = (PTE){.present=true, .writable=true, .frame_index=30};
-    G_physical_memory[30] = (PhysicalFrame){.in_use=true, .share_count=1};
-
-    printf("Initial parent process (PID %d) created.\n", parent->pid);
-    return parent;
-}
-
-// 打印一个进程的页表状态，用于验证
-void print_process_pagetable(Process* proc) {
-    if (!proc) return;
-    printf("\n--- Page Table for PID: %d ---\n", proc->pid);
-    printf("V.Page | Present | Writable | P.Frame | Frame Share Count\n");
-    printf("----------------------------------------------------------\n");
-    for (int i = 0; i < NUM_PAGES; ++i) {
-        if (proc->page_table[i].present) {
-            int frame_idx = proc->page_table[i].frame_index;
-            printf("  %-4d |    %-3s  |   %-5s  |   %-5d | %-d\n",
-                   i,
-                   proc->page_table[i].present ? "Yes" : "No",
-                   proc->page_table[i].writable ? "Yes" : "No",
-                   frame_idx,
-                   G_physical_memory[frame_idx].share_count);
-        }
-    }
-    printf("----------------------------------------------------------\n");
-}
-
-/**
- * @brief 模拟fork()系统调用，创建一个子进程，并实现写时复制(COW)。
- * @param parent 指向父进程的指针。
- * @return 指向新创建的子进程的指针。
- */
-Process* my_fork(Process* parent) {
-
-    printf("\n>>> Calling my_fork() on parent PID %d...\n", parent->pid);
-    
-    // TODO: 步骤 1: 创建一个新的子进程结构体(Process)，并为其分配一个新的PID。
-
-
-    // TODO: 步骤 2: 遍历父进程的页表 (从 i=0 到 NUM_PAGES-1)。
-
-
-    // TODO: 步骤 3: 对于父进程中每一个有效的页表项 (即 present_bit 为 true 的PTE):
-    //     a. 将父进程的PTE完整地复制给子进程的对应PTE。
-    //
-    //     b. 检查这个页面是否是可写的 (writable)。如果是，则需要触发COW机制。
-    //
-    //     c. COW处理:
-    //        i.  将父进程中该页面的PTE权限设置为只读 (writable = false)。
-    //        ii. 将子进程中该页面的PTE权限也设置为只读 (writable = false)。
-    //
-    //     d. 无论是只读页还是被设置为只读的可写页，现在它们都被共享了。
-    //        因此，需要增加其对应的物理帧的共享计数 (share_count)。
-    //        提示: 物理帧的索引是 pte.frame_index。
-
-
-    // TODO: 步骤 4: 将新创建的子进程添加到全局进程列表 G_process_list 中，并更新 G_process_count。
-
-
-    // TODO: 步骤 5: 返回指向子进程的指针。
-
-
-    return NULL; // 请在完成实现后，删除或替换这一行
-}
-
-
-// --- 用于测试你的实现的 main 函数 (无需修改) ---
-int main() {
-    init_simulation();
-
-    Process* parent = create_initial_process();
-    printf("\n--- State BEFORE fork ---\n");
-    print_process_pagetable(parent);
-
-    Process* child = my_fork(parent);
-
-    printf("\n--- State AFTER fork ---\n");
-    printf("Parent process state after fork:\n");
-    print_process_pagetable(parent);
-
-    printf("Child process state after fork:\n");
-    print_process_pagetable(child);
-
-    // 释放内存 (在真实OS中，这是由进程退出时完成的)
-    free(parent);
-    free(child);
-
-    return 0;
+    return statbuf.st_ino;
 }
 ```
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;恭喜你完成了这一道题目 ～需要提示的是，你需要做的不是完成题目，而是学习 。在这个大框架之下还有许许多多细节的知识等待着你去发掘，希望我们能当面好好交流交流你学到了什么～
+请将正确的代码提交至**markdown文档**中。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;不过在此之前，需要你把本题中提出的问题、涉及的代码，都用：**问题 - 答案** 的方式成对地写在 markdown 中进行提交哦，当然可以附上你的学习感谢，有额外加分～
+> 注意：该任务有一定难度，在初步尝试无果后，允许直接使用AI得出答案。但是，一定要看懂AI给你的答案，要有你自己的思考，还要记得把解决题目的思路在文档中展示出来。如果你使用了AI协助你完成这道题目，请简述你在**哪个环节**运用到了AI，将你主要的**prompt**的截图提交到**markdown文档**中。
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**特别提醒 ：你为小双解释的也需要写进 md 中哦～** 
+---
 
+## 最终境：算帝—— 递归与文件筛选
+
+历经千百次报错与段错误的洗礼，你已臻至化境，距离传说中的最高境界——“算帝境”仅半步之遥。冥冥中，大道梵音在你耳畔回响：突破算帝、横渡虚空回家的道标，就封印在禁地 <Badge text="/var/backups/turing/" /> 之下，名为 <Badge text="The_way_home.tar.gz" /> 的圣物之中。
+
+你毫不犹豫地祭出刚炼成的 ls 法宝，刹那间，终端上万千文件如星渊般倾泻而出，晃瞎了你的双眼。你道心险些失守：糟了！这里堆积了太多岁月的残渣（临时文件），那件圣物<Badge text="The_way_home.tar.gz" />不知被深埋在哪一重空间（子目录）裂缝里了！
+
+**【任务 4.1：敢问，路在何方？】**
+
+为了在限定时间内找到文件，你打算写一个探测函数，让它具备在**当前目录**及其**所有子目录**下，寻找指定文件名的功能。
+
+请仔细阅读以下给出的简化版探测函数框架，利用递归思想，补全缺失的核心逻辑：
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+// 递归查找指定文件，若找到则打印其相对路径
+void find_file(const char *current_path, const char *target_name) {
+    DIR *dir;
+    struct dirent *entry;
+    struct stat statbuf;
+
+    if (!(dir = opendir(current_path))) {
+        return; // 无法打开目录则跳过
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        // 忽略当前目录 . 和父目录 .. 防止无限死循环
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+
+        char full_path[1024];
+        snprintf(full_path, sizeof(full_path), "%s/%s", current_path, entry->d_name);
+
+        if (stat(full_path, &statbuf) == -1) continue;
+
+        // 请补全代码写在 TO DO 与 END OF TO DO 之间：
+        // 要求：
+        // 1. 检查当前 entry 的文件名是否与 target_name 匹配，若匹配则打印 full_path。
+        // 2. 如果当前 entry 是一个目录，则需要对其进行深度优先的递归查找。
+        // （提示：若(statbuf.st_mode & S_IFMT) == S_IFDIR则statbuf为目录文件）
+        // TO DO
+        
+        
+        
+        // END OF TO DO
+    }
+    closedir(dir);
+}
+```
+
+请将正确的代码提交至**markdown文档**中。
+
+---
+
+## 后记
+
+>【玄黄历九九八一年，九月三日，夜】
+>
+>指尖按落，终端清响，如敲金戛玉，荡开万道黑底绿字的玄奥符文。
+>
+>随着那一段递归寻径的代码在识海中疯狂运转，沉寂万载的 <Badge text="/var/backups/turing/" /> 终于绽放出冲天金芒！
+>
+><Badge text="Target found at: /var/backups/turing/deep_void/The_way_home.tar.gz" />
+>
+>刹那间，天地异变，雷劫滚滚！你的身上隐隐有九条“内核线程”化作金龙盘旋而起，昔日被嘲讽“算之力三段”的废柴，今日以 C 语言为笔、以系统调用为剑，一举踏入那传说中的**算帝之境**！
+>
+>苍穹之上，天道投影缓缓吐出一句玄奥无比的解压法诀：
+><Badge text="tar -zxvf The_way_home.tar.gz" />
+>
+>你气沉丹田，运起全身上下的 Linux 算力，大吼一声：“给本帝解包！”
+>
+>虚空撕裂，光芒四射。那神秘的文件之中，并未藏着什么至尊神功，只有一行苍劲有力的大字映入眼帘：
+>
+> “同学，醒醒！图书馆要关门了，你这笔记本屏幕亮了一下午，口水都滴到桌子上了！”
+>
+>“吸——”
+>
+>你猛地倒吸一口凉气，从图书室的课桌上猝然惊醒。
+>
+>哪有什么萧家算盘，哪有什么林家残骸。身旁只有管理员阿姨看傻子一样的眼神，以及笔记本屏幕上那个刚刚编译成功、正优雅运行着的 <Badge text="find_file" /> 程序。
+>
+>你擦了擦嘴角不小心流出的涎水，合上电脑，步入清冷而广袤的校园夜色之中。
+>
+>异世算帝也罢，一介书生也罢。世间黑箱万千，吾自以灵心为钥，指打乾坤，何惧漫漫长夜？
+>
+>***少年负气凌云志，踏遍黑夜莫回头——***
+
+---
 
 ## **本题提交方式**
 
@@ -604,4 +418,8 @@ int main() {
 
 ## 出题人联系方式
 
-> Acacia  QQ：384934309
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2674884616&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Niko✔</p>
+>
+> QQ：2674884616
+>
+> 邮箱：[2674884616@qq.com](mailto:2674884616@qq.com)
