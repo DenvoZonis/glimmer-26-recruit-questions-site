@@ -3,14 +3,14 @@ title: "Java01 - Java基础"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/backend/go语言基础-level1/
+  link: /archives/23/backend/go语言基础-level1/
   label: Go语言基础-level1
 next:
-  link: /recruit/archives/23/backend/java02/
+  link: /archives/23/backend/java02/
   label: Java02 - 语言特性
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
     难度系数：简单
 

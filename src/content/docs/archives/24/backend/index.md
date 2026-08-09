@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/24/backend/java08-数据结构/
+  link: /archives/24/backend/java08-数据结构/
   label: Java - 08 数据结构
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![](https://pic.imgdb.cn/item/64c4a5611ddac507cc058911.png)
 

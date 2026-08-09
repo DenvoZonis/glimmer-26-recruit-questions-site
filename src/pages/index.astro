@@ -1,0 +1,1238 @@
+---
+// src/pages/index.astro
+//
+// 独立首页：不复用 Starlight 默认的顶部导航栏 / 侧边栏 / 右侧目录。
+// 用 <StarlightPage template="splash"> 是关键 —— 它会让 Starlight 自动把
+// hasSidebar / tableOfContents 都设为 false（源码 utils/routing/data.ts 第
+// 54、65 行：`hasSidebar: entry.data.template !== 'splash'`，splash 模板下
+// toc 也强制为 false），所以左侧栏、右侧目录不会被渲染，不需要我们自己再隐藏。
+// 但顶部的 <header class="header">（Logo / 搜索 / 主题切换）在任何模板下都会
+// 无条件渲染（见 Page.astro），所以下方 <style is:global> 里手动把它隐藏掉，
+// 换成我们自己做的、更适合首页的浮动品牌条。
+//
+// 仍然复用主题自带的 Card / CardGrid / Badge / LinkCard 组件——它们已经在
+// md3.components 层里做好了 token 化样式，不需要重新写卡片/徽标的 CSS。
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import dev_1 from '../assets/main-page/dev-1.jpg';
+import dev_2 from '../assets/main-page/dev-2.jpg';
+import honor1 from '../assets/main-page/honor1.jpg';
+import honor2 from '../assets/main-page/honor2.jpg';
+import honor3 from '../assets/main-page/honor3.jpg';
+import honor4 from '../assets/main-page/honor4.jpg';
+import honor5 from '../assets/main-page/honor5.jpg';
+import qq_group_qrcode from '../assets/main-page/qq_group_qrcode.jpg';
+
+// 页内锚点导航 —— 自定义的浮动条用，不是 Starlight 的侧边栏/顶栏内容。
+const inPageNav = [
+    { label: '主页', href: '#' },
+    { label: '团队', href: '#team' },
+    { label: '荣誉', href: '#honors' },
+    { label: '活动', href: '#activities' },
+    { label: '学长寄语', href: '#senior-advice' },
+    { label: '方向简介', href: '#services' },
+    { label: '加入我们', href: '#join' }
+];
+
+// 技术方向数据（沿用原 index.astro 的数据，与 index.html 方向简介对应）
+const tracks = [
+    {
+        icon: 'window' as const,
+        title: 'Web 前端',
+        desc: '什么是前端，最简单的讲，当你打开一个网页，看到的酷炫的动画，贴心的交互，丰富的内容，这些都是属于前端范畴的开发内容。前端是应用与用户交互的窗口，是用户使用体验的保障。',
+    },
+    {
+        icon: 'server' as const,
+        title: 'Web 后端',
+        desc: '一个好看的皮囊固然重要，但里面有趣的灵魂也绝不可缺少。如果说前端是那好看的皮囊，那么后端便是那其中有趣的灵魂，负责着设计程序架构、管理数据库以控制前端所展示的内容。',
+    },
+    {
+        icon: 'desktop' as const,
+        title: '计算机系统',
+        desc: '计算机系统，作为连接软件与硬件的桥梁，是现代信息技术的核心。它涵盖了从底层硬件架构到操作系统、网络协议、并发编程、系统安全等多个层面。学习计算机系统，就是解锁数字世界奥秘的钥匙，让我们能够深入理解计算机是如何工作的，以及如何利用这些原理来构建更加高效、安全、智能的应用和服务。',
+    },
+    {
+        icon: 'seti:odata' as const,
+        title: '机器学习',
+        desc: '无论你在哪里，无论你要做什么，你总能听到、用到人工智能。那它到底是什么呢？维基上说，"指由人制造出来的机器所表现出来的智能"。也许足够多的 if-else 就能实现网络天才那样的人工智能，但是有更多更复杂的、未知的任务我们的逻辑还实现不了，于是便需要机器学习来近似的解决这些难题。',
+    },
+];
+
+// 扩展技术方向（来自 index.html 的"光点计划"方向）
+// const extendedTracks = [
+//     {
+//         icon: 'web-asset' as const,
+//         title: '分布式系统与云计算',
+//         subtitle: '光点计划',
+//         desc: '分布式系统是由一组通过网络进行通信、为了完成共同的任务而协调工作的计算机节点组成的系统。面对互联网技术与应用的爆炸式发展，分布式系统已经成为了现代化信息系统的必备支撑。无论是天猫双十一秒杀、抖音视频流业务还是云原神负载均衡，分布式系统的思想已然涉及现代互联网业务的方方面面。',
+//     },
+//     {
+//         icon: 'copyright' as const,
+//         title: '编译原理',
+//         subtitle: '光点计划',
+//         desc: '你是否好奇在你编写的代码中所使用的函数、变量和逻辑是如何被翻译成计算机能够执行的指令的呢？你是否好奇编译世界中的前后中端是什么？你听说过LLVM吗？你是否想从上层应用走下底层，探索编译与汇编的奥秘？',
+//     },
+//     {
+//         icon: 'camera-enhance' as const,
+//         title: '处理器设计',
+//         subtitle: '光点计划',
+//         desc: '在《三体》科幻小说中，描述了这样一个计算机：人列计算机。该计算机由3000万士兵组成，规模之大。如今的计算机芯片，同样也是由百万级的元件构成。处理器设计就是如何利用这些元件通过连接组合一个可以完成复杂计算任务的解决过程。然后就是对设计进行优化，使用最少的元件，最小的延迟完成一个计算任务。',
+//     },
+//     {
+//         icon: 'camera-enhance' as const,
+//         title: '操作系统',
+//         subtitle: '光点计划',
+//         desc: '说到操作系统，不知道大家对挂在嘴边的windows是否有所了解，它就是我们最广为熟知操作系统。操作系统是计算机系统中至关重要的组成部分，负责管理计算机的各种资源，以及协调不同程序之间的执行，就连你目前查看我们官网的硬件屏幕也离不开操作系统的管理。',
+//     },
+//     {
+//         icon: 'camera-enhance' as const,
+//         title: 'CV图像分类',
+//         subtitle: '光点计划',
+//         desc: '在计算机视觉（CV）领域，图像分类任务占有较大的份额。目前有大量的研究人员都在专注于这个领域，并已经有广泛且深厚的研究成果。与图像分类有关的业务在日常生活中比较普遍，表现效果和性能优异，极大地便捷了人类的生活，促进了 AI 技术的落地实践和蓬勃发展。',
+//     },
+// ];
+
+// 学长寄语数据（来自 index.html）
+const seniorAdvice = [
+    { name: 'Bri1987', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1216754835&spec=100', message: '试炼的终点是花开万里，愿你以渺小启程、以伟大结束' },
+    { name: 'Eternity', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1370172202&spec=100', message: '选择比努力重要' },
+    { name: 'oldsheep', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1067632600&spec=100', message: 'ai会统治一切，做好准备' },
+    { name: 'tkk', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2071594767&spec=100', message: '好想进微光工作室啊~' },
+    { name: 'lee', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=239148349&spec=100', message: '好好睡觉' },
+    { name: 'Liquid', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=492928615&spec=100', message: '好好学英语' },
+    { name: '奶绿、', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3073494764&spec=100', message: '万事开头难，当心完美主义陷阱' },
+    { name: 'Cause', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=2046193615&spec=100', message: '寝室不是学习的地方' },
+    { name: 'Dalek', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3064517736&spec=100', message: '好好准备六级' },
+    { name: 'Pluto.', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1183452142&spec=100', message: '少刷视频，多睡觉' },
+    { name: '农夫山醇', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3062803169&spec=100', message: '记得每天吃早餐' },
+    { name: '时人评', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1017327044&spec=100', message: '嘻嘻，我一定要活下去' },
+    { name: '热心网友宁桑.', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3322640054&spec=100', message: '带我打舞萌' },
+    { name: 'Parzival', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=450621609&spec=100', message: '一想到最坏的结果也不过如此，又有勇气去随心而行了' },
+    { name: '王府井🍍', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3624089541&spec=100', message: '允许自己慢下来，去撞见属于你的热爱。' },
+];
+
+// 团队荣誉数据（来自 index.html）
+const honors = [
+    { year: '2025+', items: [
+        'ACM-ICPC 国际大学生程序设计大赛亚洲区域赛银牌',
+        '全国大学生计算机系统能力大赛 PolarDB 数据库创新设计赛国家级三等奖',
+        '蓝桥杯省级二等奖x2+省级三等奖x1+国家级一等奖x1',
+        '网络技术挑战赛国家级三等奖',
+        '大学生计算机设计大赛—华迪杯四川省一等奖',
+        '全国大学生英语竞赛国家级一等奖',
+        '第十七届服务外包创新创业大赛国家级二等奖x1+国家级三等奖x1',
+    ]},
+    { year: '2024', items: [
+        '全国大学生计算机系统能力大赛编译系统设计赛全国特等奖x1',
+        '中国高校计算机大赛—网络技术挑战赛全国二等奖x1',
+        '蓝桥杯个人赛软件赛全国三等奖x1',
+        '第十五届服务外包创新创业大赛国家级三等奖x2',
+        '第十六届服务外包创新创业大赛国家级三等奖x2+省级三等奖x1',
+        '第十七届中国大学生计算机设计大赛省级一等奖x1',
+    ]},
+    { year: '2023', items: [
+        '第十四届服务外包创新创业大赛国家级二等奖x1',
+        '第十二届软件杯大赛国家级三等奖x1',
+        '全国大学生计算机系统能力大赛编译系统设计赛全国二等奖x1',
+        '全国大学生计算机系统能力大赛数据库管理系统设计赛全国二等奖x1',
+        '蓝桥杯信息技术产业人才大赛省级二等奖x2+省级三等奖x1',
+        '第十六届中国大学生计算机设计大赛省级二等奖x1+省级三等奖x1',
+    ]},
+    { year: '2022', items: [
+        '中国高校计算机大赛-网络技术挑战赛区域赛一等奖x1',
+        '中国高校计算机大赛-网络技术挑战赛国家级一等奖x1',
+        '服务外包创新创业大赛西部区域赛一等奖x1',
+        '服务外包创新创业大赛国家级二等奖x1',
+        '蓝桥杯信息技术产业人才大赛省级二等奖x1+省级三等奖x1',
+    ]},
+    { year: '2021', items: [
+        'IEEE联发科技杯二等奖x1',
+        '中国高校计算机大赛-网络技术挑战赛国家级三等奖x1',
+        '中国高校计算机大赛-微信小程序应用开发赛国家级三等奖x1',
+        '中国高校计算机大赛-网络技术挑战赛国家级二等奖x1',
+        '中国高校计算机大赛-微信小程序应用开发赛区域二等奖x1',
+    ]},
+];
+
+// 在 honors 数组定义后添加
+const honorImageMap = {
+  '2025+': honor4,
+  '2024': honor5,
+  '2023': honor3,
+  '2022': honor2,
+  '2021': honor1,
+};
+
+// 日常活动图片（来自 index.html）
+const activityImages = [
+    '/main-page/activity1.png',
+    '/main-page/activity2.jpg',
+    '/main-page/activity3.jpg',
+    '/main-page/activity4.jpg',
+    '/main-page/activity5.jpg',
+    '/main-page/activity6.jpg',
+    '/main-page/activity7.jpg',
+    '/main-page/activity8.jpg',
+    '/main-page/activity9.jpg',
+];
+---
+
+<StarlightPage
+    frontmatter={{
+        title: '主页',
+        description: '心有微光，不惧黑暗',
+        template: 'splash',
+    }}
+>
+    <!-- ========== 关键改动：给首页内容容器添加唯一 ID ========== -->
+    <div id="custom-homepage" class="md3-home not-content">
+        <!-- ============ 自定义浮动品牌条（替代 Starlight 默认导航栏） ============ -->
+        <div class="md3-topbar">
+            <a class="md3-brand" href="/">
+                <img src="/favicon.png" alt="微光工作室图标" />
+                <span>微光工作室</span>
+            </a>
+            <nav class="md3-toplinks" aria-label="页面内导航">
+                {inPageNav.map((item) => <a href={item.href}>{item.label}</a>)}
+            </nav>
+            <a class="md3-btn md3-btn-tonal md3-btn-sm" href="/information/">立即加入</a>
+        </div>
+
+        <!-- ============ 全屏视频 Banner ============ -->
+        <section class="md3-hero">
+            <video
+                class="md3-hero-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                src="/banner.webm"
+            >
+            </video>
+            <div class="md3-hero-scrim" aria-hidden="true"></div>
+
+            <div class="md3-hero-content">
+                <span class="hero-tag">Glimmer</span>
+                <h1>心有微光，不惧黑暗</h1>
+                <p>
+                    前身为微软创新工作室，成立于2012年，是技术氛围最浓厚、团队联系最紧密的工作室之一。由一群热爱技术的Geek组成，力图召集志同道合、敢于创新的伙伴们，共同拼搏、挑战自我。
+                </p>
+                <div class="md3-hero-actions">
+                    <a class="md3-btn md3-btn-filled" href="#join">加入我们</a>
+                    <a class="md3-btn md3-btn-outlined" href="/information/">招新说明</a>
+                </div>
+            </div>
+
+            <a class="md3-hero-scroll" href="#team" aria-label="向下滚动查看更多">
+                <span>探索更多</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+            </a>
+        </section>
+
+        <!-- ============ 数据条 ============ -->
+        <section class="md3-stats-strip">
+            <div class="md3-container md3-stats">
+                <div class="md3-stat">
+                    <strong>10+</strong>
+                    <span>年工作室发展</span>
+                </div>
+                <div class="md3-stat">
+                    <strong>70+</strong>
+                    <span>活跃成员</span>
+                </div>
+                <div class="md3-stat">
+                    <strong>30+</strong>
+                    <span>竞赛成果</span>
+                </div>
+                <div class="md3-stat">
+                    <strong>100%</strong>
+                    <span>大厂Offer获得率</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 团队发展 ============ -->
+        <section class="md3-section" id="team">
+            <div class="md3-container">
+                <div class="md3-team">
+                    <div class="md3-team-intro">
+                        <p class="md3-eyebrow">关于我们</p>
+                        <h2>团队发展</h2>
+                        <div class="md3-team-text">
+                            <p>
+                                工作室近年就业成员100%获得字节跳动、阿里、腾讯等大厂offer，保研成员数十人进入清华、北大、中科大等顶尖名校，在读成员多人获得国家奖学金、多人名列专业排名第一。
+                            </p>
+                            <p>
+                                目前团队在校成员在OS内核、云计算、编译技术、硬件设计、SDN等方向均有研究进展与项目实现，毕业成员也多投身基础架构相关岗位和研究领域。除此之外，团队也拥有应用层web开发、机器学习等成熟的技术组与培养路线，欢迎不同技术方向的同学与我们共同进步。
+                            </p>
+                            <p>
+                                "心有微光，不惧黑暗"是我们的口号，也是微光工作室在发展中始终贯彻的信条。秉持"兴趣驱动，自由发展"的理念，我们乐于接收对不同技术方向感兴趣的朋友，善于探求未知的技术领域。工作室由一群热爱技术的Geek组成，力图召集志同道合，敢于创新的伙伴们共同拼搏，挑战自我。
+                            </p>
+                            <p>
+                                作为研究氛围最自由的工作室之一，微光工作室并不限制团队成员的技术方向，而是鼓励成员以兴趣导向的积极进步寻找适合自己的领域，同时鼓励百花齐放的路线创新。
+                            </p>
+                        </div>
+                    </div>
+                    <div class="md3-team-images">
+                        <Image src={dev_1} alt="团队合影" width="460" height="345" />
+                        <Image src={dev_2} alt="团队活动" width="460" height="345" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 团队荣誉 ============ -->
+        <section class="md3-section md3-section-alt" id="honors">
+            <div class="md3-container">
+                <div class="md3-honors">
+                    <div class="md3-honors-intro">
+                        <p class="md3-eyebrow">荣誉</p>
+                        <h2>团队荣誉</h2>
+                        <p>工作室成员积极参与各类高校比赛，奖项众多，包括：</p>
+                    </div>
+                    <div class="md3-honor-carousel">
+                        <!-- 左侧：文字（年份 + 奖项列表），独立 wrapper -->
+                        <div class="md3-honor-text-container">
+                            <div class="swiper md3-honor-text-swiper">
+                                <div class="swiper-wrapper">
+                                    {honors.map((yearData) => (
+                                        <div class="swiper-slide md3-honor-text-slide">
+                                            <h3>{yearData.year}</h3>
+                                            <ul>
+                                                {yearData.items.map((item) => (
+                                                    <li>{item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右侧：图片，独立 wrapper；翻页按钮放在图片 wrapper 下方 -->
+                        <div class="md3-honor-image-area">
+                            <div class="swiper md3-honor-image-swiper">
+                                <div class="swiper-wrapper">
+                                    {honors.map((yearData) => (
+                                        <div class="swiper-slide">
+                                            <Image
+                                                src={honorImageMap[yearData.year]}
+                                                alt={`${yearData.year} 荣誉`}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div class="md3-honor-controls">
+                                <button class="md3-honor-prev" aria-label="上一年">←</button>
+                                <button class="md3-honor-next" aria-label="下一年">→</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 日常活动 ============ -->
+        <section class="md3-section" id="activities">
+          <div class="md3-container">
+            <p class="md3-eyebrow">活动</p>
+            <h2>日常活动</h2>
+            <p class="md3-section-desc">
+              正所谓开源互助，共同进步，微光工作室技术氛围浓厚，学期内会定期组织多场技术相关分享会活动，
+              由有相关研究经验的工作室内同学对某项技术主题展开专题分享，激发工作室成员在相关领域的学习热情。
+              除了技术分享以外，工作室还会时常举行非技术分享/学业答疑会以及桌游/聚餐等团建活动，
+              增加工作室成员的紧密联系和诚挚感情，在紧张的学习生活之余增添一分属于集体的美好记忆。
+            </p>
+
+            <!-- Swiper 容器（活动图片） -->
+            <div class="swiper md3-activity-swiper">
+              <div class="swiper-wrapper">
+                {activityImages.map((img) => (
+                  <div class="swiper-slide">
+                    <a href={img} data-fancybox="gallery" class="md3-activity-thumb">
+                      <img src={img} alt="日常活动" />
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <!-- 分页器（小圆点） -->
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 学长寄语 ============ -->
+        <section class="md3-section md3-section-alt" id="senior-advice">
+          <div class="md3-container">
+            <div class="md3-advice-header">
+              <p class="md3-eyebrow">传承</p>
+              <h2>学长寄语</h2>
+            </div>
+
+            <!-- Swiper 容器（无分页器） -->
+            <div class="swiper md3-advice-swiper">
+              <div class="swiper-wrapper">
+                {seniorAdvice.map((person) => (
+                  <div class="swiper-slide md3-advice-card">
+                    <img src={person.avatar} alt={person.name} />
+                    <h3>{person.name}</h3>
+                    <p>"{person.message}"</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ 方向简介（基础方向） ============ -->
+        <section class="md3-section" id="services">
+            <div class="md3-container">
+                <p class="md3-eyebrow">我们在做什么</p>
+                <h2>方向简介</h2>
+                <p class="md3-section-desc">
+                    欢迎来到微光工作室。常言道："八仙过海，各显神通"。选择你感兴趣的方向，而后只管大显神通！以下并不完全是工作室主流/学长在研究的主要方向，更确切地说是工作室成员"实力延伸"的领域。除了自身主要在研究的底层方向，工作室成员往往熟悉其中至少一个领域。
+                </p>
+                <CardGrid>
+                    {tracks.map((track) => (
+                        <Card title={track.title} icon={track.icon}>
+                            {track.desc}
+                        </Card>
+                    ))}
+                </CardGrid>
+            </div>
+        </section>
+
+        <!-- ============ 方向简介（光点计划扩展方向） ============ -->
+        <!-- <section class="md3-section md3-section-alt">
+            <div class="md3-container">
+                <p class="md3-eyebrow">光点计划</p>
+                <h2>更多方向</h2>
+                <p class="md3-section-desc">
+                    除了上述方向，工作室还通过"光点计划"覆盖了更多前沿技术领域。
+                </p>
+                <CardGrid>
+                    {extendedTracks.map((track) => (
+                        <Card title={track.title} icon={track.icon}>
+                            <span class="md3-track-subtitle">{track.subtitle}</span>
+                            {track.desc}
+                        </Card>
+                    ))}
+                </CardGrid>
+            </div>
+        </section> -->
+
+        <!-- ============ 加入我们 ============ -->
+        <section class="md3-section" id="join">
+            <div class="md3-container md3-join">
+                <div>
+                    <p class="md3-eyebrow">加入我们</p>
+                    <h2>准备好和我们一起做点什么了吗？</h2>
+                    <p class="md3-section-desc">
+                        团队秉承"兴趣驱动，自由发展"的理念，欢迎任何热爱技术的伙伴加入。
+                        无论你之前是否接触过计算机，无论你对哪方面感兴趣，
+                        只要有想法，有决心，敢于挑战困难，不断学习新知识，就能成为我们的一员！
+                    </p>
+                    <p>
+                        招新群：1077343149（招新报名表请进群下载）
+                    </p>
+                    <Image src={qq_group_qrcode} alt="招新群二维码" class="md3-join-qr" width="160" height="160" />
+                </div>
+                <div class="md3-join-links">
+                    <h3>相关链接</h3>
+                    <ul>
+                        <li><a href="https://csinfra.cn/" target="_blank">光点计划</a></li>
+                        <li><a href="/submit/" target="_blank">交题网站</a></li>
+                        <li><a href="/QA/" target="_blank">Q&A</a></li>
+                        <li><a href="/cs/introduction/" target="_blank">计算机系统招新题</a></li>
+                        <li><a href="/frontend/introduction/" target="_blank">前端招新题</a></li>
+                        <li><a href="/backend/introduction/" target="_blank">后端招新题</a></li>
+                        <li><a href="/ml/introduction/" target="_blank">机器学习招新题</a></li>
+                    </ul>
+                    <LinkCard
+                        title="查看招新说明"
+                        description="内含我们的联系方式，希望大家多来水群交流~"
+                        href="/information/"
+                    />
+                </div>
+            </div>
+        </section>
+    </div>
+</StarlightPage>
+
+<style is:global>
+    /*
+     * 关键修复：利用 :root:has(#custom-homepage) 作为条件前缀。
+     * 即使 Vite 将这段 CSS 打包进公共样式，非首页因没有 #custom-homepage 元素，
+     * 选择器不会命中，从而避免污染文档页。
+     */
+
+    /* 隐藏 Starlight 默认顶部导航栏（仅在首页） */
+    :root:has(#custom-homepage) .header {
+        display: none !important;
+    }
+
+    /* 顶栏隐藏后，取消 main-frame 为顶栏预留的顶部内边距 */
+    :root:has(#custom-homepage) .main-frame {
+        padding-top: 0 !important;
+        padding-inline-start: 0 !important;
+    }
+
+    /* 取消 Starlight 内容区默认的左右内边距 / 最大宽度 */
+    :root:has(#custom-homepage) .content-panel {
+        padding: 0 !important;
+    }
+    :root:has(#custom-homepage) .content-panel + .content-panel {
+        border-top: none !important;
+    }
+    :root:has(#custom-homepage) .sl-container {
+        max-width: 100% !important;
+        margin-inline: 0 !important;
+    }
+
+    /* 隐藏 splash 模板下仍会渲染的默认 <h1> */
+    :root:has(#custom-homepage) #_top {
+        display: none !important;
+    }
+
+    /* ---------- 学长寄语 Swiper ---------- */
+    .md3-advice-swiper {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* 卡片样式：无背景边框，圆形头像 */
+    .md3-advice-swiper .swiper-slide {
+      text-align: center;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0.5rem 0.75rem;
+      box-sizing: border-box;
+    }
+
+    .md3-advice-swiper .swiper-slide img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.75rem;
+      border: 2px solid var(--md-sys-color-outline-variant, #43474e);
+      background: var(--md-sys-color-surface-container-high, #21242a);
+    }
+
+    .md3-advice-swiper .swiper-slide h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1rem;
+      color: var(--md-sys-color-on-surface, #fff);
+    }
+
+    .md3-advice-swiper .swiper-slide p {
+      margin: 0;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 70%, transparent);
+    }
+
+    /* ---------- 日常活动 Swiper ---------- */
+    .md3-activity-swiper {
+      width: 100%;
+      overflow: visible;           /* 允许分页器显示在外部 */
+      margin-top: 1.5rem;
+      padding-bottom: 2.8rem;      /* 为分页器预留空间 */
+    }
+
+    .md3-activity-swiper .swiper-slide {
+      padding: 0 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .md3-activity-swiper .swiper-slide .md3-activity-thumb {
+      display: block;
+      overflow: hidden;
+      border-radius: var(--md-sys-shape-corner-medium, 0.75rem);
+      border: 1px solid var(--md-sys-color-outline-variant, #43474e);
+      transition: transform 0.2s ease;
+      height: 200px;
+      width: 100%;
+    }
+
+    .md3-activity-swiper .swiper-slide .md3-activity-thumb:hover {
+      transform: scale(1.02);
+    }
+
+    .md3-activity-swiper .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 分页器（小圆点） */
+    .md3-activity-swiper .swiper-pagination {
+      position: relative !important;
+      bottom: 0 !important;
+      margin-top: 0.8rem;
+      line-height: 1;
+    }
+
+    .md3-activity-swiper .swiper-pagination-bullet {
+      width: 8px !important;
+      height: 8px !important;
+      background: var(--md-sys-color-outline-variant, #5a5f66) !important;
+      opacity: 1 !important;
+      transition: background 0.3s, transform 0.2s;
+      display: inline-block;
+      margin: 0 4px;
+    }
+
+    .md3-activity-swiper .swiper-pagination-bullet-active {
+      background: var(--md-sys-color-primary, #9ecaff) !important;
+      transform: scale(1.3);
+    }
+
+    /* ---------- 团队荣誉：文字/图片同步轮播 ---------- */
+    /* 左右两栏：左侧纯文本 wrapper，右侧图片 wrapper（含翻页按钮），布局见下方 .md3-honor-carousel */
+    .md3-honor-carousel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 3rem;
+        align-items: center;
+    }
+
+    /* 左侧文字 wrapper */
+    .md3-honor-text-container {
+        background: var(--md-sys-color-surface-container-high);
+        padding: 2rem;
+        border-radius: var(--md-sys-shape-corner-medium);
+        border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    .md3-honor-text-swiper {
+        width: 100%;
+    }
+    .md3-honor-text-slide {
+        background: none;
+        padding: 0;
+    }
+    .md3-honor-text-slide h3 {
+        margin-top: 0;
+        font-size: 2rem;
+        color: var(--md-sys-color-primary);
+    }
+    .md3-honor-text-slide li {
+        line-height: 1.8;
+    }
+
+    /* 右侧图片 wrapper：图片轮播 + 下方翻页按钮 */
+    .md3-honor-image-area {
+        min-width: 0; /* 同上，防止被撑爆 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .md3-honor-image-swiper {
+        width: 100%;
+        height: 520px;
+        border-radius: var(--md-sys-shape-corner-large);
+        overflow: hidden;
+        border-top-left-radius: 200px;
+        width: 380px;
+    }
+    .md3-honor-image-swiper .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .md3-honor-image-swiper img {
+        max-width: 100%;
+        max-height: 100%; /* 跟随容器实际高度（520/360/280px 各断点），而不是写死某一个值 */
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    /* 翻页按钮：放在图片 wrapper 下方，点击时通过 Swiper controller 同步驱动文字轮播 */
+    .md3-honor-controls {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    .md3-honor-controls button {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+        font-size: 1.3rem;
+    }
+</style>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+    /*
+     * 下面是首页自己的视觉样式，全部通过 var(--md-sys-*) / var(--md3-comp-*)
+     * 读取主题 token，不写死颜色值；每个 var() 都带了一个不依赖主题也能看的
+     * 兜底值，避免 token 名称在主题版本升级后变化时页面直接"裂开"。
+     * 这个 <style> 块没有加 is:global，Astro 会自动给这里的选择器加上
+     * scope 属性，只作用于当前组件模板里写的元素（不会渗透进 Card /
+     * LinkCard 等子组件内部的 DOM，也不会影响页面其它地方）。
+     */
+
+    .md3-home {
+        --md3-home-max-width: 1180px;
+        --md3-home-pad-x: clamp(1.25rem, 4vw, 3rem);
+        color: var(--md-sys-color-on-surface, #e2e2e6);
+        background: var(--md-sys-color-surface, #121316);
+    }
+
+    .md3-container {
+        max-width: var(--md3-home-max-width);
+        margin-inline: auto;
+        padding-inline: var(--md3-home-pad-x);
+    }
+
+    /* ---------- 通用按钮 ---------- */
+    .md3-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.85rem 1.75rem;
+        border-radius: var(--md-sys-shape-corner-full, 999px);
+        font-size: var(--md-sys-typescale-label-large-size, 0.95rem);
+        font-weight: 600;
+        line-height: 1;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: transform var(--md3-motion-duration-short-4, 200ms) var(--md-sys-motion-easing-standard, ease),
+            box-shadow var(--md3-motion-duration-short-4, 200ms) var(--md-sys-motion-easing-standard, ease),
+            background-color var(--md3-motion-duration-short-4, 200ms) var(--md-sys-motion-easing-standard, ease);
+    }
+    .md3-btn-sm {
+        padding: 0.5rem 1.1rem;
+        font-size: var(--md-sys-typescale-label-medium-size, 0.85rem);
+    }
+    .md3-btn-filled {
+        background: var(--md-sys-color-primary, #9ecaff);
+        color: var(--md-sys-color-on-primary, #003258);
+    }
+    .md3-btn-filled:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--md-sys-elevation-level2, 0 8px 20px rgba(0, 0, 0, 0.28));
+    }
+    .md3-btn-tonal {
+        background: var(--md-sys-color-secondary-container, #3c4858);
+        color: var(--md-sys-color-on-secondary-container, #d8e3f8);
+    }
+    .md3-btn-tonal:hover {
+        transform: translateY(-2px);
+    }
+    .md3-btn-outlined {
+        background: color-mix(in srgb, var(--md-sys-color-surface, #121316) 40%, transparent);
+        color: var(--md-sys-color-on-surface, #e2e2e6);
+        border-color: color-mix(in srgb, var(--md-sys-color-outline, #8b9198) 70%, transparent);
+    }
+    .md3-btn-outlined:hover {
+        transform: translateY(-2px);
+        border-color: var(--md-sys-color-outline, #8b9198);
+    }
+
+    /* ---------- 浮动品牌条 ---------- */
+    .md3-topbar {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        position: fixed;
+        background: rgba(15, 23, 42, 0.45);
+        inset-inline: 0;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        padding: 1.25rem var(--md3-home-pad-x);
+    }
+    .md3-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: #FEF8F4;
+        font-weight: 700;
+        font-size: 1.05rem;
+        text-decoration: none;
+        letter-spacing: 0.02em;
+    }
+
+    .md3-toplinks {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    .md3-toplinks a {
+        color: color-mix(in srgb, #FEF8F4 82%, transparent);
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+    .md3-toplinks a:hover {
+        color: #38bdf8;
+    }
+
+    /* ---------- Hero ---------- */
+    .md3-hero {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        min-height: 100svh;
+        overflow: hidden;
+        background: var(--md-sys-color-surface-container-lowest, #0b0c0f);
+    }
+    .md3-hero-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+    }
+    .md3-hero-scrim {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--md-sys-color-scrim, #000) 30%, transparent) 0%,
+            color-mix(in srgb, var(--md-sys-color-scrim, #000) 50%, transparent) 55%,
+            color-mix(in srgb, var(--md-sys-color-scrim, #000) 85%, transparent) 100%
+        );
+    }
+    .md3-hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 50rem;
+        padding-inline: var(--md3-home-pad-x);
+        margin-top: 2.5rem;
+        text-align: center;
+        color: #FEF8F4;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    .hero-tag {
+        margin-top: 100px !important;
+        display: inline-block !important;
+        padding: 6px 16px !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        border-radius: 999px !important;
+        font-size: 14px !important;
+        font-weight: 750 !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase !important;
+        color: #7dd3fc !important;
+        backdrop-filter: blur(8px) !important;
+    }
+    .md3-hero-content h1 {
+        margin: 0;
+        font-size: var(--md-sys-typescale-display-large-size, clamp(2.25rem, 5vw, 3.5rem));
+        line-height: var(--md-sys-typescale-display-large-line-height, 1.15);
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+    .md3-hero-content p {
+        margin: 0;
+        font-size: var(--md-sys-typescale-body-large-size, 1.05rem);
+        line-height: 1.7;
+        color: color-mix(in srgb, #FEF8F4 85%, transparent);
+    }
+    .md3-hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+    .md3-hero-scroll {
+        position: absolute;
+        bottom: 2rem;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 70%, transparent);
+        font-size: 0.75rem;
+        letter-spacing: 0.15em;
+        text-decoration: none;
+        text-transform: uppercase;
+        animation: md3-scroll-bounce 2.2s infinite;
+    }
+    .md3-hero-scroll svg {
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+    @keyframes md3-scroll-bounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-6px);
+        }
+        60% {
+            transform: translateY(-3px);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .md3-hero-scroll {
+            animation: none;
+        }
+    }
+
+    /* ---------- 数据条 ---------- */
+    .md3-stats-strip {
+        background: var(--md-sys-color-surface-container, #1a1c20);
+        border-block: 1px solid var(--md-sys-color-outline-variant, #43474e);
+    }
+    .md3-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        padding-block: 2.75rem;
+        text-align: center;
+    }
+    .md3-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+    .md3-stat strong {
+        font-size: var(--md-sys-typescale-headline-large-size, 2rem);
+        font-weight: 700;
+        color: var(--md-sys-color-primary, #9ecaff);
+    }
+    .md3-stat span {
+        font-size: 0.85rem;
+        color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 70%, transparent);
+    }
+
+    /* ---------- 通用 section ---------- */
+    .md3-section {
+        padding-block: clamp(3.5rem, 7vw, 6rem);
+    }
+    .md3-section-alt {
+        background: var(--md-sys-color-surface-container-low, #16181c);
+    }
+    .md3-eyebrow {
+        margin: 0 0 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--md-sys-color-primary, #9ecaff);
+    }
+    .md3-section h2 {
+        margin: 0 0 0.75rem;
+        font-size: var(--md-sys-typescale-headline-large-size, 1.85rem);
+        font-weight: 700;
+        color: var(--md-sys-color-on-surface, #fff);
+    }
+    .md3-section-desc {
+        max-width: 42rem;
+        margin: 0 0 2.5rem;
+        color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 75%, transparent);
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    /* ---------- 团队发展 ---------- */
+    .md3-team {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+        gap: 3rem;
+        align-items: start;
+    }
+    .md3-team-text p {
+        color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 75%, transparent);
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+    .md3-team-images {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .md3-team-images img {
+        width: 100%;
+        border-radius: var(--md-sys-shape-corner-large, 1rem);
+        border: 1px solid var(--md-sys-color-outline-variant, #43474e);
+    }
+
+    /* ---------- 团队荣誉 ---------- */
+    /* 外层纵向排列：上方 intro 文案，下方 .md3-honor-carousel（左右两栏，样式见 is:global 块） */
+    .md3-honors {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+    }
+    .md3-honors-intro p {
+        color: color-mix(in srgb, var(--md-sys-color-on-surface, #fff) 75%, transparent);
+    }
+
+    /* ---------- 日常活动 ---------- */
+    .md3-activity-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+    .md3-activity-thumb {
+        display: block;
+        overflow: hidden;
+        border-radius: var(--md-sys-shape-corner-medium, 0.75rem);
+        border: 1px solid var(--md-sys-color-outline-variant, #43474e);
+        transition: transform 0.2s ease;
+    }
+    .md3-activity-thumb:hover {
+        transform: scale(1.02);
+    }
+    .md3-activity-thumb img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* ---------- 方向简介 ---------- */
+    .md3-track-subtitle {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--md-sys-color-primary, #9ecaff);
+        background: var(--md-sys-color-primary-container, #274874);
+        padding: 0.15rem 0.6rem;
+        border-radius: var(--md-sys-shape-corner-full, 999px);
+        margin-bottom: 0.5rem;
+    }
+
+    /* ---------- 学长寄语 ---------- */
+
+    /* ---------- 加入我们 ---------- */
+    .md3-join {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+        gap: 2.5rem;
+        align-items: start;
+    }
+    .md3-join .md3-section-desc {
+        margin-bottom: 1rem;
+    }
+    .md3-join-qr {
+        max-width: 240px;
+        border-radius: var(--md-sys-shape-corner-medium, 0.75rem);
+        margin-top: 1rem;
+        border: 1px solid var(--md-sys-color-outline-variant, #43474e);
+    }
+    .md3-join-links h3 {
+        margin: 0 0 1rem;
+        font-size: 1.1rem;
+        color: var(--md-sys-color-on-surface, #fff);
+    }
+    .md3-join-links ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.5rem;
+    }
+    .md3-join-links li {
+        margin-bottom: 0.5rem;
+    }
+    .md3-join-links a {
+        color: var(--md-sys-color-primary, #9ecaff);
+        text-decoration: none;
+    }
+    .md3-join-links a:hover {
+        text-decoration: underline;
+    }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 960px) {
+        .md3-toplinks {
+            display: none;
+        }
+        .md3-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .md3-team,
+        .md3-join {
+            grid-template-columns: 1fr;
+        }
+        .md3-honor-carousel {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 2rem;
+        }
+        .md3-honor-image-swiper {
+            height: 360px;
+        }
+        .md3-activity-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .md3-advice-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 600px) {
+        .md3-hero-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+        .md3-hero-actions .md3-btn {
+            width: 100%;
+        }
+        .md3-stats {
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .md3-activity-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .md3-advice-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .md3-honor-image-swiper {
+            height: 280px;
+            width: 205px;
+            border-top-left-radius: 150px;
+        }
+        .md3-join-qr {
+            max-width: 160px;
+        }
+    }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const loadSwiper = async () => {
+      if (typeof Swiper !== 'undefined') {
+        initSwipers();
+        return;
+      }
+      const cssLink = document.createElement('link');
+      cssLink.rel = 'stylesheet';
+      cssLink.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+      document.head.appendChild(cssLink);
+
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+      script.onload = () => initSwipers();
+      document.head.appendChild(script);
+    };
+
+    const initSwipers = () => {
+      // 学长寄语轮播（配置同前，移动端1张，平板2张，桌面4张）
+      const adviceContainer = document.querySelector('.md3-advice-swiper');
+      if (adviceContainer) {
+        if (adviceContainer.swiper) adviceContainer.swiper.destroy(true, true);
+        new Swiper(adviceContainer, {
+          slidesPerView: 1,                // 移动端默认1张
+          spaceBetween: 0,
+          loop: true,
+          autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          },
+          pagination: false,
+          breakpoints: {
+            640: { slidesPerView: 2 },      // 平板
+            960: { slidesPerView: 4 },      // 桌面
+          },
+          grabCursor: true,
+          slidesPerGroup: 1,
+          speed: 400,
+          resistanceRatio: 0,
+          centeredSlides: false,
+        });
+      }
+
+      // 日常活动轮播（移动端1张，平板2张，桌面3张）
+      const activityContainer = document.querySelector('.md3-activity-swiper');
+      if (activityContainer) {
+        if (activityContainer.swiper) activityContainer.swiper.destroy(true, true);
+        new Swiper(activityContainer, {
+          slidesPerView: 1,
+          spaceBetween: 0,
+          loop: true,
+          autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          },
+          pagination: {
+            el: '.md3-activity-swiper .swiper-pagination',
+            clickable: true,
+          },
+          breakpoints: {
+            640: { slidesPerView: 2 },
+            960: { slidesPerView: 3 },
+          },
+          grabCursor: true,
+          slidesPerGroup: 1,
+          speed: 400,
+          resistanceRatio: 0,
+          centeredSlides: false,
+        });
+      }
+
+      // 团队荣誉同步轮播：左侧文字 swiper 与右侧图片 swiper 互为 controller，
+      // 任意一侧翻页（拖动 / 点击按钮 / 图片侧的自动轮播）都会驱动另一侧同步翻页。
+      const honorText = document.querySelector('.md3-honor-text-swiper');
+      const honorImage = document.querySelector('.md3-honor-image-swiper');
+      if (honorText && honorImage) {
+        // 文字侧关闭手动拖动，只作为被同步的一方，避免和图片侧手势冲突
+        const honorTextSwiper = new Swiper(honorText, {
+          loop: true,
+          allowTouchMove: false,
+          speed: 600,
+        });
+
+        // 图片侧承担自动轮播 + 翻页按钮，是用户真正交互的一侧
+        const honorImageSwiper = new Swiper(honorImage, {
+          loop: true,
+          speed: 600,
+          autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          },
+          navigation: {
+            nextEl: '.md3-honor-next',
+            prevEl: '.md3-honor-prev',
+          },
+          grabCursor: true,
+        });
+
+        // 双向绑定 controller，实现文字与图片同步翻页
+        honorTextSwiper.controller.control = honorImageSwiper;
+        honorImageSwiper.controller.control = honorTextSwiper;
+      }
+    };
+
+    loadSwiper();
+  });
+</script>

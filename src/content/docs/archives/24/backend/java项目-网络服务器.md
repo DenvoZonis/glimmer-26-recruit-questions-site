@@ -3,11 +3,11 @@ title: "项目——搭建一个web服务器"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/backend/java10-网络编程/
+  link: /archives/24/backend/java10-网络编程/
   label: Java - 10 网络编程
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ## 建立一个服务器和客户端
 

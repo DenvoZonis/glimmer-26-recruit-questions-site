@@ -3,14 +3,14 @@ title: "C Basis-04 赢不了的游戏"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/c/c-basis-03-神秘密文/
+  link: /archives/23/c/c-basis-03-神秘密文/
   label: C Basis-03 神秘密文
 next:
-  link: /recruit/archives/23/c/c-project--00-manual/
+  link: /archives/23/c/c-project--00-manual/
   label: C Project- 00 Manual
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![](https://pic.imgdb.cn/item/64c4a2881ddac507cc007975.png)
 

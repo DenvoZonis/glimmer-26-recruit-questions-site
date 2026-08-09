@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/23/c/c-basis-01-helloworld/
+  link: /archives/23/c/c-basis-01-helloworld/
   label: "C Basis-01 Hello,world!"
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![img](https://pic.imgdb.cn/item/64c4a2881ddac507cc007975.png) 
 

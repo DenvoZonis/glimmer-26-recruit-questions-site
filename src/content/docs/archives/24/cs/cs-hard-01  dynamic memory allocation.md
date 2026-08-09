@@ -3,14 +3,14 @@ title: "CS-Hard-01  Dynamic Memory Allocation"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/24/cs/
+  link: /archives/24/cs/
   label: CS-Total-00 计算机系统方向总述
 next:
-  link: /recruit/archives/24/cs/cs-hard-02-network-programming/
+  link: /archives/24/cs/cs-hard-02-network-programming/
   label: CS-HARD-02 Network Programming
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![标题](./img/CS.PNG)
 

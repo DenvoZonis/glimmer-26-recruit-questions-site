@@ -3,14 +3,14 @@ title: "C Basis-03 神秘密文"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/c/c-basis-02-来邂逅语句吧/
+  link: /archives/23/c/c-basis-02-来邂逅语句吧/
   label: 'C Basis-02 来邂逅"语句"吧'
 next:
-  link: /recruit/archives/23/c/c-basis-04-赢不了的游戏/
+  link: /archives/23/c/c-basis-04-赢不了的游戏/
   label: C Basis-04 赢不了的游戏
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![](https://pic.imgdb.cn/item/64c4a2881ddac507cc007975.png)
 

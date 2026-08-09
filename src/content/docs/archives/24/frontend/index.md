@@ -4,11 +4,11 @@ description: 归档文件
 
 prev: false
 next:
-  link: /recruit/archives/24/frontend/t6瓦一把--jquery的简单使用/
+  link: /archives/24/frontend/t6瓦一把--jquery的简单使用/
   label: 前端-06 瓦一把--jQuery的简单使用
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 ![](https://pic.imgdb.cn/item/64c4a5611ddac507cc058875.png)
 

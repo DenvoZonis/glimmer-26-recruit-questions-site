@@ -6,7 +6,7 @@ import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
 	site: 'https://www.glimmer.org.cn',
-	base: '/recruit',
+	//base: '/recruit',
 	// Markdown插件
   	markdown: {
     	remarkPlugins: [remarkMath],
@@ -14,10 +14,10 @@ export default defineConfig({
   	},
 	integrations: [
 		starlight({
-			title: '微光工作室',
-			logo: {
-        		src: './src/assets/glimmer_logo.png',
-      		},
+			title: 'Glimmer',
+			// logo: {
+        	// 	src: './src/assets/glimmer_logo.png',
+      		// },
 			social: [
 				{
 					icon: 'email',
@@ -31,14 +31,14 @@ export default defineConfig({
           		tag: 'link',
           		attrs: {
             		rel: 'icon',
-            		href: '/recruit/favicon.png',
+            		href: '/favicon.png',
             		sizes: '32x32',
           		},
         		},{
           		tag: 'link',
           		attrs: {
             		rel: 'apple-touch-icon',
-            		href: '/recruit/apple-touch-icon.png',
+            		href: '/apple-touch-icon.png',
             		sizes: '180x180',
           		},},],
 			// 配置toc目录层级
@@ -60,7 +60,7 @@ export default defineConfig({
       		],
 			// 自定义组件
 			components: {
-        		Hero: './src/components/CustomHero.astro',
+        		// Hero: './src/components/CustomHero.astro',
 				Footer: './src/components/Footer.astro',
       		},
 			// 主题配置

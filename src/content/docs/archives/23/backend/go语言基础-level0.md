@@ -3,14 +3,14 @@ title: "Go语言基础-level0"
 description: 归档文件
 
 prev:
-  link: /recruit/archives/23/backend/
+  link: /archives/23/backend/
   label: 2023后端方向介绍
 next:
-  link: /recruit/archives/23/backend/go语言基础-level1/
+  link: /archives/23/backend/go语言基础-level1/
   label: Go语言基础-level1
 ---
 
-> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/recruit/archives/)
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
 > `难度系数`：简单
 >
