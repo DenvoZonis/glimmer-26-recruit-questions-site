@@ -6,7 +6,6 @@ import rehypeKatex from 'rehype-katex';
 
 export default defineConfig({
 	site: 'https://www.glimmer.org.cn',
-	//base: '/recruit',
 	// Markdown插件
   	markdown: {
     	remarkPlugins: [remarkMath],
@@ -60,7 +59,6 @@ export default defineConfig({
       		],
 			// 自定义组件
 			components: {
-        		// Hero: './src/components/CustomHero.astro',
 				Footer: './src/components/Footer.astro',
       		},
 			// 主题配置
