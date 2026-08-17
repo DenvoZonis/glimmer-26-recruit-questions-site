@@ -1,13 +1,13 @@
 ---
-title: MEDIUM-4：计算机网络常识与实验
-description: 微光工作室2026招新——计算机系统：MEDIUM-4：计算机网络常识与实验
+title: MEDIUM-4：计算机系统内存与执行机制
+description: 微光工作室2026招新——计算机系统：MEDIUM-4：计算机系统内存与执行机制
 
 prev:
   link: /cs/medium-3/
   label: MEDIUM-3：初识Linux系统
 next:
   link: /cs/hard-1/
-  label: HARD-1：cache
+  label: HARD-1：计算机网络基础
 ---
 
 import { Image } from 'astro:assets';
@@ -15,212 +15,499 @@ import banner from '../../../assets/cs/banner.png';
 
 <Image src={banner} alt="计算机系统Banner" width="600" height="188" />
 
-## Step 1
+## 前情提要
 
-### Part 1：特殊 IP 地址与网段
+霓虹灯闪烁的**晨曦之城**，像往常那样，被棕黄色的云雾笼罩着，被淅淅沥沥的酸雨侵蚀着。而你，表面上是一个在这座 “繁荣之城” 长大的普通大学生，但其实你还有着另一个身份——地下黑客组织 ***Glimmer*** 的新人骇客，代号——***Fighting Wolf***。在这个被巨型垄断企业 ***Flame Reaver***  掌控的世界里，所有的个人数据都被锁在他们那被称为 **深网核心** 的绝对防御服务器中。“嗡嗡——。”随着组织专用通讯器发出阵阵嗡鸣声，你就知道，来活了。然而，让你没想到的是，发来讯息的人竟是你的导师，传奇黑客 ***Cool Cipher*** 。
 
-import { Badge } from '@astrojs/starlight/components';
+>"该死的，组织里出了个叛徒！今晚秘密行动的消息泄露了！(&gt;_&lt;#)”
+>
+>“听着，我的学生，当你看见这条消息，我的意识应该已经被 ***Flame Reaver***的反入侵电子程序捕获，我需要你来救我!(O_O;)”
+>
+>“ ***Flame Reaver*** 的防御机制很强，但他们使用的底层架构，依旧逃不出冯·诺依曼的五指山。想要黑进深网，把你导师我救出来，你必须比他们的架构师更懂**计算机系统内存与执行机制**。&lt;(￣︶￣)&gt;”
+>
+>“我在黑市给你留了一台未注册的‘赛博终端’，去把它组装起来，深入系统的物理层与虚拟层。别让我等太久……┐(´-｀)┌”
+
+读完导师的讯息，你看着工作台上散落一地的电子元件，深吸了一口气，将数据线接入了自己后颈的神经插槽。
+
+> ***“System Booting... Welcome to the Underground.”***
+
+---
+
+## 阶段一：硬件拾荒者 —— 存储的物理层级
+
+要骇入 ***Flame Reaver***，你首先需要一台性能强悍的赛博终端。但在黑市这个电子垃圾山，奸商横行。你需要利用扎实的硬件知识，拼凑出最强算力。
+
+**【任务 1.1：识破奸商】**
+
+一只脚刚踏进黑市，你忽地打了个寒颤，接着就看到一个浑身装满机械义体的老板用他的机器眼来来回回地打量着你，那种眼神你再熟悉不过，你都不用多思考一秒就知道，老板那是把你当成啥都不懂的普通大学生了，准备宰你呢！果不其然，打量了你一会后，人机参半的老板笑吟吟地走过来，开口说到：“哟吼吼吼吼，新来的！来看这套顶级配置：用的是 **大牌主板**，其上搭载比 **i5处理器** 还多i2的 **i7级CPU**，**16G的高端内存**，性能比上一代高出一半的**豪华GPU**。我再送你台 **512G 内存**的手机，外加一块 **1.25T 的超大硬盘**，只要 4000 信用点，包你畅游赛博空间！”
+
+“我的天哪，手机的内存是电脑的32倍，手机真可以取代电脑称帝了吧！”你带着开玩笑的语气说道。很明显，这老板就是个彻头彻尾的奸商，为了向老板证明你不是肥羊，请你条理清晰地向老板解释以下基础概念，让他乖乖把真家伙拿出来：
+
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. **127.0.0.1 的作用** 解释 <Badge text="127.0.0.1" /> 的含义及用途，并说明它与 <Badge text="localhost" /> 的关系。
-2. **常见特殊网段** 除了 <Badge text="127.0.0.1" />，还有哪些保留地址和特殊网段？请至少举出 3 类并说明用途，例如：
-   1. 私有地址（Private IP）
-   2. 回环地址（Loopback）
-   3. 链路本地地址（Link-local）
-   4. 多播地址（Multicast）
-   5. 广播地址（Broadcast）
+1. CPU、GPU、主板是什么，他们分别提供什么，有什么功能？
+2. 手机上常说的 **512G内存** 和电脑上的 **16G内存** 是一回事吗？内存、主存、存储到底分别是什么？有什么区别？
+3. 电源要注意什么？
+4. **i7** 处理器一定比 **i5** 处理器强吗？**30**系的显卡和 **40** 系的相比呢？处理器和显卡的性能究竟怎么看？
+5. 把老板这套配置里所有的坑找出来，让他见识一下你的实力。
 
 </Steps>
 
-### Part 2：计算机网络分层模型
+请回答以上问题并提交至**markdown文档**中。
 
-1. **各层协议与作用** 简述 **OSI 七层模型** 与 **TCP/IP 四层模型**，并说明每一层的主要功能和常见协议。
+**【任务 1.2：你问我答】**
 
-> **提示：** 例如 HTTP 属于应用层，TCP 属于传输层。
-
-2. **常用协议举例** 列出至少 5 个常用网络协议，并标注它们所在的层次及典型用途。
-
-### Part 3：DNS 的工作流程
+老板被你镇住了，他说：“哟嗬嗬嗬嗬，看不出来啊，居然是个懂行的。这样吧，我再考考你，你要是全部都答上来了，我就把我这里最好的藏货都拿出来。”为了拿到最好的配件，你点点头接受了老板给你的挑战。
 
 <Steps>
 
-1. **DNS 的作用** 简述 DNS 在网络通信中的作用。
-2. **DNS 查询流程** 描述从浏览器输入 <Badge text="www.example.com" /> 到最终获取 IP 地址的 DNS 解析过程，包含以下内容：
-   1. 浏览器缓存、本地缓存、hosts 文件
-   2. 递归查询与迭代查询的区别
-   3. 根域名服务器、顶级域名服务器、权威 DNS 服务器的作用
-3. **实际操作** 使用 <Badge text="nslookup" /> 或 <Badge text="dig" /> 命令，查询任意一个域名的解析过程，并截图结果。
+1. 常见的存储介质（如 **SRAM**、**DRAM**、**NAND Flash**、**HDD**）分别应用在计算机的哪些部件中？分别有什么特点？这样的特点起到了什么作用？
+2. 寄存器、高速缓存、只读存储器是什么，位于电脑的哪个地方？
+3. **DRAM** 的物理结构决定了它需要不断“刷新”才能保住数据，那么 **DRAM** 的结构是怎样的？ **DRAM** 的基本工作原理又是怎样的？
+4. Cache（高速缓存）的根本原理是什么？
+5. 假设你需要编写一个 **矩阵乘法程序** 来暴力破解密码，依据Cache的根本原理，如何优化 **矩阵乘法程序** 呢？请简述你的优化方案，并说说运用了Cache的哪个原理。
 
 </Steps>
 
-### Part 4：ARP 协议基础
+请回答以上问题并提交至**markdown文档**中
+
+---
+
+## 阶段二：虚拟空间潜行 —— MMU 与页表机制
+
+硬件组装完毕。你启动终端，意识瞬间沉浸入无垠的数字矩阵中。
+
+刚触碰到 ***Flame Reaver***的外层防御墙，你的破解程序突然崩溃，鲜红的警报弹满视野：
+
+>**[FATAL ERROR] Segmentation fault**
+
+“段错误？”你眉头紧锁,忽然一拍脑袋“哎哟！我怎么直接拿程序的虚拟地址去撞他们的物理内存条了，这当然会触发警报了！在现代操作系统中，每一个进程都活在‘幻觉’里，我们需要解析他们的**虚拟内存（Virtual Memory）**……”
+
+**【任务 2.1：揭开虚拟的面纱】**
+
+作为一名骇客，你居然对虚拟内存这方面的知识有些遗忘了，为了回忆起来，你给自己出了一些题目，试着回答它们，进一步掌握虚拟内存的知识吧。
 
 <Steps>
 
-1. **ARP 的作用** 简述 ARP（地址解析协议）的工作原理，以及它在局域网通信中的地位。
-2. **ARP 报文结构** 了解 ARP 请求与 ARP 响应的报文格式（硬件类型、协议类型、MAC 地址、IP 地址等字段）。
-3. **ARP 与安全** 简述 ARP 协议存在的安全隐患，以及常见的防护手段（例如静态 ARP 表、ARP 防护软件等）。
-4. **动手实验（可选加分）** 使用抓包工具（如 Wireshark）捕获一次正常的 ARP 请求与响应报文，并分析字段含义。
+1. 什么是**虚拟地址**？什么是**物理地址**？操作系统为什么要引入 **“虚拟内存”** 这个概念？（请列举至少两点好处）
+2. 这是一张32位系统虚拟地址空间的示意图：[![pmjShDJ.png](https://s41.ax1x.com/2026/08/17/pmjShDJ.png)](https://imgchr.com/i/pmjShDJ)根据这张图回答以下问题：
+   1. 每个进程的虚拟地址空间具有什么特性？其大小是多少？
+   2. 虚拟地址空间由什么基本单位组成？该单位的大小是多少？
+   3. 虚拟地址空间中的页可以被划分到哪几个主要的段中？
+   4. 页和页框是什么？是用来做什么的？它们有什么共同点？
 
 </Steps>
 
-## Tips
+请回答以上问题并提交至**markdown文档**中。
+
+**【任务 2.2：认识页表管理】**
+
+虚拟内存和物理内存是怎么对应上的呢？为了找到你需要的物理地址来进攻 ***Flame Reaver*** 的防御服务器，你现在不得不用上页表管理的知识了捏。
+
+import { Badge } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. 常识和基础部分可参考群中资料《计算机网络：自顶向下方法》，书中关于通信网的一些题目涵盖外的知识点也推荐了解一下。
-2. 后面部分需要同学们发挥主观能动性，自行了解相关概念；回答注意体现自己理解即可，完成度可以放在第二位，可以参考https://www.runoob.com/w3cnote/summary-of-network.html 以及 https://csdiy.wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/topdown_ustc/
-3. 本题不需要提交
+1. 请根据你对页表管理的了解回答以下问题（32位系统中）：
+    1. **页表**是什么？它和页是一个东西吗？
+    2. 请简述 **MMU（内存管理单元）** 和 **TLB（转译后备缓冲区）** 在地址翻译中分别扮演了什么角色？
+    3. 进程用来查找物理页框的单级或多级页表存储在什么地方？用来记录页表 **“物理基地址”** 的是哪一个特定的寄存器？
+    4. **二级页表**是什么？对比单级页表有什么优势？这样的优势是怎样展现的？
+    5. 在二级页表机制下，一个32位的虚拟地址具体被划分为哪三个部分？请说明各个部分的位数及其对应的含义。
+2. 为了伪装成合法的系统进程，你必须在自己的骇客工具中手动模拟 **MMU** 的查表过程。你翻出了骇客前辈 ***Xiao Shuang*** 留下的一段残缺的 C 语言代码，这是一个基于 32位系统、4KB 页大小、二级页表结构 的地址翻译模拟器。 请你补全<Badge text="translate_address()" />这个残缺的函数。
 
 </Steps>
 
-## Step 2
-
-### Part 1:IP 地址转换
-
-**题目：** 编写一个程序，输入一个 IPv4 地址（形如 <Badge text="192.168.1.1" />），输出它对应的 32 位无符号整数形式。 再将该整数转换回 IPv4 字符串，验证是否一致。
-
-**示例：**
-
-makefileCopyEdit输入: 192.168.1.1
-
-输出: 3232235777
-
-再转换回: 192.168.1.1
-
-### Part 2:模拟 Ping
-
-**题目：** 编写一个简单的 **TCP** 或 **UDP** 客户端，连接到 <Badge text="example.com" /> 的 <Badge text="80" /> 端口，成功建立连接后输出“连接成功”，否则输出“连接失败”。 （不要求真正发送 ICMP Ping 报文，用 socket 即可）
-
-**提示：** 可以使用 <Badge text="socket" /> 库，注意异常处理。
-
-### Part 3:HTTP 请求解析
-
-**题目：** 编写一个程序，向 <Badge text="http://example.com" /> 发送 HTTP 请求（GET），接收服务器返回的数据，并打印 HTTP 响应头（Header）部分。
-
-**加分：** 在代码中手动构造 HTTP 请求报文（字符串拼接），而不是直接用高级网络库。
-
-## Step 3
-
-### Part 1:简易聊天室（TCP）
-
-**题目：** 使用 TCP Socket 编程，实现一个简单的 **多人聊天室**：
-
-- 服务器端：接收多个客户端连接，将收到的消息广播给所有已连接客户端。
-- 客户端：连接到服务器，能发送和接收消息。
-
-**加分：** 实现“昵称”功能，在每条消息前加上发送者昵称。
-
-### Part 2:数据包解析器
-
-**题目：** 编写一个程序，读取给定的一个 **PCAP 文件**（抓包文件），统计其中出现最多的源 IP 地址，并输出它的出现次数。
-
-**提示：**
-
-- PCAP 文件可以用 Wireshark 抓几个包生成。
-- Python 可用 <Badge text="scapy" /> 解析，C 可用 <Badge text="libpcap" />。
-
-### Part 3:自定义“迷你协议”
-
-**题目：** 自己设计一个简单的应用层协议：
-
-- 报文格式：<Badge text="[LEN][TYPE][DATA]" />
-  - <Badge text="LEN" />：数据部分长度（1字节）
-  - <Badge text="TYPE" />：消息类型（1字节，1=文本，2=数字）
-  - <Badge text="DATA" />：实际数据
-- 编写客户端与服务器：
-  - 客户端可发送两种类型的消息
-  - 服务器收到消息后解析，并按类型输出
-
-**加分：**
-
-- 支持多客户端
-- 支持粘包/拆包处理
-
-### Part 4:模拟 ARP 表
-
-**题目：** 编写一个程序，模拟一个 ARP 表（IP ↔ MAC 映射关系）：
-
-- 支持添加、删除、查询条目
-- 查询不到时输出“未找到”
-- 使用结构体（C/C++）或字典（Python）实现
-
-## Step 4
-
-### Part 1：ARP
-
-**什么是 ARP 欺骗？** 简述 ARP 协议的工作原理，并解释何为 ARP 欺骗攻击。
-
-**ARP 协议的漏洞分析** ARP 协议的哪一项设计特点，使得局域网内可以被实施 ARP 欺骗？请结合原理说明。
-
-**编程实战：ARP 欺骗** 使用 **C 语言** 编写一个简单的 ARP 欺骗程序，使得与您处于同一 Wi-Fi 网络的目标设备（例如室友的电脑，或您自己的另一台设备）失去网络连接。
-
-> **提示：** 建议先熟悉以太网帧结构与 ARP 报文格式。实验时请注意合法合规，仅在允许的设备上测试。
-
-### Part 2：IPv6
-
-**为什么需要 IPv6？** 简述 IPv6 出现的背景，以及相比 IPv4 的主要改进之处。
-
-**获取运营商分配的 IPv6 地址** 尝试在自己的设备上查看并获取运营商提供的 IPv6 地址，并截图记录。
-
-**实验：Nginx IPv6 配置** 配置 Nginx 使其可以通过 IPv6 对外提供服务，并在外网进行访问测试。（简单输出一个helloworld即可）
-
-> **加分项：** 如果使用校园网环境，可尝试直接通过 IPv6 对外访问。
-
-### Part 3：DNS
-
-**什么是 DNS 污染？** 调查并简述 DNS 污染的原理、表现形式以及危害。
-
-**修改本地 DNS 服务器地址** 将本机的 DNS 服务器地址修改为指定值（例如公共 DNS：8.8.8.8），并测试访问效果。
-
-**修改 hosts 文件** 编辑本机的 <Badge text="hosts" /> 文件，将 GitHub 相关域名直接映射到对应 IP 地址，然后测试访问是否有所改善。
-
-> **提示：** 注意修改前备份原文件，防止因配置错误导致无法访问网站。
-
-### Step 4：组网实验
-
-希望你可以使用任意的网络模拟器(推荐使用PacketTracer,当然了要是你能用HCL做我向你致以崇高的敬意)最终完成下示网络拓扑结构的搭建：
-
-![image-20250813193138281](https://raw.githubusercontent.com/ZHOUGONG24/pic/master/image-20250813193138281.png)
-
-咱们可以分步骤来进行:
-
-#### Part 4.1.1
-
-完成 <Badge text="10.0.10.0/24" />与10.0.20.0/24网段的搭建,使PC0至PC3可以互通
-
-#### Part 4.1.2
-
-完成<Badge text="10.0.30.0/24" />网段的搭建，并为<Badge text="Edge_Route" />与<Badge text="Side_Route" />配置动态路由协议，在不使用静态路由的前提下,使PC0至PC4可以互通
-
-#### Part 4.1.3
-
-配置ICP,并为其配置静态路由,使PC0至PC4可以连通**ICP**
-
-#### Part 4.1.4
-
-假设ICP所在的网段为外网,PC0至PC3所在的网段为内网,为<Badge text="Edge_Route" />配置NAT,你可以使用 Ping 测试连通性。
-
-### 额外项目
-
-#### Part 4.2.1
-
-配置VLAN,令PC0与PC2加入<Badge text="vlan10" />,PC1与PC3加入<Badge text="vlan20" />
-
-#### Part 4.2.2
-
-将<Badge text="Edge_Route" />替换为防火墙,并配置规则,使:
-
-- **PC0-3**能连通PC4、<Badge text="Edge_Route" />、**ICP**
-- **PC4**能连通<Badge text="Edge_Route" />、ICP、不能连通**PC0-3**
-- **ICP**不能连通PC0-4、<Badge text="Edge_Route" />
-
-小Tip:
-
-- 记得保存
-- 网络设备的命令行和Linux还是不太一样,建议多看看文档.可以在命令行里面输入<Badge text="?" />来获取可用命令和参数
+```c
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define PAGE_DIR_BITS   10 // 页目录索引位数
+#define PAGE_TABLE_BITS 10 // 页表索引位数
+#define OFFSET_BITS     12 // 页内偏移位数
+
+#define PAGE_TABLE_SIZE (1 << PAGE_TABLE_BITS) // 1024
+#define PAGE_DIR_SIZE   (1 << PAGE_DIR_BITS)   // 1024
+#define PAGE_SIZE       (1 << OFFSET_BITS)     // 4096 (4KB)
+
+// 页表项 (PTE - Page Table Entry)
+// 包含物理帧号和权限位
+typedef struct {
+    bool     present_bit; // 存在位：1表示该页在物理内存中，0表示不在
+    bool     rw_bit;      // 读写位：1表示可读可写，0表示只读
+    uint32_t frame_number; // 对应的物理帧号
+} PTE;
+
+// 页目录项 (PDE - Page Directory Entry)
+// 包含指向页表的指针和存在位
+typedef struct {
+    bool present_bit; // 存在位：1表示该页目录项指向一个有效的页表，0表示无效
+    PTE* page_table_base; // 指向一个页表（PTE数组）的指针
+} PDE;
+
+// 模拟的页目录表（作为我们模拟的 "CR3寄存器" 指向的地址）
+PDE page_directory[PAGE_DIR_SIZE];
+
+
+/**
+ * @brief 模拟MMU进行地址翻译和权限检查
+ * * @param virtual_address 要翻译的32位虚拟地址
+ * @param is_write_access 访问类型，true表示写操作，false表示读操作
+ */
+void translate_address(uint32_t virtual_address, bool is_write_access) {//请你完成这个尚未完成的函数
+    printf("----------------------------------------\n");
+    printf("Translating Virtual Address: 0x%08X (%s access)\n", virtual_address, is_write_access ? "WRITE" : "READ");
+
+    // --- 步骤1: 从虚拟地址中提取索引和偏移 ---
+    uint32_t page_dir_index;
+    uint32_t page_table_index;
+    uint32_t offset;
+    // 利用位运算（移位 >> 和 掩码 &）提取对应部分
+    // 请补全代码写在TO DO与END OF TO DO之间：
+    // TO DO:
+
+
+    // END OF TO DO：
+    
+    printf(" -> Page Dir Index: %u (0x%X)\n", page_dir_index, page_dir_index);
+    printf(" -> Page Table Index: %u (0x%X)\n", page_table_index, page_table_index);
+    printf(" -> Offset: %u (0x%X)\n", offset, offset);
+
+    // --- 步骤2: 查询页目录表 ---
+    // 请补全代码写在TO DO与END OF TO DO之间：
+    // TO DO:
+
+
+    // END OF TO DO：
+    
+    // --- 步骤3: 查询页表 ---
+    // 请补全代码写在TO DO与END OF TO DO之间：
+    // TO DO:
+
+
+    // END OF TO DO：
+    
+    // --- 步骤4: 检查访问权限 ---
+    // 请补全代码写在TO DO与END OF TO DO之间：
+    // TO DO:
+
+
+    // END OF TO DO：
+    printf("  [*] Checking access permissions...\n");
+    
+    // --- 步骤5: 计算最终的物理地址 ---
+    // 请补全代码写在TO DO与END OF TO DO之间：
+    // TO DO:
+
+
+    // END OF TO DO：
+    printf("  [SUCCESS] Translation complete.\n");
+    printf("  Virtual Address 0x%08X  =>  Physical Address 0x%08X\n", virtual_address, physical_address);
+}
+
+/**
+ * @brief 初始化模拟环境，预设一些页表和页目录项
+ */
+void initialize_simulation() {
+    printf("Initializing MMU simulation environment...\n");
+
+    // 初始化整个页目录表
+    for (int i = 0; i < PAGE_DIR_SIZE; ++i) {
+        page_directory[i].present_bit = false;
+        page_directory[i].page_table_base = NULL;
+    }
+
+    // 2. 创建并填充第一个页表 (用于虚拟地址 0x00000000 - 0x003FFFFF)
+    //    假设页目录索引为0
+    PTE* page_table_1 = (PTE*)malloc(sizeof(PTE) * PAGE_TABLE_SIZE);
+    
+    page_directory[0].present_bit = true;
+    page_directory[0].page_table_base = page_table_1;
+
+    for (int i = 0; i < PAGE_TABLE_SIZE; ++i) {
+        page_table_1[i].present_bit = false; // 默认所有PTE无效
+    }
+    // 设置几个有效的PTE
+    // VA 0x00001xxx -> PA 0x0001Axxx (可读可写)
+    page_table_1[1].present_bit = true;
+    page_table_1[1].rw_bit = true;
+    page_table_1[1].frame_number = 26; // 物理帧号 0x1A
+
+    // VA 0x00002xxx -> PA 0x0008Fxxx (只读)
+    page_table_1[2].present_bit = true;
+    page_table_1[2].rw_bit = false; // 只读页面
+    page_table_1[2].frame_number = 143; // 物理帧号 0x8F
+    
+    // 3. 创建并填充第二个页表 (用于虚拟地址 0x00400000 - 0x007FFFFF)
+    //    假设页目录索引为1
+    PTE* page_table_2 = (PTE*)malloc(sizeof(PTE) * PAGE_TABLE_SIZE);
+    page_directory[1].present_bit = true;
+    page_directory[1].page_table_base = page_table_2;
+
+    for (int i = 0; i < PAGE_TABLE_SIZE; ++i) {
+        page_table_2[i].present_bit = false;
+    }
+    // VA 0x00400xxx -> PA 0x00033xxx
+    page_table_2[0].present_bit = true;
+    page_table_2[0].rw_bit = true;
+    page_table_2[0].frame_number = 51; // 物理帧号 0x33
+
+    printf("Initialization complete.\n\n");
+}
+
+// --- 4. 主函数，运行测试用例 ---
+
+int main() {
+    initialize_simulation();
+
+    // --- 测试用例 ---
+
+    // 1. 成功读取: 访问一个有效的、可读写的地址
+    // 虚拟地址: 0x00001A2B
+    // -> 页目录索引: 0, 页表索引: 1, 偏移: 0xA2B
+    // -> 查找 PDE[0] -> PTE[1] -> 物理帧号 26 (0x1A)
+    // -> 物理地址: (26 << 12) | 0xA2B = 0x1A000 | 0xA2B = 0x1AA2B
+    translate_address(0x00001A2B, false);
+
+    // 2. 成功写入: 访问一个有效的、可读写的地址
+    // 与上面相同，但请求是写操作
+    translate_address(0x00001A2B, true);
+
+    // 3. 保护错误: 尝试写入一个只读页面
+    // 虚拟地址: 0x00002048
+    // -> 页目录索引: 0, 页表索引: 2, 偏移: 0x048
+    // -> 查找 PDE[0] -> PTE[2] -> rw_bit = 0, 触发保护错误
+    translate_address(0x00002048, true);
+
+    // 4. 缺页错误: 访问一个页表项(PTE)无效的地址
+    // 虚拟地址: 0x00003555
+    // -> 页目录索引: 0, 页表索引: 3, 偏移: 0x555
+    // -> 查找 PDE[0] -> PTE[3] -> present_bit = 0, 触发缺页错误
+    translate_address(0x00003555, false);
+
+    // 5. 段错误: 访问一个页目录项(PDE)无效的地址
+    // 虚拟地址: 0x00804000 (页目录索引=2)
+    // -> 页目录索引: 2
+    // -> 查找 PDE[2] -> present_bit = 0, 触发段错误
+    translate_address(0x00804000, false);
+
+    // --- 释放动态分配的内存 ---
+    // 在真实OS中，这部分内存管理会更复杂
+    free(page_directory[0].page_table_base);
+    free(page_directory[1].page_table_base);
+
+    return 0;
+}
+
+
+
+/*
+sample output:
+
+Initializing MMU simulation environment...
+Initialization complete.
+
+----------------------------------------
+Translating Virtual Address: 0x00001A2B (READ access)
+ -> Page Dir Index: 0 (0x0)
+ -> Page Table Index: 1 (0x1)
+ -> Offset: 2603 (0xA2B)
+  [*] Checking Page Directory Entry 0...
+      -> PDE is present. Page table base address: 0x60000305c010
+  [*] Checking Page Table Entry 1...
+      -> PTE is present. Frame number: 26 (0x1A)
+  [*] Checking access permissions...
+      -> Access granted.
+  [SUCCESS] Translation complete.
+  Virtual Address 0x00001A2B  =>  Physical Address 0x0001AA2B
+----------------------------------------
+Translating Virtual Address: 0x00001A2B (WRITE access)
+ -> Page Dir Index: 0 (0x0)
+ -> Page Table Index: 1 (0x1)
+ -> Offset: 2603 (0xA2B)
+  [*] Checking Page Directory Entry 0...
+      -> PDE is present. Page table base address: 0x60000305c010
+  [*] Checking Page Table Entry 1...
+      -> PTE is present. Frame number: 26 (0x1A)
+  [*] Checking access permissions...
+      -> Access granted.
+  [SUCCESS] Translation complete.
+  Virtual Address 0x00001A2B  =>  Physical Address 0x0001AA2B
+----------------------------------------
+Translating Virtual Address: 0x00002048 (WRITE access)
+ -> Page Dir Index: 0 (0x0)
+ -> Page Table Index: 2 (0x2)
+ -> Offset: 72 (0x48)
+  [*] Checking Page Directory Entry 0...
+      -> PDE is present. Page table base address: 0x60000305c010
+  [*] Checking Page Table Entry 2...
+      -> PTE is present. Frame number: 143 (0x8F)
+  [*] Checking access permissions...
+  [!] FAULT: Write attempt on a read-only page. (Protection Fault)
+----------------------------------------
+Translating Virtual Address: 0x00003555 (READ access)
+ -> Page Dir Index: 0 (0x0)
+ -> Page Table Index: 3 (0x3)
+ -> Offset: 1365 (0x555)
+  [*] Checking Page Directory Entry 0...
+      -> PDE is present. Page table base address: 0x60000305c010
+  [*] Checking Page Table Entry 3...
+  [!] FAULT: Page Table Entry not present. (Page Fault)
+----------------------------------------
+Translating Virtual Address: 0x00804000 (READ access)
+ -> Page Dir Index: 2 (0x2)
+ -> Page Table Index: 4 (0x4)
+ -> Offset: 0 (0x0)
+  [*] Checking Page Directory Entry 2...
+  [!] FAULT: Page Directory Entry not present. (Segmentation Fault)
+*/
+```
+
+请将你的回答和正确的代码提交至**markdown文档**中。
+
+**【任务 2.3：深入理解内存与页表管理】**
+
+<Steps>
+
+1. 与内存组织相关的**寄存器**有什么？他们分别有什么作用？
+2. 一次从内存中完整读取数据的过程是怎么样的？一次从存储中完整读取数据的过程是什么样的？你可以绘制一张**流程图**，借助这张图来描述过程。
+3. 什么是**缺页异常** ？它分为哪些种类？当发生不同缺页异常时，操作系统分别会怎么处理？
+4. 什么是**页面替换**？它是怎么样进行的？怎么找到适合替换的页？
+
+</Steps>
+
+>思考题：在64位系统中，阶段二中的问题会有不同的答案吗？请将虚拟内存和页表管理在64位系统和32位系统下不同的地方列出来。
+
+请将你的回答和你绘制的流程图的照片一并提交至**markdown文档**中。
+
+---
+
+## 阶段三：致命一击 —— 深入调用栈与控制流挟持
+
+依靠完美的地址伪装，你终于穿透了**深网核心**，来到了关押 ***Cool Cipher*** 意识的进程面前。但你发现，这个版本的守护进程是由 ***Flame Reaver*** 的高级架构师亲自编写的，代码极其精简，没有留下任何可以被轻易篡改的“局部变量标志位”。如果不能通过验证，整个节点将在一秒后自毁。
+
+**【任务 3.1：解剖函数调用栈】**
+
+<Steps>
+
+1. 栈在内存地址的增长方向上有什么特殊之处？
+2. 栈帧是什么？有什么作用？
+3. 当发生函数调用时，CPU 的核心寄存器 **EBP/RBP（基址指针）** 和 **ESP/RSP（栈顶指针）** 分别起到了什么作用？
+4. 在函数调用的那一瞬间，程序是如何记住“执行完这个函数后，该回到哪里继续执行”的？这个信息（**Return Address返回地址**）在栈帧中具体存放在什么位置？
+
+</Steps>
+
+请回答以上问题并提交至**markdown文档**中。
+
+**【任务 3.2：赛博越权】**
+
+你截获了核心验证模块的 C 语言源码残卷：
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// 这是一个隐藏的后门函数，正常流程中永远不会被调用
+void grant_access() {
+    printf("[System] Access Granted. Releasing Prisoner 'Cool Cipher'...\n");
+    system("/bin/sh");  // 开启最高权限的 Shell
+}
+
+void verify_identity() {
+    char password[16];  // 分配了 16 字节的缓冲区用于存放密码
+
+    printf("Enter Admin Password: ");
+    
+    // 致命弱点：gets() 函数不检查用户输入的长度！
+    gets(password);             
+
+    if (strcmp(password, "Quantum_Neuro_Sec_999") == 0) {
+        printf("[System] Welcome, Admin.\n");
+    } else {
+        printf("[System] Access Denied. Commencing Purge...\n");
+    }
+}
+
+int main() {
+    verify_identity();
+    return 0;
+}
+```
+
+你不知道密码,但你发现由于数组 <Badge text="password" /> 是在函数内部定义的局部变量，它被存放在了栈中。由于 C 语言的栈在分配局部变量时通常从高地址向低地址分配，内存排布大致如下(64位系统中)：
+
+>| password[16] (16字节) | 曾经的 RBP (8字节) | 返回地址 Return Address (8字节) | ...
+
+>注：为简化验证，假设当前环境关闭了现代编译器的栈对齐填充（Stack Alignment Padding），局部变量与 RBP 紧密相连。你只需用文字或十六进制形式描述出输入字符串的结构即可，无需真正用键盘敲出不可见字符。
+
+请你完成以下任务，从而完成验证，解救 ***Cool Cipher***：
+
+<Steps>
+
+1. 请指出程序中 <Badge text="gets(password)" />; 这行代码为什么极其危险？这种漏洞在网络安全中统称为什么？
+
+2. 骇客的艺术在于计算。假设你已经查出 <Badge text="grant_access" /> 函数在内存中的起始地址为 <Badge text="0x401156" />,为了让函数 <Badge text="verify_identity" /> 结束后不返回<Badge text=" main" />，而是直接跳转到 <Badge text="grant_access" />，你的输入字符串在结构上应该如何构造？
+
+</Steps>
+
+请回答以上问题并提交至**markdown文档**中
+
+**【任务 3.3：最后防线 —— 现代内存保护机制】**
+
+>这是一道附加题，了解即可。
+
+就在你准备敲下回车的时候，初步脱困的 ***Cool Cipher*** 传来讯息：“小心！***Flame Reaver*** 的服务器可能开启了现代操作系统的内存保护机制。几十年前那种简单的栈溢出，现在没那么容易成功了！((；ﾟДﾟ))”
+
+为了以防万一，请你简单了解以下任意一种现代内存保护机制是如何防御缓冲区溢出攻击的？
+
+<Steps>
+
+1. **ASLR (Address Space Layout Randomization / 地址空间布局随机化)**
+2. **Stack Canary / Stack Cookie (栈金丝雀 / 栈保护机制)**
+3. **NX Bit / DEP (不可执行位 / 数据执行保护)**
+
+</Steps>
+
+本题不需要提交对这些机制的解释，但如果你使用了AI协助你完成这道题目，请简述你在**哪个环节**运用到了AI，将你主要的**prompt**的截图提交到**markdown文档**中。
+
+---
+
+## 后记
+
+> 晨曦之城深夜的酸雨依旧砸在赛博终端的散热风扇上，发出噼啪的微响。
+>
+> 当你敲下回车的那一刻，终端屏幕上的指针停滞了半秒。栈帧中的旧 RBP 被精准碾碎，写着 <Badge text="0x401156" /> 的地址字节序列顺着溢出边界缓缓流入，覆盖掉了原本指向 <Badge text="main" /> 函数的返回地址。
+>
+> 守护进程的自毁倒计时瞬间冻结在 <Badge text="00:00:01" />。下一秒，屏幕上刷出一行行绿色的命令行：
+>
+> ```text
+> [System] Access Granted. Releasing Prisoner 'Cool Cipher'...
+> $ whoami
+> root
+> ```
+>
+> 神经插槽中剧烈的灼烧感如潮水般退去，通讯器里立刻收到了那一串熟悉的、仿佛带着欠扁音调的讯息：
+>
+> “哈哈哈！不愧是我的学生，这一手控制流挟持有我当年几分风采了！(￣▽￣)”
+>
+> “不过，组织里的叛徒还没找出来，我的任务还要继续......我的学生，我没有时间好好地感谢你了，接下来，我要让那些人知道，我‘冷酷的密码’为什么是传奇黑客......( ╬◣ 皿 ◢)”
+>
+> 你疲惫地点了点头。
+>
+> 霓虹灯光透过窗帘的缝隙斑驳地洒在工作台上，散落的芯片、内存条与散热铜管在夜色中熠熠生辉。你摘下神经数据线，靠在椅背上长舒了一口气。
+>
+> 在你看来，你只不过是轻松地救了个人。但在外界看来，却是有个冉冉升起的骇客新星，他不但成功骇入 ***Flame Reaver*** 的服务器，还能全身而退。
+>
+>你的真名无人知晓，你的代号却成为了晨曦之城的传奇。
+>
+>**“晨曦之城的狼尊”**
+>
+>他们这样称呼你。
 
 ## **本题提交方式**
 
@@ -228,6 +515,8 @@ makefileCopyEdit输入: 192.168.1.1
 
 ## 出题人联系方式
 
-> fw190 QQ:1242641543
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2674884616&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Niko✔</p>
 >
-> 杨沁雨 QQ: 1353516434
+> QQ：2674884616
+>
+> 邮箱：[2674884616@qq.com](mailto:2674884616@qq.com)

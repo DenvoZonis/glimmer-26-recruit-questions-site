@@ -1,10 +1,10 @@
 ---
-title: HARD-1：cache
-description: 微光工作室2026招新——计算机系统：HARD-1：cache
+title: HARD-1：计算机网络基础
+description: 微光工作室2026招新——计算机系统：HARD-1：计算机网络基础
 
 prev:
   link: /cs/medium-4/
-  label: MEDIUM-4：计算机网络常识与实验
+  label: MEDIUM-4：计算机系统内存与执行机制
 next: false
 ---
 
@@ -13,304 +13,147 @@ import banner from '../../../assets/cs/banner.png';
 
 <Image src={banner} alt="计算机系统Banner" width="600" height="188" />
 
-##   前言
+> **引言**：小明是成电软院的一名学生，小明爱打瓦。小明发现，在瓦的选服务器时，明明他处在成都，但是天津服的延迟是最低的，只有40ms，而重庆服理应延迟最低，却有80ms的延迟。X更奇怪的是，有时小明用手机热点选择重庆服进入游戏，在游戏内再将电脑连的wifi切回宿舍wifi，这时游戏内延迟会变为20ms。但是此时，游戏内语音会出现卡顿，但游戏内容流畅运行。小明的宿舍在欣五，有两个网口和两个开学时一起买的相同的路由器，他连这两个路由器时都会出现上述问题。并且，**只有小明的宿舍出现了这样的问题，别的宿舍没有问题，且小明的舍友也有相同的问题。**通过上述引例，你是否对网络知识产生了兴趣？现在让我们先学习基本的网络知识，尝试回答上面的问题。**另：这一层的实验题不限制语言。**
 
-​	所有的现代处理器都包含一个或多个高速缓存存储器，以对这样少量的存储器提供快速的访问。这一设计的根本原因在于中央处理器与主存储器之间存在的巨大性能鸿沟。随着处理器时钟频率的飞速提升，主存的访问延迟已成为制约系统整体性能的关键瓶颈，这一现象被称为“**内存墙**”。
+## step1_网络知识基础
 
-​	为了有效弥合这一差距，计算机设计者引入了“**存储层次结构**”的概念。高速缓存正是这一层次结构中至关重要的一环，它作为CPU与主存之间的高速缓冲层而存在。
+请你根据下面的题目，有针对性地学习计网的底层知识。在这道题以外，如果你想系统的学习计网的知识，可以看https://www.runoob.com/w3cnote/summary-of-network.html 以及https://csdiy.wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/topdown_ustc/ （这个网课设计较多硬件部分，文档则比较概括）
 
-​	高速缓存之所以能以较小的容量实现显著的性能提升，其理论基石是程序的“**局部性原理**”。该原理指出，程序在一段时间内的内存访问行为并非随机分布，而是倾向于集中在特定的区域。它主要表现为两种形式：
-
-- **时间局部性**：被访问过的内存位置，在不久的将来很可能被再次访问。
-- **空间局部性**：如果一个内存位置被访问，其附近的内存位置也很可能在不久的将来被访问。
-
-​	本项目的任务就是实现一个高速缓存模拟器。通过编程模拟缓存的**命中**、**未命中**以及**数据替换**等行为，你将对缓存的组织结构、地址映射和替换策略有深入的、实践性的理解。
-
-## Step 1 前置知识学习
-
-### 任务 :
-
-- 了解存储层次结构，尤其是高速缓存 (L1, L2, L3) 在其中所处的位置，简单理解寄存器、各级缓存、主存与磁盘之间的速度、容量和成本关系。
-- 了解缓存的基本原理和缓存的地址映射
-- 了解缓存的核心操作与算法
-  - 缓存未命中时使用的替换策略(LRU ,FIFO,Random等)
-  - 缓存写入时使用的策略
-- 了解量缓存性能的关键指标
-
-  - 命中率与 和 未命中率
-  - 平均访存时间
-
-### 要求
-
-- 将任务中问题用你自己的语言描述讲解，可配图
-
-## Step 2 实现一个你的cache模拟器
-
-> 实现一个高速缓存模拟器也许对你并不容易，但别担心，只需要将大问题分解成一个个小问题，相信你也能实现
-
-#### 高速缓存模拟器介绍
+### Part 1：特殊 IP 地址与网段
 
 import { Badge } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
 
-该高速缓存模拟器(以下简称模拟器)支持 <Badge text="4" /> 个参数:
+<Steps>
 
-- <Badge text="-s" /> 组索引的位数
-- <Badge text="-E" /> 行数
-- <Badge text="-b" /> 块大小 <Badge text="B = 2^b" />
-- <Badge text="-t" /> 输入文件 <Badge text="trace" /> 的路径 
+1. **127.0.0.1 的作用** 解释 <Badge text="127.0.0.1" /> 的含义及用途，并说明它与 <Badge text="localhost" /> 的关系。
+2. **常见特殊网段** 除了 <Badge text="127.0.0.1" />，还有哪些保留地址和特殊网段？请至少举出 3 类并说明用途，例如：
+   1. 私有地址（Private IP）
+   2. 回环地址（Loopback）
+   3. 链路本地地址（Link-local）
+   4. 多播地址（Multicast）
+   5. 广播地址（Broadcast）
 
-其中前三个参数描述了一个高速缓存存储器，可以参考下图
+</Steps>
 
-import p_h_1_1 from '../../../assets/cs/hard-1-1.png';
+### Part 2：计算机网络分层模型
 
-<Image src={p_h_1_1} alt="hard-1-1" />
+1. **各层协议与作用** 简述 **OSI 七层模型** 与 **TCP/IP 四层模型**，并说明每一层的主要功能和常见协议。
 
-第四个参数给出了输入文件的路径
+> **提示：** 例如 HTTP 属于应用层，TCP 属于传输层
 
-### 模拟器输入与输出
+### Part 3：DNS 的工作流程
 
-在输入文件中我们将给出模拟器的指令,其中每一行都是一次独立操作
+<Steps>
 
-输入文件格式遵循 <Badge text="[space]operation address, size" /> ，其中操作有三种 
+1. **DNS 的作用** 简述 DNS 在网络通信中的作用。
+2. **DNS 查询流程** 描述从浏览器输入 <Badge text="www.example.com" /> 到最终获取 IP 地址的 DNS 解析过程，包含以下内容：
+   1. 浏览器缓存、本地缓存、hosts 文件
+   2. 递归查询与迭代查询的区别
+   3. 根域名服务器、顶级域名服务器、权威 DNS 服务器的作用
+3. **实际操作** 使用 <Badge text="nslookup" /> 或 <Badge text="dig" /> 命令，查询任意一个域名的解析过程，并截图结果。
 
-- <Badge text="L" /> 加载数据
-- <Badge text="S" /> 存储数据
-- <Badge text="M" /> 修改数据
+</Steps>
 
-而 <Badge text="address" /> 为 <Badge text="64" /> 位，以 <Badge text="16" /> 进制给出，<Badge text="size" /> 以字节为单位
+### Part 4：ARP 协议基础
 
-你的程序面对每个操作需要给出模拟的结果，分为三种
+<Steps>
 
-- <Badge text="hit" /> 命中
-- <Badge text="miss" /> 不命中
-- <Badge text="eviction" /> 驱赶，进行了替换操作
+1. **ARP 的作用** 简述 ARP（地址解析协议）的工作原理，以及它在局域网通信中的地位。
+2. **ARP 报文结构** 了解 ARP 请求与 ARP 响应的报文格式（硬件类型、协议类型、MAC 地址、IP 地址等字段）。
+3. **ARP 与安全** 简述 ARP 协议存在的安全隐患，以及常见的防护手段（例如静态 ARP 表、ARP 防护软件等）。
+4. **动手实验（可选加分）** 使用抓包工具（如 Wireshark）捕获一次正常的 ARP 请求与响应报文，并分析字段含义。
 
-#### 代码编写
+</Steps>
 
-1. 缓存组结构
+### Part 5：IPv6
 
-   本题缓存组和缓存行使用双向链表进行实现，本题需要你 **模拟和分析缓存的性能**，可以不真正存储数据
+**为什么需要 IPv6？** 简述 IPv6 出现的背景，以及相比 IPv4 的主要改进之处。
 
-   ```
-   typedef struct cache_line {
-       int tag;                 // 存储地址的标签(tag)部分
-       // int data 
-       struct cache_line* prev; // 指向前一个节点的指针
-       struct cache_line* next; // 指向后一个节点的指针
-   } cache_line;
-   
-   // 定义缓存组结构体
-   // 每个组本质上是一个缓存行的集合。
-   typedef struct cache_set {
-       int len;            // 当前组中已存储的缓存行数量
-       cache_line* head;   // 指向链表头部的指针（LRU端）
-       cache_line* tail;   // 指向链表尾部的指针（MRU端）
-   } cache_set;
-   
-   ```
+**获取运营商分配的 IPv6 地址** 尝试在自己的设备上查看并获取运营商提供的 IPv6 地址，并截图记录。
 
-2. **Cache** 替换算法
+**实验：Nginx IPv6 配置** 配置 Nginx 使其可以通过 IPv6 对外提供服务，并在外网进行访问测试。（简单输出一个helloworld即可）
 
-   本题使用 <Badge text="LRU" /> 算法，即将最近最少使用的内容替换掉
+### Part6：简单应用
 
-   - 请你思考再本题的缓存组结构下如何使用 <Badge text="LRU" /> 算法
+**请你分析引言中的情景，指出小明为什么会出现这样的问题。**
 
-请你仔细阅读代码后，根据代码注释给出的要求完成你的模拟器
+<Steps>
 
-```c
-#include <getopt.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <math.h>
-#include <assert.h>
-#include <time.h>
+1. **为什么会出现重庆服的延迟高于天津服？** 从网口和路由器两个角度分析。
+2. **为什么切换手机热点再切回宿舍wifi延迟降低？** 这其中不同的wifi选择主要体现哪些协议的哪些功能？
+3. **为什么会出现语音卡顿但游戏不卡顿的问题？**
+4. 小明发现，他连使用uu加速器连接到成都节点后，延迟变为20ms， **这个信息可以排除哪些原因？你认为最可能的原因是什么？**
 
-// 读取文件时每行的最大长度
-#define MAXLINE 100
+</Steps>
 
-// 全局变量，用于存储缓存的参数
-// s: 组索引的位数 (number of set index bits)
-// S: 缓存组的数量 (number of sets), S = 2^s
-// E: 每个组的行数 (associativity, number of lines per set)
-// b: 块内偏移的位数 (number of block bits)
-int s, S, E, b;
+## step2_网络实验和网站搭建
 
-// 定义缓存行结构体
-typedef struct cache_line {
-    int tag;                 // 存储地址的标签(tag)部分
-     int data 
-    struct cache_line* prev; // 指向前一个节点的指针
-    struct cache_line* next; // 指向后一个节点的指针
-} cache_line;
+### Part1：初识网络编程
 
-// 定义缓存组结构体
-// 每个组本质上是一个缓存行的集合。
-// 使用双向链表来管理这些行，以便高效实现LRU策略。
-typedef struct cache_set {
-    int len;            // 当前组中已存储的缓存行数量
-    cache_line* head;   // 指向链表头部的指针
-    cache_line* tail;   // 指向链表尾部的指针
-} cache_set;
+学习并掌握Socket编程的基础知识，实现一个简单的客户端与服务端通信程序。
 
+**如果你用c语言，请你学习socket库。使用python时，使用socket和thread模块，在这一部分不要用flask/fastapi等包。**
 
-/**
- * @brief 总结并打印缓存模拟的统计数据。
- *
- * @param hits 命中总次数。
- * @param misses 未命中总次数。
- * @param evictions 驱逐总次数。
- */
-void printSummary(int hits, int misses, int evictions)
-{
-    printf("hits:%d misses:%d evictions:%d\n", hits, misses, evictions);
-    FILE* output_fp = fopen(".csim_results", "w");
-    assert(output_fp);
-    fprintf(output_fp, "%d %d %d\n", hits, misses, evictions);
-    fclose(output_fp);
-}
+#### 具体要求：
 
-/**
- * @brief 打印错误信息到标准错误流并退出程序。
- *
- * @param msg 格式化的错误信息字符串。
- * @param ... 可变参数，用于格式化字符串。
- */
-void err_sys(const char *msg, ...) {
-    char buf[MAXLINE];
-    va_list ap;
-    va_start(ap, msg);
-    vsnprintf(buf, MAXLINE - 1, msg, ap);
-    va_end(ap);
-    strcat(buf, "\n");
-    fputs(buf, stderr);
-    fflush(NULL);
-    exit(0);
-}
+<Steps>
 
-/**
- * @brief 将一个缓存行节点插入到缓存组队列的尾部。
- * @brief 这是LRU策略的一部分，最近使用的项放在队尾(MRU端)。
- * 此函数需要处理链表为空和不为空两种情况。
- *
- * @param set 指向目标缓存组的指针。
- * @param ptr 指向要插入的缓存行节点的指针。
- */
-void cache_insert(cache_set* set, cache_line* ptr) {
-}
+1. 实现基本的C-S端通信，即客户端向服务端发送信息，服务器接收到信息后，向客户端反馈发送内容和结果。
+2. 实现通信日志记录功能。以每次通信的时间和端口号命名日志文件，记录通信的成功与否及通信内容。日志文件应存放在log文件夹内。每次新连接创建一个新文件，连续对话记录在同一文件中，下一次连接则创建新的日志文件。
+3. 实现客户端用户的注册和登录功能，并将通信内容格式化为：用户名--通信内容。
+4. 使用<Badge text="readline" />库记录历史对话内容。
+5. 在代码中加入完整的错误处理机制，确保程序在异常情况下（如网络中断、错误输入等）不会崩溃，并能够给出相应提示。
+6. 提供客户端与服务器通信的运行结果及日志记录的截图，本地虚拟机中自己与自己通信即可。
 
-/**
- * @brief 模拟一次缓存操作（命中、未命中、驱逐）。
- * @brief 采用LRU（最近最少使用）替换策略。
- *
- * @param set 指向要操作的缓存组的指针。
- * @param address_tag 访问地址的标签(tag)部分。
- * @return 0 表示命中(hit)，1 表示未命中(miss)，2 表示未命中且有驱逐(miss eviction)。
- */
-int cache_operate(cache_set* set, int address_tag) {
-}
+</Steps>
 
-/**
- * @brief 初始化一个缓存组
- *
- * @param set 指向要初始化的缓存组的指针。
- */
-void cache_init(cache_set* set) {
-}
+### Part2：网络聊天室
 
-/**
- * @brief 运行缓存模拟。
- * @brief 此函数负责初始化缓存、读取trace文件并逐行模拟。
- *
- * @param filename 要读取的trace文件名。
- * @param flagV 是否启用详细输出模式的标志。
- */
-void run_simulation(const char* filename, bool flagV) {
+写在前面： **浏览器只能渲染html/css/js等文件，不能使用渲染client文件中的tkinter语句。** 因此如果你完全没有学过前端知识，让ai给你跑整个客户端然后部署在服务器上意义不大。你只需要把这个项目部署在本地虚拟机上，然后创建多个客户端并上传成功运行的截图即可。
 
-    // 提示：你可按照以下步骤完成该函数
-    // 1. [初始化统计变量] 定义并初始化 hits, misses, evictions 计数器为 0。
-    // 2. [打开文件] 记得处理失败情况
-    // 3. [初始化缓存]
-    // 4. [读取和处理Trace文件]
-    // 5. [计算地址部分]
-    // 6. [执行模拟] 
-    // 7. [释放内存]
-    // 8. [调用 printSummary] 
-}
+**题目：** 使用 TCP Socket 编程，实现一个简单的 **多人聊天室**：
 
-/**
- * @brief 程序主入口。
- * @brief 负责解析命令行参数，保存到全局变量并调用模拟器核心函数。
- *
- * @param argc 命令行参数数量。
- * @param argv 命令行参数数组。
- * @return 成功时返回 0。
- */
-int main(int argc, char *argv[]) {
-    // 提示：
-    // 需要检查用户输出了不合法参数
-    
-    return 0;
-}
-```
+- 服务器端：接收多个客户端连接，将收到的消息广播给所有已连接客户端。
+- 客户端：连接到服务器，能发送和接收消息。
 
+**到这里就是笔试要求范围内所有的招新题了，接下来的部分如果你感兴趣可以自行学习。**
 
+**扩展内容：** 上线服务器，用前后端不分离的方式，搭建一个聊天网站。这里推荐使用python等语言，c实现起来会很难。
 
-### 要求 
+<Steps>
 
-- 完成你的模拟器编写，并运行测试用例
+1. 购买一个服务器，并实现ssh登录，下载docker和数据库。注：这里推荐买香港服务器，国内服务器上线聊天室要备案。
+2. 学习前端知识，重构你之前所写的文件。用js完成前端和客户端的内容，服务端只提供前端html和处理客户端信息。
+3. 将完成的文件上传到服务器当中。
 
-  ```
-  -s 1 -E 1 -b 2
-   L 0,1
-   L 1,1
-   L 2,1
-   L 3,1
-   S 4,1
-   L 5,1
-   S 6,1
-   L 7,1
-   S 8,1
-   L 9,1
-   S a,1
-   L b,1
-   S c,1
-   L d,1
-   S e,1
-   M f,1
-  ```
+</Steps>
 
-- 提交你的.c文件以及运行结果图
+**优化内容：**
 
-- 测试更多样例
+- 实现主机与服务器断开连接后，服务器持续运行聊天室服务。
+- 增加支持表情符号、文件传输的消息格式，使用简单的二进制协议来传输这些数据。
+- 增加私聊功能。
+- 连接数据库存储用户信息，增加用户注册功能，增加管理员设置，允许管理员禁言普通用户。
+- 处理多人同时聊天的并发问题。
+- 使用json传递用户的对话消息。
 
-## 扩展
+### Part3：五子棋对战
 
-### 任务
+请根据以下要求，把五子棋集成到上面的网络聊天室当中，在私聊功能中加入“发起五子棋对战”。
 
-- 尝试实现更多淘汰策略
-- 对你的模拟器进行大规模测试
+<Steps>
 
-#### 提示
+1. 在对战开始时跳出一个对战弹窗，所有功能在一个页面中即可。（思考如果有多个页面应该怎样做？）
+2. 五子棋对局信息保存在内存中，不进入数据库。
+3. 使用css渲染棋子和棋盘，具体下棋规则和设置参考简单题04（把提示词喂给ai就行，这道题的重点是多进程控制和网站部署）。
+4. 加入防对战干扰，同一用户处于对战状态时，其他用户不许对其发起私聊和对战邀请。
 
-- 了解<Badge text="srand" />和<Badge text="rand" />等函数，随机化测试
-- 了解如何编写<Badge text="bash" />脚本文件，高效运行测试文件
+</Steps>
 
-#### 要求
+可以参考http://47.242.56.191:8000/ ，我用ai跑的前端，使用fastapi写的后端，可以私信找我要源码。
 
-- 描述测试思路，用图片提交测试结果
-
-## 需要提交的内容及要求
-
-README文件，包含做题过程与个人思路
-
-做题中的C语言文件与运行截图
-
-其他相关佐证个人学习能力与求解过程的证明材料
-
+写在后面：因为我学的内容偏后端，很多底层的内容我没有学过，这个招新题也比去年的更偏应用，少了一些网络实验。如果你需要往年的招新题，加入工作室后找我要即可。
 
 ## **本题提交方式**
 
@@ -318,4 +161,8 @@ README文件，包含做题过程与个人思路
 
 ## 出题人联系方式
 
-> dwdyy QQ:3403504034
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=1748798371&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;taaaakoooo</p>
+>
+> QQ：1748798371
+>
+> 邮箱：[1748798371@qq.com](mailto:1748798371@qq.com)

@@ -1,20 +1,9 @@
 ---
-// src/pages/index.astro
-//
-// 独立首页：不复用 Starlight 默认的顶部导航栏 / 侧边栏 / 右侧目录。
-// 用 <StarlightPage template="splash"> 是关键 —— 它会让 Starlight 自动把
-// hasSidebar / tableOfContents 都设为 false（源码 utils/routing/data.ts 第
-// 54、65 行：`hasSidebar: entry.data.template !== 'splash'`，splash 模板下
-// toc 也强制为 false），所以左侧栏、右侧目录不会被渲染，不需要我们自己再隐藏。
-// 但顶部的 <header class="header">（Logo / 搜索 / 主题切换）在任何模板下都会
-// 无条件渲染（见 Page.astro），所以下方 <style is:global> 里手动把它隐藏掉，
-// 换成我们自己做的、更适合首页的浮动品牌条。
-//
-// 仍然复用主题自带的 Card / CardGrid / Badge / LinkCard 组件——它们已经在
-// md3.components 层里做好了 token 化样式，不需要重新写卡片/徽标的 CSS。
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 import { Image } from 'astro:assets';
+
+// Astro引入图片
 import dev_1 from '../assets/main-page/dev-1.jpg';
 import dev_2 from '../assets/main-page/dev-2.jpg';
 import honor1 from '../assets/main-page/honor1.jpg';
@@ -24,7 +13,7 @@ import honor4 from '../assets/main-page/honor4.jpg';
 import honor5 from '../assets/main-page/honor5.jpg';
 import qq_group_qrcode from '../assets/main-page/qq_group_qrcode.jpg';
 
-// 页内锚点导航 —— 自定义的浮动条用，不是 Starlight 的侧边栏/顶栏内容。
+// 页内锚点导航 —— 自定义顶部导航栏
 const inPageNav = [
     { label: '主页', href: '#' },
     { label: '团队', href: '#team' },
@@ -35,7 +24,7 @@ const inPageNav = [
     { label: '加入我们', href: '#join' }
 ];
 
-// 技术方向数据（沿用原 index.astro 的数据，与 index.html 方向简介对应）
+// 技术方向数据
 const tracks = [
     {
         icon: 'window' as const,
@@ -59,41 +48,44 @@ const tracks = [
     },
 ];
 
-// 扩展技术方向（来自 index.html 的"光点计划"方向）
-// const extendedTracks = [
-//     {
-//         icon: 'web-asset' as const,
-//         title: '分布式系统与云计算',
-//         subtitle: '光点计划',
-//         desc: '分布式系统是由一组通过网络进行通信、为了完成共同的任务而协调工作的计算机节点组成的系统。面对互联网技术与应用的爆炸式发展，分布式系统已经成为了现代化信息系统的必备支撑。无论是天猫双十一秒杀、抖音视频流业务还是云原神负载均衡，分布式系统的思想已然涉及现代互联网业务的方方面面。',
-//     },
-//     {
-//         icon: 'copyright' as const,
-//         title: '编译原理',
-//         subtitle: '光点计划',
-//         desc: '你是否好奇在你编写的代码中所使用的函数、变量和逻辑是如何被翻译成计算机能够执行的指令的呢？你是否好奇编译世界中的前后中端是什么？你听说过LLVM吗？你是否想从上层应用走下底层，探索编译与汇编的奥秘？',
-//     },
-//     {
-//         icon: 'camera-enhance' as const,
-//         title: '处理器设计',
-//         subtitle: '光点计划',
-//         desc: '在《三体》科幻小说中，描述了这样一个计算机：人列计算机。该计算机由3000万士兵组成，规模之大。如今的计算机芯片，同样也是由百万级的元件构成。处理器设计就是如何利用这些元件通过连接组合一个可以完成复杂计算任务的解决过程。然后就是对设计进行优化，使用最少的元件，最小的延迟完成一个计算任务。',
-//     },
-//     {
-//         icon: 'camera-enhance' as const,
-//         title: '操作系统',
-//         subtitle: '光点计划',
-//         desc: '说到操作系统，不知道大家对挂在嘴边的windows是否有所了解，它就是我们最广为熟知操作系统。操作系统是计算机系统中至关重要的组成部分，负责管理计算机的各种资源，以及协调不同程序之间的执行，就连你目前查看我们官网的硬件屏幕也离不开操作系统的管理。',
-//     },
-//     {
-//         icon: 'camera-enhance' as const,
-//         title: 'CV图像分类',
-//         subtitle: '光点计划',
-//         desc: '在计算机视觉（CV）领域，图像分类任务占有较大的份额。目前有大量的研究人员都在专注于这个领域，并已经有广泛且深厚的研究成果。与图像分类有关的业务在日常生活中比较普遍，表现效果和性能优异，极大地便捷了人类的生活，促进了 AI 技术的落地实践和蓬勃发展。',
-//     },
-// ];
 
-// 学长寄语数据（来自 index.html）
+// 扩展技术方向（"光点计划"方向）
+/*
+const extendedTracks = [
+    {
+        icon: 'web-asset' as const,
+        title: '分布式系统与云计算',
+        subtitle: '光点计划',
+        desc: '分布式系统是由一组通过网络进行通信、为了完成共同的任务而协调工作的计算机节点组成的系统。面对互联网技术与应用的爆炸式发展，分布式系统已经成为了现代化信息系统的必备支撑。无论是天猫双十一秒杀、抖音视频流业务还是云原神负载均衡，分布式系统的思想已然涉及现代互联网业务的方方面面。',
+    },
+    {
+        icon: 'copyright' as const,
+        title: '编译原理',
+        subtitle: '光点计划',
+        desc: '你是否好奇在你编写的代码中所使用的函数、变量和逻辑是如何被翻译成计算机能够执行的指令的呢？你是否好奇编译世界中的前后中端是什么？你听说过LLVM吗？你是否想从上层应用走下底层，探索编译与汇编的奥秘？',
+    },
+    {
+        icon: 'camera-enhance' as const,
+        title: '处理器设计',
+        subtitle: '光点计划',
+        desc: '在《三体》科幻小说中，描述了这样一个计算机：人列计算机。该计算机由3000万士兵组成，规模之大。如今的计算机芯片，同样也是由百万级的元件构成。处理器设计就是如何利用这些元件通过连接组合一个可以完成复杂计算任务的解决过程。然后就是对设计进行优化，使用最少的元件，最小的延迟完成一个计算任务。',
+    },
+    {
+        icon: 'camera-enhance' as const,
+        title: '操作系统',
+        subtitle: '光点计划',
+        desc: '说到操作系统，不知道大家对挂在嘴边的windows是否有所了解，它就是我们最广为熟知操作系统。操作系统是计算机系统中至关重要的组成部分，负责管理计算机的各种资源，以及协调不同程序之间的执行，就连你目前查看我们官网的硬件屏幕也离不开操作系统的管理。',
+    },
+    {
+        icon: 'camera-enhance' as const,
+        title: 'CV图像分类',
+        subtitle: '光点计划',
+        desc: '在计算机视觉（CV）领域，图像分类任务占有较大的份额。目前有大量的研究人员都在专注于这个领域，并已经有广泛且深厚的研究成果。与图像分类有关的业务在日常生活中比较普遍，表现效果和性能优异，极大地便捷了人类的生活，促进了 AI 技术的落地实践和蓬勃发展。',
+    },
+];
+*/
+
+// 学长寄语数据
 const seniorAdvice = [
     { name: 'Bri1987', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1216754835&spec=100', message: '试炼的终点是花开万里，愿你以渺小启程、以伟大结束' },
     { name: 'Eternity', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=1370172202&spec=100', message: '选择比努力重要' },
@@ -112,7 +104,7 @@ const seniorAdvice = [
     { name: '王府井🍍', avatar: 'https://q2.qlogo.cn/headimg_dl?dst_uin=3624089541&spec=100', message: '允许自己慢下来，去撞见属于你的热爱。' },
 ];
 
-// 团队荣誉数据（来自 index.html）
+// 团队荣誉数据
 const honors = [
     { year: '2025+', items: [
         'ACM-ICPC 国际大学生程序设计大赛亚洲区域赛银牌',
@@ -155,7 +147,6 @@ const honors = [
     ]},
 ];
 
-// 在 honors 数组定义后添加
 const honorImageMap = {
   '2025+': honor4,
   '2024': honor5,
@@ -164,7 +155,7 @@ const honorImageMap = {
   '2021': honor1,
 };
 
-// 日常活动图片（来自 index.html）
+// 日常活动图片
 const activityImages = [
     '/main-page/activity1.png',
     '/main-page/activity2.jpg',
@@ -185,9 +176,9 @@ const activityImages = [
         template: 'splash',
     }}
 >
-    <!-- ========== 关键改动：给首页内容容器添加唯一 ID ========== -->
+    <!-- ========== 关键改动：给首页内容容器添加唯一 ID，防止污染文档 ========== -->
     <div id="custom-homepage" class="md3-home not-content">
-        <!-- ============ 自定义浮动品牌条（替代 Starlight 默认导航栏） ============ -->
+        <!-- ============ 自定义顶部导航栏 ============ -->
         <div class="md3-topbar">
             <a class="md3-brand" href="/">
                 <img src="/favicon.png" alt="微光工作室图标" />
@@ -242,15 +233,15 @@ const activityImages = [
                 </div>
                 <div class="md3-stat">
                     <strong>70+</strong>
-                    <span>活跃成员</span>
+                    <span>在校活跃成员</span>
                 </div>
                 <div class="md3-stat">
                     <strong>30+</strong>
-                    <span>竞赛成果</span>
+                    <span>近三年竞赛成果</span>
                 </div>
                 <div class="md3-stat">
                     <strong>100%</strong>
-                    <span>大厂Offer获得率</span>
+                    <span>就业同学中大厂Offer获得率</span>
                 </div>
             </div>
         </section>
@@ -467,9 +458,7 @@ const activityImages = [
 
 <style is:global>
     /*
-     * 关键修复：利用 :root:has(#custom-homepage) 作为条件前缀。
-     * 即使 Vite 将这段 CSS 打包进公共样式，非首页因没有 #custom-homepage 元素，
-     * 选择器不会命中，从而避免污染文档页。
+     利用 :root:has(#custom-homepage) 作为条件前缀，避免污染文档页。
      */
 
     /* 隐藏 Starlight 默认顶部导航栏（仅在首页） */
@@ -680,12 +669,9 @@ const activityImages = [
         scroll-behavior: smooth;
     }
     /*
-     * 下面是首页自己的视觉样式，全部通过 var(--md-sys-*) / var(--md3-comp-*)
-     * 读取主题 token，不写死颜色值；每个 var() 都带了一个不依赖主题也能看的
-     * 兜底值，避免 token 名称在主题版本升级后变化时页面直接"裂开"。
-     * 这个 <style> 块没有加 is:global，Astro 会自动给这里的选择器加上
-     * scope 属性，只作用于当前组件模板里写的元素（不会渗透进 Card /
-     * LinkCard 等子组件内部的 DOM，也不会影响页面其它地方）。
+     * 下面是首页自己的视觉样式，全部通过 var(--md-sys-*) / var(--md3-comp-*)读取主题 token，不写死颜色值；每个 var() 都带了一个不依赖主题也能看的
+     * 兜底值，避免 token 名称在主题版本升级后变化时页面直接"裂开"。这个 <style> 块没有加 is:global，Astro 会自动给这里的选择器加上scope 属性，只作
+     * 用于当前组件模板里写的元素（不会渗透进 Card / LinkCard 等子组件内部的 DOM，也不会影响页面其它地方）。
      */
 
     .md3-home {
@@ -747,7 +733,7 @@ const activityImages = [
         border-color: var(--md-sys-color-outline, #8b9198);
     }
 
-    /* ---------- 浮动品牌条 ---------- */
+    /* ---------- 顶部导航栏 ---------- */
     .md3-topbar {
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
@@ -1030,8 +1016,6 @@ const activityImages = [
         border-radius: var(--md-sys-shape-corner-full, 999px);
         margin-bottom: 0.5rem;
     }
-
-    /* ---------- 学长寄语 ---------- */
 
     /* ---------- 加入我们 ---------- */
     .md3-join {

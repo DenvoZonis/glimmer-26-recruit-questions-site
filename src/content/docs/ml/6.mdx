@@ -22,6 +22,7 @@ import banner from '../../../assets/ml/banner.png';
 ## 📚 参考资料
 
 - 主要参考：[《动手学深度学习》](https://zh-v2.d2l.ai/chapter_recurrent-neural-networks/index.html)
+- 辅助资料：[李宏毅RNN循环神经网络]
 - 🤖 **友情提示**：适度使用AI工具来辅助理解概念是完全可以的！
 
 ------
@@ -30,14 +31,18 @@ import banner from '../../../assets/ml/banner.png';
 
 ### 学习并解释下列概念
 
-让我们从基础开始，逐步建立对RNN的完整认知：
+回顾第 5 题，CNN 通过"卷积核"提取空间特征，擅长处理图像。
+
+但现实世界中很多数据是**序列**
+
+现在让我们从基础开始，逐步建立对RNN的完整认知：
 
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
 1. **循环神经网络的基本架构**
-   - 🔍 思考：为什么叫"循环"？它和普通神经网络有什么不同？
+   - 🔍 思考：为什么叫"循环"？数学公式中的"循环"在哪？RNN和普通神经网络有什么不同？（模型结构受数据特征影响）
 
 2. **关键概念深度理解**
    - 隐藏状态（Hidden State）- RNN的"记忆"
@@ -49,6 +54,7 @@ import { Steps } from '@astrojs/starlight/components';
    - 双向RNN（Bidirectional RNN）- 看向过去和未来
    - 深层RNN（Deep RNN）- 层层递进的智慧
    - Seq2Seq模型 - 序列到序列的魔法
+   - 选学：从Seq2Seq到Attention初步 
 
 4. **门控机制的智慧**
    - LSTM门控机制：遗忘门、输入门、输出门 - 精确控制信息流
@@ -68,6 +74,17 @@ import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
+0. **思考问题**（仅起引导作用，你无需在提交文档中呈现）
+
+   Q1) 为什么 RNN 不能并行？
+
+   Q2) 对LSTM 4 个门的输入输出维度进行推导
+
+   Q3) GRU 相比 LSTM 少了什么？参数量减少多少？
+
+   Q4) Seq2Seq 的 Encoder-Decoder 为什么需要 Context Vector？
+
+
 1. **根本问题探讨** 为什么传统的全连接网络不适合处理序列数据？RNN是如何巧妙地解决这个问题的？
 
 2. **架构对比分析** 比较RNN、LSTM、GRU三种架构的特点：
@@ -76,13 +93,13 @@ import { Steps } from '@astrojs/starlight/components';
 
    b) 计算复杂度比较 - 效率的考量
 
-   c) 适用场景分析 - 实际应用的智慧选择
+   c) 适用场景分析 - RNN 在 LLM 时代还有用吗？
 
 3. **双向RNN深度分析** 分析双向RNN相比单向RNN的优势和劣势，什么情况下不能使用双向RNN？
 
 </Steps>
 
-> 💪 **挑战自己**：尝试用自己的话来解释这些概念，就像在向朋友介绍一样！
+> 💪 **挑战自己**：尝试用自己的话来解释这些概念，最好不要生搬概念，就像在向朋友介绍一样！
 
 ------
 
@@ -106,9 +123,9 @@ $$
 
 <Steps>
 
-1. **梯度传播公式推导** 推导从时刻t到时刻k(k\<t)的梯度传播公式 $\frac{\partial h_t}{\partial h_k}$
+1. **梯度传播公式推导** 推导从时刻t到时刻k(k&lt;t)的梯度传播公式 $\frac{\partial h_t}{\partial h_k}$
 
-   > **提交方式**：可以手写后拍照上传，也可以使用LaTeX格式（LaTeX格式为加分项哦！）
+   > **提交方式**：可以手写后拍照上传，也可以使用LaTeX格式
 
 2. **条件分析** 分析什么条件下会出现梯度消失，什么条件下会出现梯度爆炸
 
@@ -179,13 +196,16 @@ class LSTMCell:
         """
         LSTM单元初始化
         """
-        # TODO: 初始化LSTM的四个门的参数
-        # 遗忘门、输入门、候选记忆、输出门
-        # 每个门都需要权重矩阵和偏置：
-        # - 输入权重: [input_size, hidden_size]
-        # - 隐藏状态权重: [hidden_size, hidden_size]  
-        # - 偏置: [hidden_size]
+        # TODO: 初始化四个门的参数
+        # 提示：每个门都需要：
+        #   W_x: [input_size, hidden_size]   处理当前输入
+        #   W_h: [hidden_size, hidden_size]  处理上一时刻隐藏状态
+        #   b:   [hidden_size]               偏置
+        # 四个门：遗忘门 f、输入门 i、候选记忆 g、输出门 o
+        # 思考：为什么 W 的形状是 [hidden_size, hidden_size + input_size]？
+        #      （提示：可以把 h_{t-1} 和 x_t 拼接起来一次性算）
         pass
+        
         
     def forward(self, input_t, hidden_state, cell_state):
         """
@@ -253,7 +273,7 @@ def train_rnn_on_sequence():
 ### 🤝 关于AI工具的使用
 
 - **鼓励使用AI辅助学习**：可以使用AI来帮助理解概念、调试代码
-- **重要提醒**：必须保证在面试时对RNN具有完整的思路，能够独立应对相关问题
+- **重要提醒**：为保证在面试时对RNN具有完整的思路，能够独立应对相关问题，应在尝试手搓核心代码,推导相关公式后再使用AI修改
 - **学习目标**：AI是你的学习伙伴，而不是替代品。真正的理解来自于你的思考和实践！
 
 ------
@@ -282,6 +302,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 - **主题**: <Badge text="6-姓名-学号" />
 
->出题人：Pluto.
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3629542766&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Emily</p>
 >
->QQ：1183452142
+> QQ：3629542766
+>
+> 邮箱：[3629542766@qq.com](mailto:3629542766@qq.com)

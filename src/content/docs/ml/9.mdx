@@ -1,6 +1,6 @@
 ---
-title: 9：BERT
-description: 微光工作室2026招新——机器学习：9：BERT
+title: 9：初识智能体 Agent
+description: 微光工作室2026招新——机器学习：9：初识智能体 Agent
 
 prev:
   link: /ml/8/
@@ -13,226 +13,214 @@ import banner from '../../../assets/ml/banner.png';
 
 <Image src={banner} alt="机器学习Banner" width="640" height="256" />
 
-## 🎉 恭喜抵达终点线！
+## 🤖 从"会聊天"到"会做事"——LLM Agent 入门
 
-哇！恭喜你坚持到了最后一题！这一路走来，从线性回归的小白，到现在能够挑战BERT这样的经典模型，你的成长有目共睹！
+经过前八题，你已经从线性回归一路走到了 Transformer，理解了深度学习与大模型的底层原理。但你会发现，直接问一个大模型问题，它只会"回答"，不会"做事"：它不能帮你查资料、订机票、操作软件。而 **Agent（智能体）** 正是让大模型从"会聊天"走向"会做事"的关键技术。
 
-这道题不仅是对你学习成果的检验，更是一次**站在巨人肩膀上**的体验。BERT作为NLP领域的里程碑之作，它的设计思想至今仍在影响着整个AI界。
-
-> 🎯 **最后的挑战**: 让我们一起探索这个改变了整个自然语言处理格局的传奇模型！
-
-## 📚 第一部分：BERT论文深度解读
-
-### 论文研读任务
-
-**论文链接**: [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/pdf/1810.04805)
-
-> 💡 **阅读指南**: 这是**芝麻街系列**的经典之作！作者巧妙融合前人成果，取得了惊艳效果。这种"站在巨人肩膀上"的做法很值得我们学习！
-
-### 核心问题解析
-
-**必答题清单：**
+这一题我们有意不做得复杂，不要求你从零手写模型。我们的目标是：
 
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. **论文结构分析** 
-
-   - 论文分为几个部分？
-
-   - 每部分主要解决什么问题？
-
-   - 各部分之间的逻辑关系如何？
-
-2. **Input Embedding策略** 
-
-   - BERT采用了什么embedding方法？
-
-   - 你认为这样做有什么好处？
-
-   - 相比传统方法有什么创新？
-
-3. **Tokenization谜题** 在附录A.1的例子中：
-
-   ```
-   为什么是 "flight ##less" 而不是直接写 "flightless"？
-   ```
-
-   - 这个"##"符号有什么特殊含义？
-   
-   - 这种设计解决了什么问题？
-
-4. **模型架构解析** 
-
-   - BERT的基本架构是怎样的？
-
-   - 它与Transformer的关系如何？
-
-   - 有哪些关键的改进和创新？
-
-5. **Pre-train & Fine-tune策略** 
-
-   - **预训练(Pre-train)**的含义是什么？
-
-   - **微调(Fine-tune)**又是什么？
-
-   - BERT是如何巧妙利用这两个阶段的？
-
-6. **GLUE评估基准** 
-
-   - GLUE分数是什么？
-
-   - 它评估了模型的哪些能力？
-
-   - 为什么它在NLP领域这么重要？
-
-7. **BERT家族谱系** *(需要自行搜集资料)*
-
-   - BERT衍生出了哪些"后代"模型？
-
-   - 这些模型的发展趋势是什么？
-
-   - 你觉得未来的发展方向在哪里？
+1. 让你理解 Agent 的核心概念
+2. 教会你如何检索论文、阅读论文——这是所有后续科研工作的基本功
+3. 通过精读 1~2 篇论文，写出你自己的心得与收获
 
 </Steps>
 
-### 拓展研究（进阶挑战）
+> 提示：这一题最重要的产出不是代码，而是你的思考过程和阅读记录。请务必独立完成，不要依赖 AI 代写。
 
-<Steps>
+---
 
-1. **实验设计精髓** 
+## Part 1: 核心概念理解（简答题）
 
-   - 作者如何设计实验证明方法有效性？
+> 请先用自己的话回答以下问题，为论文阅读建立"背景知识"。
 
-   - **消融实验(Ablation Study)**的巧思在哪里？
+### 1.1 什么是 LLM Agent？
 
-   - 实验结果如何支撑核心论点？
+- 什么是 AI Agent？它与普通的"问答式"大模型应用（比如直接向 ChatGPT 提问）有什么本质区别？
+- 如何理解"感知（Perception）→ 规划（Planning）→ 行动（Action）"这个循环？
+- 在 LLM 出现之前，Agent 概念已经存在（如强化学习智能体）。LLM 给 Agent 带来了哪些新能力？
 
-2. **GPT vs BERT对比研究** 推荐阅读：[《Improving Language Understanding by Generative Pre-Training》](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf)
+### 1.2 Agent 的核心能力
 
-   - GPT和BERT在思路上有何本质区别？
+目前主流观点认为 Agent 通常具备以下能力，请逐一解释：
+- **规划（Planning）**：什么是任务分解？什么是反思与自我纠正？
+- **记忆（Memory）**：短期记忆与长期记忆分别指什么？实现上可以借助哪些技术？
+- **工具使用（Tool Use）**：什么是工具调用（Tool Calling / Function Calling）？为什么工具对 Agent 如此重要？
+- **行动（Action）**：Agent 如何与环境交互、观察反馈并调整下一步？
 
-   - 各自的优势和局限性是什么？
+### 1.3 经典范式与框架
 
-   - 为什么后来GPT系列"逆袭"了？
-   
-3. **阅读感悟** 
+- 什么是 ReAct 模式（Reasoning + Acting）？它与 Chain-of-Thought（思维链）有什么区别？
+- 什么是多智能体系统（Multi-Agent）？多个 Agent 协作相比单个 Agent 有什么优势与代价？
+- 你了解哪些 Agent 框架或项目（如 LangChain、AutoGPT、BabyAGI、MetaGPT、Generative Agents）？任选一个简单介绍它的设计思路。
 
-   - 读完这几篇经典论文后，你最大的收获是什么？
+### 1.4 Agent 与相关概念
 
-   - 对AI研究有了哪些新的认识？
+- RAG（检索增强生成）与 Agent 是什么关系？Agent 的"记忆"与 RAG 有何联系和区别？
+- 任选一个 Agent 应用场景（编程助手、自动科研、游戏 NPC、浏览器操作、智能客服等），谈谈它的价值与目前面临的挑战。
 
-   - 对你未来的学习和研究有什么启发？
+---
 
-</Steps>
+## Part 2: 如何检索与阅读论文
 
-------
+> 这一部分是本题的"重点教学"。请认真阅读，并把它当作你完成 Part 3 的操作手册。
 
-## 💻 第二部分：自然语言推理实战
+### 2.1 在哪里找论文
 
-### 任务背景
+| 平台 | 用途 | 地址 |
+| --- | --- | --- |
+| arXiv | AI 领域论文预印本平台，新工作几乎第一时间发布 | https://arxiv.org |
+| Google Scholar | 学术搜索引擎，可查看引用量与被引关系 | https://scholar.google.com |
+| Semantic Scholar | 语义搜索，能查"引用了谁 / 被谁引用"，按影响力排序 | https://www.semanticscholar.org |
+| Papers with Code | 论文 + 开源代码 + 结果排行榜，方便复现和对比 | https://paperswithcode.com |
+| ACL Anthology | NLP 方向论文官方库（ACL / EMNLP / NAACL 等） | https://aclanthology.org |
+| Hugging Face Papers | 每日精选论文与社区讨论 | https://huggingface.co/papers |
+| 中文社区 | 知乎、机器之心、PaperWeekly、B 站论文讲解 | 搜索关键词即可 |
 
-**自然语言推理(NLI)**，也叫**文本蕴含识别(RTE)**，是NLP的核心任务之一！
-
-**任务定义**: 给定两个句子：
-
-- **前提(Premise)** 
-
-- **假设(Hypothesis)** 
-
-判断它们的关系：
-
-- **矛盾(Contradiction)**: 前提与假设冲突
-
-- **蕴含(Entailment)**: 前提支持假设
-
-- **中立(Neutral)**: 前提与假设无关
-
-### 数据集示例
-
-```plaintext
-前提: A person on a horse jumps over a broken down airplane.
-假设: A person is training his horse for a competition.
-关系: neutral
-
-前提: Children smiling and waving at camera  
-假设: They are smiling at their parents
-关系: neutral
-
-前提: A boy is jumping on skateboard in the middle of a red bridge.
-假设: The boy does a skateboarding trick.
-关系: entailment
-```
-
-### 🎯 实战目标
-
-**核心任务**: 训练一个分类模型，准确判断句子对之间的逻辑关系！
-
-**评价指标**: 测试集上的**准确率(Accuracy)**
-
-**实现策略**:
-
-- **模型选择**: 不限制架构和参数量，选择最适合的！
-
-- **数据处理**: 预处理、训练技巧、超参数调优都很重要！
-
-- **创新设计**: 充分发挥想象力！
-
-### 数据获取
-
-**数据集链接**: [Kaggle Datasets](https://www.kaggle.com/datasets/qiqiyiyiguo/glimmer-2025-ml-9)
-
-- **文件名**: `dataset/classification.txt`
-
-- **任务**: 自行按合适比例划分训练集和测试集
-
-### 实战笔记要求
-
-**笔记文档内容应包括**:
-
-- **项目实现逻辑**: 你的整体思路和架构设计
-
-- **问题与解决方案**: 实现中遇到的坑和填坑经验
-
-- **收获与思考**: 在项目中的成长和感悟
-
-- **实验结果分析**: 模型性能和改进方向
-
-> **LaTeX公式**: 内部公式建议使用LaTeX格式，让文档更专业！
-
-## ⚠️ 注意事项
-
-### AI工具使用政策
-
-**适度使用AIGC工具**是被允许的，但是！**不仅要知其然，更要知其所以然！** 
-
-### 学习建议
-
-<Steps>
-
-1. 经典文献不可不读
-   - 虽然技术贴很有用，但原始论文更重要！
-
-2. 保持探索精神
-   - 读不懂时多查资料，多思考
-
-3. 相信自己，勇敢尝试
-   - 你已经走到这里了，一定可以的！
-
-</Steps>
-
-## 提交要求
-
-### 提交内容
+**搜索技巧**：
 
 import { Badge } from '@astrojs/starlight/components';
 
-- **理论部分**: <Badge text="ml-9-姓名-学号.md" /> (第1题答案 + 第2题实战笔记)
+- 关键词组合：<Badge text="LLM agent survey" />、<Badge text="large language model agent" />、<Badge text="ReAct reasoning acting" />、<Badge text="multi-agent framework" />。
+- 限定站点：<Badge text="site:arxiv.org agent" />、<Badge text="site:aclanthology.org agent" />。
+- 时间限定：优先看近两年的工作；搜索时先看标题和摘要，把候选论文列成清单，再逐个决定是否精读。
 
-- **代码文件**: <Badge text="ml-9-姓名-学号.py" /> (或完整项目文件夹)
+### 2.2 如何判断一篇论文"值得读"
 
-- 所有文件压缩后提交
+- **从综述（Survey）入手**：先读 Agent 方向的综述，能快速建立"领域地图"，综述里会引用大量经典论文。例如 *The Rise and Potential of Large Language Model Based Agents: A Survey*（arXiv 2023）。
+- **顺藤摸瓜（引用追踪）**：
+  - 向前追踪：这篇论文引用了哪些工作（基础）？
+  - 向后追踪：谁引用了这篇论文（后续改进）？
+- **看发表渠道**：顶会论文（NeurIPS、ICML、ICLR、ACL、EMNLP、AAAI）经过严格评审，质量更有保障。
+- **看团队与代码**：知名机构的工作可信度更高；有开源代码的论文更容易复现和学习。
+
+### 2.3 如何阅读一篇论文："三遍阅读法"
+
+推荐使用计算机科学家 S. Keshav 提出的三遍阅读法：
+
+- **第一遍：泛读（5~10 分钟）**。只读标题、摘要、引言、结论和图表标题，回答三个问题：这篇论文解决什么问题？方法大致是什么？效果如何？据此决定是否继续。
+- **第二遍：精读（约 1 小时）**。通读全文，重点理解方法部分和实验部分；看懂每一张图；把不懂的地方标记出来；合上论文，尝试向自己复述论文的核心思想。
+- **第三遍：批判性阅读**。思考：方法有什么局限？假设是否合理？换作你会怎么做？这篇论文能给你自己的项目带来什么启发？
+
+**阅读建议**：
+
+- 边读边记，不要"只读不写"。用 Part 3 的论文卡片记录，或在原文上做批注。
+- 遇到不懂的概念（如 RAG、Function Calling、思维链），可以先用 AI 工具查清楚，再回到论文里。
+- 第一次读不懂很正常，先抓住"解决的问题"和"核心思想"，细节可以之后回看。
+
+### 2.4 Agent 方向推荐论文清单（按易到难排序）
+
+从以下清单中任选 1~2 篇精读（也可以自选，但需说明选择理由）：
+
+<Steps>
+
+1. **Chain-of-Thought Prompting Elicits Reasoning in Large Language Models**（NeurIPS 2022）——思维链，推理能力的基础
+2. **ReAct: Synergizing Reasoning and Acting in Language Models**（ICLR 2023）——Agent 范式开山之作，强烈推荐
+3. **Toolformer: Language Models Can Teach Themselves to Use Tools**（NeurIPS 2023）——模型如何学会用工具
+4. **Tree of Thoughts: Deliberate Problem Solving with Large Language Models**（NeurIPS 2023）——更强大的搜索式推理
+5. **Reflexion: Language Agents with Verbal Reinforcement Learning**（NeurIPS 2023）——自我反思与纠错
+6. **Generative Agents: Interactive Simulacra of Human Behavior**（UIST 2023）——记忆系统与"模拟人生"
+7. **MetaGPT: Meta Programming for A Multi-Agent Collaborative Framework**（ICLR 2024）——多智能体协作
+8. **The Rise and Potential of Large Language Model Based Agents: A Survey**（arXiv 2023）——综述，建立全局观
+9. 开源项目 **AutoGPT / BabyAGI**（非论文）——最早的自主 Agent 演示，可当科普读物
+
+</Steps>
+
+---
+
+## Part 3: 论文精读任务
+
+### 任务说明
+
+<Steps>
+
+1. 使用 Part 2 的方法完成检索，记录你的检索过程（见下）。
+2. 精读 1~2 篇论文，填写"论文阅读卡片"。
+3. 将结果整理进报告。
+
+</Steps>
+
+### 3.1 检索过程记录（请如实填写）
+
+```markdown
+- 检索平台：______（如 arXiv / Google Scholar / Semantic Scholar）
+- 检索关键词：______
+- 浏览过的论文标题（至少列 3 篇）：______
+- 最终选择的论文：______
+- 选择理由（如：经典之作 / 我对这个话题感兴趣 / 有开源代码）：______
+```
+
+### 3.2 论文阅读卡片模板
+
+```markdown
+## 论文阅读卡片
+
+**基本信息**
+- 标题（中英文）：
+- 作者 / 机构：
+- 发表会议 / 期刊 / arXiv 编号：
+- 论文链接：
+
+**1. 这篇论文解决了什么问题？**
+- 研究背景与动机：
+- 要解决的核心问题：
+
+**2. 核心方法（用自己的话概括，不超过 200 字）**
+- 方法的核心思想：
+- 关键技术与流程：
+
+**3. 实验与结论**
+- 使用的数据集 / 任务：
+- 主要实验结果：
+- 论文的贡献：
+
+**4. 局限与思考**
+- 论文的局限：
+- 如果让我改进，我会：
+- 对"Agent 是什么、如何构建"的启发：
+
+**5. 收获与心得（不少于 300 字）**
+- 阅读前我对 Agent 的理解：
+- 阅读后我的理解发生了什么变化：
+- 我打算如何把论文中的思想用到实践中：
+```
+
+---
+
+## 🎉 Part 4：思考题
+
+<Steps>
+
+1. 有人说"大模型是大脑，Agent 是躯体，工具是四肢"，你如何理解这句话？是否同意？
+2. 目前 Agent 还存在哪些明显的问题？（提示：幻觉、推理成本、长任务失败率、安全与对齐……）
+3. 如果让你设计一个面向校园场景的 Agent（例如"课程助教 Agent"），你会为它配备哪些工具与记忆能力？请简要描述你的设计。
+
+</Steps>
+
+---
+
+## 提交要求
+
+### 关于 AI 使用
+
+与前几题保持一致：鼓励使用 AI 辅助学习，但请注意：
+
+<Steps>
+
+1. 简答题与心得必须用自己的语言组织，禁止直接复制粘贴
+2. 论文卡片应基于真实的阅读过程，不能只靠摘要或 AI 总结拼凑
+3. 在报告中注明你使用了哪些 AI 帮助（如解释概念、协助检索）
+
+</Steps>
+
+### 提交内容
+
+- **文档报告**：Part 1 简答题 + Part 2 的检索过程记录 + Part 3 论文卡片 + Part 4 思考题，写入 <Badge text=".md" /> 文件，命名格式：<Badge text="ml-9-姓名-学号.md" />
+
+- 将文件压缩为 <Badge text="ml-9-姓名-学号.zip" /> 提交
 
 ### 提交方式
 
@@ -240,6 +228,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 - **主题**: <Badge text="9-姓名-学号" />
 
->出题人：百事可乐
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=2078306188&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Taffy</p>
 >
->QQ：2465800571
+> QQ：2078306188
+>
+> 邮箱：[2078306188@qq.com](mailto:2078306188@qq.com)

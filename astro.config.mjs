@@ -95,11 +95,12 @@ export default defineConfig({
 						{ label: "C-EASY-1: C语言入门", slug: 'cs/c-easy-1' },
 						{ label: 'C-EASY-2: 指针', slug: 'cs/c-easy-2' },
 						{ label: 'C-EASY-3: 二叉树与递归', slug: 'cs/c-easy-3' },
+						{ label: 'C-EASY-4: 小应用之五子棋游戏', slug: 'cs/c-easy-4' },
 						{ label: 'MEDIUM-1: 位级操作', slug: 'cs/medium-1' },
 						{ label: 'MEDIUM-2: 计算机中的整数与浮点数', slug: 'cs/medium-2' },
 						{ label: 'MEDIUM-3: 初识Linux系统', slug: 'cs/medium-3' },
-						{ label: '〇MEDIUM-4: 计算机网络常识与实验', slug: 'cs/medium-4' },
-						{ label: '〇HARD-1: cache', slug: 'cs/hard-1' }
+						{ label: 'MEDIUM-4: 计算机系统内存与执行机制', slug: 'cs/medium-4' },
+						{ label: 'HARD-1: 计算机网络基础', slug: 'cs/hard-1' }
 					],
 				},{
 					label: '前端',
@@ -140,10 +141,10 @@ export default defineConfig({
 						{ label: '3: 多层感知机实战', slug: 'ml/3' },
 						{ label: '4: 卷积神经网络理论', slug: 'ml/4' },
 						{ label: '5: 卷积神经网络实战', slug: 'ml/5' },
-						{ label: '〇6: 循环神经网络理论', slug: 'ml/6' },
-						{ label: '〇7: 循环神经网络实战', slug: 'ml/7' },
-						{ label: '〇8: Transformer', slug: 'ml/8' },
-						{ label: '〇9: BERT', slug: 'ml/9' }
+						{ label: '6: 循环神经网络理论', slug: 'ml/6' },
+						{ label: '7: 循环神经网络实战', slug: 'ml/7' },
+						{ label: '8: Transformer', slug: 'ml/8' },
+						{ label: '9: 初识智能体 Agent', slug: 'ml/9' }
 					],
 				}
 			],

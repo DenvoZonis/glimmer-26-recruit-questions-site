@@ -7,7 +7,7 @@ prev:
   label: 7：循环神经网络实战项目
 next:
   link: /ml/9/
-  label: 9：BERT
+  label: 9：初识智能体 Agent
 ---
 
 import { Image } from 'astro:assets';
@@ -32,6 +32,10 @@ import banner from '../../../assets/ml/banner.png';
 
 ## 💡 学习建议
 
+import { Steps } from '@astrojs/starlight/components';
+
+<Steps>
+
 1. **理论先行**: 在写代码之前，确保脑海中有清晰的架构图
 
 2. **循序渐进**: 从单头注意力到多头，从简单到复杂
@@ -42,21 +46,25 @@ import banner from '../../../assets/ml/banner.png';
 
 5. **延伸思考**: 想想如何让你的模型更强更快
 
-  ⚠️ **重要提醒**: 虽然这题很硬核，但完成后你将**从入门直达精通**！这可能是你编程生涯中最有成就感的时刻之一！同时也是面试中的重点题目喔~
+</Steps>
+
+⚠️ **重要提醒**: 虽然这题很硬核，但完成后你将**从入门直达精通**！这可能是你编程生涯中最有成就感的时刻之一！同时也是面试中的重点题目喔~
 
 ## 🔥 第一部分：理论基础问答
+
+思考：为什么 RNN 难以并行？为什么长序列性能差？
 
 ###  Attention is all you need！
 
 在深入代码之前，让我们先"拷问"一下Transformer的灵魂！
 
-** 必答题清单：**
+阅读论文：[Attention is All You Need](https://arxiv.org/abs/1706.03762)
 
-import { Steps } from '@astrojs/starlight/components';
+**必答题清单：**
 
 <Steps>
 
-1. **Transformer的特点**是什么？主要解决什么问题？缺点又是什么？
+1. **Transformer的特点**是什么？主要解决什么问题？优缺点又是什么？
 
    - 🔍 **任务**: 在原论文中找到对应位置并标注
 
@@ -72,13 +80,15 @@ import { Steps } from '@astrojs/starlight/components';
 
    - 这种设计的优势在哪里？
 
-4. **Encoder & Decoder 架构解析** 
+4. **Encoder & Decoder 架构解析** （你不是第一次见它）
 
    - **画图 + 文字**: 详细说明两个模块的结构
 
    - 数据是如何在其中流动的？
 
-   - 🎯 **面试重点**: 务必搞懂每个细节！
+   - 🎯 **重点**: 务必搞懂每个细节！
+
+   - 注：虽然2026年绝大多数主流商用模型（如ChatGPT）采用Decoder-Only结构，但理解原版Encoder-Decoder对理解Cross-Attention至关重要
 
 5. **注意力机制核心问题** 
 
@@ -365,13 +375,13 @@ print(generated_text)
 
 1. **Validation Loss收敛值**是多少？
 
-2. **MiniGPT参数量**统计（应该\<1M）
+2. **MiniGPT参数量**统计（应该&lt;1M）
 
-3. **显存占用**情况（应该\<1G）
+3. **显存占用**情况（应该&lt;1G）
 
 </Steps>
 
-### 9️⃣ 挑战性进阶问题
+### 9️⃣ 挑战性进阶问题（选做）
 
 <Steps>
 
@@ -380,6 +390,7 @@ print(generated_text)
    - 为什么现代GPT使用**Rotary Position Embedding**？
 
    - 尝试在MiniGPT中实现RoPE并对比性能！
+   - 扩展阅读：2026年主流大模型（如GPT-5）常用RoPE（旋转位置编码），因为它外推性更好。有兴趣的同学可自行查阅，本题不强制要求实现
 
 2. **LayerNorm位置之争**
 
@@ -397,6 +408,8 @@ print(generated_text)
 
    - 了解这个让Transformer飞起来的神奇算法！
 
+5. **LLM 时代的 Transformer 演进**
+
 </Steps>
 
 ------
@@ -406,6 +419,11 @@ print(generated_text)
 > **AI工具使用**: 本题**强烈建议纯手工实现**！这可能是你最后一次有机会完全从零手撸这么核心的算法了，好好珍惜这个过程吧！
 
 ------
+
+## 🍀我们想写给你：
+
+当你跑通这个MiniGPT，看到AI开始蹦出“莎士比亚式”的单词时，恭喜你！你已经掌握了现代AI 80%的底层密码。
+至于2026年大火的Hyperloop、稀疏注意力、Keel千层架构……它们都是在你刚敲完的这几百行代码上演进出来的。打好地基，未来的摩天大楼任你建造！
 
 ## 提交要求
 
@@ -425,6 +443,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 - **主题**: <Badge text="8-姓名-学号" />
 
->出题人：百事可乐
+> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=3629542766&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;Emily</p>
 >
->QQ：2465800571
+> QQ：3629542766
+>
+> 邮箱：[3629542766@qq.com](mailto:3629542766@qq.com)
