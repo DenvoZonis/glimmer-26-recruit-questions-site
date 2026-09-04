@@ -94,14 +94,14 @@ export default defineConfig({
 					items: [{ label: '计算机系统简介', slug: 'cs/introduction' }
 					],
 				},{
-					label: '前端',
+					label: 'Web前端',
 					collapsed: true,
-					items: [{ label: '前端简介', slug: 'frontend/introduction' }
+					items: [{ label: 'Web前端简介', slug: 'frontend/introduction' }
 					],
 				},{
-					label: '后端',
+					label: 'Web后端',
 					collapsed: true,
-					items: [{ label: '后端简介', slug: 'backend/introduction' }
+					items: [{ label: 'Web后端简介', slug: 'backend/introduction' }
 					],
 				},{
 					label: '机器学习',
