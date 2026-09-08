@@ -78,6 +78,15 @@ export default defineConfig({
 						{ label: 'Q&A 常见问题解答', slug: 'QA' }
 					],
 				},{
+					label: '碎碎念',
+					collapsed: true,
+					items: [{ label: '概述', slug: 'senior-words/introduction' },
+						{ label: '计算机系统', slug: 'senior-words/cs' },
+						{ label: 'Web前端', slug: 'senior-words/frontend' },
+						{ label: 'Web后端', slug: 'senior-words/backend' },
+						{ label: '机器学习', slug: 'senior-words/ml' }
+					],
+				},{
 					label: '日常基础',
 					collapsed: true,
 					items: [{ label: '日常简介', slug: 'daily/introduction' },
@@ -103,9 +112,9 @@ export default defineConfig({
 						{ label: 'HARD-1: 计算机网络基础', slug: 'cs/hard-1' }
 					],
 				},{
-					label: '前端',
+					label: 'Web前端',
 					collapsed: true,
-					items: [{ label: '前端简介', slug: 'frontend/introduction' },
+					items: [{ label: 'Web前端简介', slug: 'frontend/introduction' },
 						{ label: '1: 初识HTML', slug: 'frontend/1' },
 						{ label: '2: 了解网页F12开发者工具', slug: 'frontend/2' },
 						{ label: '3: CSS初识', slug: 'frontend/3' },
@@ -117,9 +126,9 @@ export default defineConfig({
 						{ label: '9: Vue的学习', slug: 'frontend/9' }
 					],
 				},{
-					label: '后端',
+					label: 'Web后端',
 					collapsed: true,
-					items: [{ label: '后端简介', slug: 'backend/introduction' },
+					items: [{ label: 'Web后端简介', slug: 'backend/introduction' },
 						{ label: '1: 环境搭建与程序运行', slug: 'backend/1' },
 						{ label: '2: 数据类型、控制流与异常处理', slug: 'backend/2' },
 						{ label: '3: 面向对象、封装继承与多态', slug: 'backend/3' },
