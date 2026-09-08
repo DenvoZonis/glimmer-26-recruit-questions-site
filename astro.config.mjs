@@ -78,6 +78,15 @@ export default defineConfig({
 						{ label: 'Q&A 常见问题解答', slug: 'QA' }
 					],
 				},{
+					label: '碎碎念',
+					collapsed: true,
+					items: [{ label: '概述', slug: 'senior-words/introduction' },
+						{ label: '计算机系统', slug: 'senior-words/cs' },
+						{ label: 'Web前端', slug: 'senior-words/frontend' },
+						{ label: 'Web后端', slug: 'senior-words/backend' },
+						{ label: '机器学习', slug: 'senior-words/ml' }
+					],
+				},{
 					label: '日常基础',
 					collapsed: true,
 					items: [{ label: '日常简介', slug: 'daily/introduction' },
