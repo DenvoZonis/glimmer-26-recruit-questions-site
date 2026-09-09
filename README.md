@@ -4,7 +4,7 @@
 
 构建后的dist文件夹请放到[前端部署仓库](https://github.com/DenvoZonis/glimmer-26-recruit-frontend)中。
 
-以前的归档题目放在这里，访问这个endpoint： `/recruit/archives/` 。在已部署的网站上，URL是 https://www.glimmer.org.cn/recruit/archives/ 。
+以前的归档题目放在这里，访问这个endpoint： `/archives/` 。在已部署的网站上，URL是 https://www.glimmer.org.cn/archives/ 。
 
 ## 构建和调试
 
