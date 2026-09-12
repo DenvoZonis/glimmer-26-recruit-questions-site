@@ -4,7 +4,13 @@
 
 构建后的dist文件夹请放到[前端部署仓库](https://github.com/DenvoZonis/glimmer-26-recruit-frontend)中。
 
-以前的归档题目放在这里，访问这个endpoint： `/archives/` 。在已部署的网站上，URL是 https://www.glimmer.org.cn/archives/ 。
+以前的归档题目放在这里，访问这个endpoint： `/archives/` 。在已部署的网站上，URL是 https://www.glimmer.org.cn/archives/ 。开放网站时记得删掉所有的归档项目，否则用户可能会通过上方的搜索面板间接找到以前的归档题目。
+
+## 分支说明
+
+- main：仓库主分支
+- feature/for-public：在未开放招新题时放出来的网站
+- feature/production：开放招新题时放出来的网站
 
 ## 构建和调试
 
@@ -28,18 +34,28 @@ Clone此仓库，然后cd到项目根目录，通过`npm install`安装依赖。
 
 写mdx可能会用到的：
 
+步骤组件：
+
 ```mdx
 import { Steps } from '@astrojs/starlight/components';
 
 <Steps>
 </Steps>
+```
 
+徽章组件：
+
+```mdx
 import { Badge } from '@astrojs/starlight/components';
 
 <Badge text="" />
 <Badge text="" variant="success" />
 <Badge text="" variant="danger" />
+```
 
+题目下方出题人模板（Image组件应该在最开头就会被导入，故此处不再导入）：
+
+```mdx
 > <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=123&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;xxx</p>
 >
 > QQ：123
