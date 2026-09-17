@@ -70,11 +70,11 @@ import { Badge } from '@astrojs/starlight/components';
 
 <Steps>
 
-1. <Badge text="void init_tree(SeqBiTree **tree*)" /> 实现初始化二叉树函数，让二叉树的大小为<Badge text="MAX_TREE_SIZE" />，并将其全部节点设置为空，大小为<Badge text="0" />。
-2. <Badge text="bool set_root(SeqBiTree **tree*, int *value*)" /> 创建根节点，在节点数组1处设置根节点，函数需要传入根节点的<Badge text="data" />。
-3. <Badge text="bool set_left_child(SeqBiTree **tree*, int *parent_node*, int *value*)" /> 创建左孩子，<Badge text="parent_node" />为对应父节点下标。
-4. <Badge text="bool set_right_child(SeqBiTree **tree*, int *parent_node*, int *value*)" /> 创建右孩子。
-5. <Badge text="void level_order(SeqBiTree **tree*)" />  实现层序遍历，按数组下标顺序打印整棵树，节点为空则打印<Badge text="-1" />，每打印完一层之后换行。
+1. <Badge text="void init_tree(SeqBiTree *tree)" /> 实现初始化二叉树函数，让二叉树的大小为<Badge text="MAX_TREE_SIZE" />，并将其全部节点设置为空，大小为<Badge text="0" />。
+2. <Badge text="bool set_root(SeqBiTree *tree, int value)" /> 创建根节点，在节点数组1处设置根节点，函数需要传入根节点的<Badge text="data" />。
+3. <Badge text="bool set_left_child(SeqBiTree *tree, int parent_node, int value)" /> 创建左孩子，<Badge text="parent_node" />为对应父节点下标。
+4. <Badge text="bool set_right_child(SeqBiTree *tree, int parent_node, int value)" /> 创建右孩子。
+5. <Badge text="void level_order(SeqBiTree *tree)" />  实现层序遍历，按数组下标顺序打印整棵树，节点为空则打印<Badge text="-1" />，每打印完一层之后换行。
 6. 实现以上函数之后，自己在主函数中定义一颗三层的二叉树，并进行层序遍历，看结果是否符合预期。
 
 </Steps>
