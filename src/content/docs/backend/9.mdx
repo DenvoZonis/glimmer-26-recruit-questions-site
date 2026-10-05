@@ -28,6 +28,8 @@ import { Badge } from '@astrojs/starlight/components';
 
 思考一下，HttpURLConnection和SocketChannel有什么区别和联系？如今现代Java后端开发为什么很少再直接在业务代码中使用HttpURLConnection？它存在什么局限性？
 
+> 计算机系统（CS）方向有关于客户端-服务端通信的经典实验，可参考[他们](https://www.glimmer.org.cn/cs/hard-1/#step2_%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C%E5%92%8C%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA)的Step2中的Part1和Part2。你可以尝试使用Java语言来完成这两个part。（非强制，但建议）
+
 ## 任务二：上手网络编程
 
 ### 基础实践：API数据交互
@@ -280,6 +282,12 @@ public class UserManager {
 当下，AI Agent也是一个热门的方向。简单来说， **Agent（智能体）** 就是一种不仅能“做解答”，还能“拿工具去干活”的AI。你给它一个复杂的最终目标，它能够自主规划步骤、调用外部工具、检查执行结果，并且根据报错或环境变化不断修正，直到把任务彻底办完。你可能听说过Claude Code，它可以帮助你写代码，改bug，还能做其他很多事情，而Claude Code就是一个Agent。尝试动手编写一个简单的Agent吧！
 
 以下两个任务只需要完成其一即可。推荐有能力的同学完成任务一。如果任务一对你来说还有点难，则可以尝试完成任务二。
+
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="note" title="提示">
+	在排行榜前列的同学建议完成任务一，排行榜前列的同学完成任务二获得的分数会略低于任务一。（因为任务二对名列前茅的大家来说可能学到的东西相对较少）
+</Aside>
 
 >你需要模型服务商提供的API才能完成本题。强烈推荐[DeepSeek](https://platform.deepseek.com/)，完成本题所花的钱还没一瓶矿泉水贵，同时DeepSeek的模型也非常好用。如果想要寻求免费的API，可尝试[百度的ENRIE-Lite](https://ai.baidu.com/ai-doc/WENXINWORKSHOP/wlwg8f1i3)、[智谱的GLM-4.7-Flash](https://bigmodel.cn/pricing)、[谷歌的Gemini](https://ai.google.dev/gemini-api/docs/pricing?hl=zh-cn)甚至[Ollama](https://ollama.com/)本地运行LLM，但模型质量可能不及预期。
 >
