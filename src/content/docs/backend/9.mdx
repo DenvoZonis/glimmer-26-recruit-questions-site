@@ -68,7 +68,7 @@ import java.time.LocalDateTime;
 
 public class SimpleDownloader {
     public static final String TEST_URL = "https://test.glimmer.org.cn/re/the_last_supper.png";
-    private static final String SAVE_PATH = "small.bin";
+    private static final String SAVE_PATH = "the_last_supper.png";
     public static void main(String[] args) {
         // 创建一个HttpClient
         try (HttpClient client = HttpClient.newBuilder()
@@ -117,9 +117,10 @@ public class SimpleDownloader {
 
 **原理要点**：
 
-- 发送 <Badge text="HEAD" /> 请求获取文件大小（<Badge text="Content-Length" />），以及是否支持分块下载（<Badge text="Accept-Ranges: bytes" />）。
-- 根据分配的线程数，切分每个线程要下载的字节区间，利用Request Header中添加<Badge text="Range: bytes=start-end" />并发请求不同的分块。
-- 将各分块数据正确写入同一个目标文件的对应偏移量处（提示：可了解<Badge text="RandomAccessFile" />或NIO <Badge text="FileChannel" />）。
+- 发送携带鉴权信息的 <Badge text="GET" /> 请求，并添加 <Badge text="Range: bytes=0-0" />，获取文件的第一个字节。
+- 检查服务器是否返回 <Badge text="206 Partial Content" />，并从 <Badge text="Content-Range" /> 响应头中获取文件总大小。
+- 根据文件总大小和线程数，将文件划分为多个字节区间，利用Request Header中添加<Badge text="Range: bytes=start-end" />并发发送<Badge text="Range GET" />请求。
+- 将各分块正确写入同一个目标文件对应的偏移位置，最终组合为完整、可打开的文件。（提示：可了解<Badge text="RandomAccessFile" />或NIO <Badge text="FileChannel" />）
 
 ## 任务三：深入网络编程
 
@@ -478,7 +479,7 @@ import { Steps } from '@astrojs/starlight/components';
 
 1. 将代码托管在GitHub、Gitlab或Gitee等平台，并设置仓库为公开（public）。
 2. 在项目根目录的<Badge text="README.md" />中写下：本题的问答、思考和思考题等仅需用文字阐述的题目的答案。
-3. 向仓库上传你的代码和运行截图等，并在<Badge text="README.md" />中展示你的运行截图，并作相应阐述。
+3. 向仓库上传你的代码、运行截图以及要求下载的<Badge text="the_last_supper.png" />图片等，并在<Badge text="README.md" />中展示你的运行截图和要求的图片，并作相应阐述。
 4. 向我们提交仓库的URL地址。[提交点这里](https://www.glimmer.org.cn/submit/)
 
 </Steps>
