@@ -93,9 +93,9 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 #include <unistd.h>
 #include <string.h>
 
+/* ==================== 常量与对齐宏 ==================== */
 #define ALIGNMENT 8  // 双字对齐
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1)) // 对齐到ALIGNMENT的倍数
-
 
 #define WSIZE       4  // 头部或尾部的字节数
 #define DSIZE       8  // 双字大小
@@ -104,7 +104,8 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 
 #define MAX(x, y)  ((x) > (y) ? (x) : (y))  // 返回最大值
 
-#define PACK_ALLOC(val, alloc)  ((size) | (alloc))  // 将 size 和 allocated bit 合并为一个字
+/* ==================== 读写块字段的宏 ==================== */
+#define PACK(size, alloc)  ((size) | (alloc))  // 将 size 和 allocated bit 合并为一个字
 
 #define GET(p)        (*(unsigned int *)(p))  // 读地址p处的一个字
 #define PUT(p, val)   (*(unsigned int *)(p) = (val))  // 向地址p处写一个字
@@ -118,14 +119,21 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 #define NEXT_BLKP(bp)    ((char*)(bp) + GET_SIZE((char*)(bp) - WSIZE))  // 获取下一个块的指针
 #define PREV_BLKP(bp)    ((char*)(bp) - GET_SIZE((char*)(bp) - DSIZE))  // 获取前一个块的指针
 
-// 全局状态：
-static void* heap_listp;  // 堆的开始指针
+/* ==================== 全局状态 ==================== */
+static char *heap_listp;  // 堆的开始指针
 
 #ifdef DEBUG
 #define VERBOSE 1  // 在调试模式下启用调试信息输出
 #else
 #define VERBOSE 0  // 默认不输出调试信息
 #endif
+
+/* ==================== 前向声明 ==================== */
+static void *extend_heap(size_t size);
+static void *find_fit(size_t size);
+static void place(char *bp, size_t asize);
+static void *coalesce(void *bp);
+static void print_heap_blocks(int verbose, const char *func);
 ```
 
 你首先要做到的是看懂宏定义。
@@ -157,7 +165,7 @@ int mm_init(void)
     // 初始化堆
     if ((heap_listp = sbrk(4*WSIZE)) == (void*)-1)
         return -1;
-    11
+    
     // 初始化空闲链表
     PUT(heap_listp, 0); 
     PUT(heap_listp + 1*WSIZE, PACK(8, 1));
@@ -214,6 +222,7 @@ static void print_heap_blocks(int verbose, const char* func) {
  */
 static void *extend_heap(size_t size) {}
 
+
 /**
  * @brief 在堆中查找合适的空闲块。
  * 
@@ -221,9 +230,10 @@ static void *extend_heap(size_t size) {}
  * 
  * @param size 需要分配的内存块的大小（以字节为单位）。
  * 
- * @return 找到的合适的空闲块的指针，如果没有找到则返回 <Badge text="NULL" />。
+ * @return 找到的合适的空闲块的指针，如果没有找到则返回 `NULL`。
  */
 static void *find_fit(size_t size) {}
+
 
 /**
  * @brief 将内存块分配给用户。
@@ -235,6 +245,7 @@ static void *find_fit(size_t size) {}
  */
 static void place(char *bp, size_t asize) {}
 
+
 /**
  * @brief 分配一个指定大小的内存块。
  * 
@@ -242,9 +253,10 @@ static void place(char *bp, size_t asize) {}
  * 
  * @param size 需要分配的内存大小（以字节为单位）。
  * 
- * @return 指向分配的内存块的指针，如果分配失败则返回 <Badge text="NULL" />。
+ * @return 指向分配的内存块的指针，如果分配失败则返回 `NULL`。
  */
 void *mm_malloc(size_t size) {}
+
 
 /**
  * @brief 合并相邻的空闲块。
@@ -257,6 +269,7 @@ void *mm_malloc(size_t size) {}
  */
 static void *coalesce(void *bp) {}
 
+
 /**
  * @brief 释放一个已分配的内存块。
  * 
@@ -265,6 +278,7 @@ static void *coalesce(void *bp) {}
  * @param ptr 指向要释放的内存块的指针。
  */
 void mm_free(void *ptr) {}
+
 
 //测试用例
 int main() {
