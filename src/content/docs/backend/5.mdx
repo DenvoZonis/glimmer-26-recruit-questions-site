@@ -288,9 +288,9 @@ Student student = new Student(1, "doro", 2, "114514");
 
 ### 知识准备
 
-1. **maven**
+**maven**
 
-2. **HTTP（HyperText Transfer Protocol）**：应用层协议，用于客户端（浏览器/APP）与服务端之间的数据传输。
+**HTTP（HyperText Transfer Protocol）**：应用层协议，用于客户端（浏览器/APP）与服务端之间的数据传输。
 
 特点：
 
@@ -323,7 +323,9 @@ Content-Length: 30
 
 <u>需要了解常见的请求方式，以及常见的响应状态码</u>（404 应该是最熟悉的状态码了）
 
-3. **JSON数据格式**
+
+
+**JSON数据格式**
 
 json本质来说就是一个字符串，是一种轻量级的数据交换格式，易于人阅读和编写，也易于机器解析和生成。
 
@@ -342,41 +344,19 @@ json本质来说就是一个字符串，是一种轻量级的数据交换格式�
 }
 ~~~
 
-如果遇到很复杂的json字符串，还可以用这个网站帮助分析结构：
+如果遇到很复杂的json字符串，还可以用这个网站帮助分析结构
 
 [JSON Formatter & Validator (curiousconcept.com)](https://jsonformatter.curiousconcept.com/#)
 
-4. **fastjson**
-
-实现 JSON 字符串 ↔ Java 对象 的互相转换，两个核心方法：
-
-```java
-String json = JSON.toJSONString(obj);                  // 对象 → JSON 字符串
-User user = JSON.parseObject(json, User.class);        // JSON 字符串 → 对象
-```
-
-5. TCP/IP 通信
+TCP/IP 通信
 
 ------
 
-### 项目实现（尽力完成！）
+### 项目实现
 
-> 这个项目对于新手来说难度也许稍大，可以适当使用AI工具来帮助你逐步上手、完成。
->
-> 但请不要完全复制粘贴AI给出的答案，我们更期待看见你在完成这个项目时的探索过程和自己的思考。
+#### 客户端
 
-#### 框架与准备
-
-编写 4 个 Java 类，组成一个客户端/服务端小系统，两端通过 HTTP + JSON 通信：
-
-| 类              | 角色             | 职责                                 |
-| --------------- | ---------------- | ------------------------------------ |
-| <Badge text="Server" />        | 服务端（快递柜） | 接收查询请求，查本地数据，返回取件码 |
-| <Badge text="Client" />        | 客户端（用户）   | 读取用户输入，发请求，展示取件码     |
-| <Badge text="QueryRequest" />  | 请求体映射类     | 描述请求 JSON 的结构                 |
-| <Badge text="QueryResponse" /> | 响应体映射类     | 描述响应 JSON 的结构                 |
-
-先要在pom.xml中导入解析json格式的依赖：
+先要在pom.xml中导入解析json格式的依赖
 
 ~~~xml
 		<dependency>
@@ -386,35 +366,103 @@ User user = JSON.parseObject(json, User.class);        // JSON 字符串 → 对
         </dependency>
 ~~~
 
-测试数据如下：
+**用fastjson构造json格式**
 
-| 快递单号    | 手机号      | 取件码 |
-| ----------- | ----------- | ------ |
-| SF123456789 | 13005433678 | 1234   |
-| JD987654321 | 19805433168 | 5678   |
-| YT456789123 | 13905479698 | 9012   |
-| ZT789123456 | 18505433664 | 3456   |
+~~~java
+//fastjson这个库需要定义一个类作为映射
+public class User {
+    private String name;
+    private int age;
+    // 必须有无参构造函数
+    // 必须提供 getter/setter (Fastjson 依赖它们)
+}
+//然后通过给这个类实例化具体数据构建json
+User user = new User("Alice", 25);
+String json = JSON.toJSONString(user);
+// 结果: {"age":25,"name":"Alice"}
+~~~
+
+解析json格式
+
+~~~java
+//{"age":25,"name":"Alice"}
+String json = "{\"name\":\"Alice\",\"age\":25}";
+User user = JSON.parseObject(json, User.class);
+//这时候user这个对象就保存了对应字段的内容
+~~~
+
+
+
+代码实现部分
+
+~~~java
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+
+public class Client {
+    private static final String SERVER_URL = "http://localhost:8000/query";
+
+    public static void main(String[] args) {
+        while (true) {
+            //读取用户输入的快递单号和手机号
+            
+            
+            try {
+                /*
+                用fastjson这个依赖构造json格式，构造的样例为
+                {"trackingNumber":"SF123456789","phone":"19867653558"}
+                */
+            
+                // 将这个json格式的数据写入请求体并发送HTTP POST请求
+                
+
+                // 读取响应，状态码是200才是响应成功
+                if (connection.getResponseCode() == 200) {
+                   /*
+                   解析服务端响应的json格式，拿到取件码，拿不到就显示msg的内容
+                   样例：
+                   例如：{"pick_code":4096,"msg":"success"}
+                   		{"pick_code":null,"msg":"手机号不正确"}
+                   */
+                    
+                    
+                   }
+                } else {
+                    System.out.println("查询失败，状态码: " + connection.getResponseCode());
+                }
+            } catch (IOException e) {
+                System.out.println("请求发生错误: " + e.getMessage());
+            }
+        }
+
+        scanner.close();
+        System.out.println("客户端已退出");
+    }
+}
+~~~
 
 #### 服务端
 
-服务端用 JDK 自带的 <Badge text="com.sun.net.httpserver.HttpServer" />，不需要引入任何 web 框架。**带 <Badge text="TODO" /> 标记的地方需要你补全**，详见代码块下方的「TODO 提示」。
-
-```java
-import com.alibaba.fastjson2.JSON;
+~~~java
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class Server {
     private static final int PORT = 8000;
-    // 模拟快递柜数据：key = 快递单号_手机号，value = 取件码
     private static final Map<String, String> expressMap = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
@@ -431,123 +479,48 @@ public class Server {
 
     private static void initializeExpressData() {
         // 添加一些测试数据
-        // 键的构成是  快递单号_手机号
+        //键的构成是  快递单号_手机号
         expressMap.put("SF123456789_13005433678", "1234");
-        // TODO 1: 参照测试数据表，把其余3条数据也加进去
+        expressMap.put("JD987654321_19805433168", "5678");
+        expressMap.put("YT456789123_13905479698", "9012");
+        expressMap.put("ZT789123456_18505433664", "3456");
     }
 
     static class QueryHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            // 非POST请求返回405 Method Not Allowed
-            if (!"POST".equals(exchange.getRequestMethod())) {
-                exchange.sendResponseHeaders(405, -1);
-                exchange.close();
-                return;
-            }
+            if ("POST".equals(exchange.getRequestMethod())) {
+                // 读取请求体
+                
 
-            try {
-                // 读取请求体（请求体是字节流，按UTF-8转成字符串）
-                String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-                // 解析JSON请求，取出单号和手机号
-                QueryRequest request = JSON.parseObject(body, QueryRequest.class);
-                String trackingNumber = request.getTrackingNumber();
-                String phone = request.getPhone();
+                try {
+                    // 解析JSON请求（例如：{"trackingNumber":"SF123456789"}）获得单号
+                    
+                    
+                    // 在expressMap中查询取件码，
+                    
+                    
+                    /*
+                    构建响应的json
+                    例如：{"pick_code":4096,"msg":"success"}
+                    如果找不到快递则是{"pick_code":null,"msg":"根据各种情况写提示信息"}
+                    */
+                    
 
-                // TODO 2: 校验单号和手机号不能为空，不合法就抛异常走400分支
-                // TODO 3: 用"单号_手机号"拼成key，在expressMap中查询取件码
-                // TODO 4: 根据查询结果构造QueryResponse
-                // TODO 5: 把响应对象序列化成JSON并发送响应（状态码200）
-            } catch (Exception e) {
-                // 处理异常，返回400状态码(Bad Request)
-                // TODO 6: 返回状态码400和错误JSON {"pick_code":null,"msg":"请求格式错误"}
-            }
-        }
-    }
-}
-```
-
-#### 客户端
-
-客户端用 <Badge text="HttpURLConnection" /> 手动发 HTTP 请求。同样，带 <Badge text="TODO" /> 标记的地方需要你补全。
-
-~~~java
-import com.alibaba.fastjson2.JSON;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
-public class Client {
-    private static final String SERVER_URL = "http://localhost:8000/query";
-
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
-            try {
-                // 读取用户输入的快递单号
-                System.out.print("请输入快递单号（输入exit退出）: ");
-                String trackingNumber = scanner.nextLine().trim();
-                // TODO 1: 输入exit时退出循环（
-
-                // 读取用户输入的手机号
-                System.out.print("请输入手机号: ");
-                String phone = scanner.nextLine().trim();
-
-                // TODO 2: 用fastjson构造json格式的请求体，样例为
-                // {"trackingNumber":"SF123456789","phone":"13005433678"}
-
-                // TODO 3: 创建HttpURLConnection，把上面的json写入请求体并发送HTTP POST请求
-                // （注意：连接对象要命名为connection，下面判断状态码要用）
-
-                // 读取响应，状态码是200才是响应成功
-                if (connection.getResponseCode() == 200) {
-                    // TODO 4: 读取响应体并解析json，拿到取件码就打印取件码，
-                    // 拿不到就打印msg的内容。响应样例：
-                    // {"pick_code":"1234","msg":"success"}
-                    // {"pick_code":null,"msg":"手机号不正确"}
-                } else {
-                    System.out.println("查询失败，状态码: " + connection.getResponseCode());
+                    // 发送响应
+                    
+                } catch (Exception e) {
+                    // 处理异常，返回400状态码(Bad Request)
+                   
                 }
-                connection.disconnect();
-            } catch (IOException e) {
-                // 请求发生错误（比如Server没启动），打印错误信息后继续循环
-                System.out.println("请求发生错误: " + e.getMessage());
+            } else {
+                // 非POST请求返回405 Method Not Allowed
+                exchange.sendResponseHeaders(405, -1);
             }
         }
-        scanner.close();
-        System.out.println("客户端已退出");
-    }
-
-    /** 读取响应体：把InputStream按UTF-8读成一个字符串 */
-    private static String readBody(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-        }
-        return sb.toString();
     }
 }
 ~~~
-
-### 提交要求
-
-<Steps>
-
-1. 给出 4个 Java 类的完整代码
-2. 代码运行结果截图
-3. 加分项：展现完成该项目过程中，你的学习笔记、思考过程、遇到的问题和解决方法，以及心得体会等等，都可以写在这里
-
-</Steps>
 
 ## **本题提交方式**
 

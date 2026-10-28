@@ -28,8 +28,6 @@ import { Badge } from '@astrojs/starlight/components';
 
 思考一下，HttpURLConnection和SocketChannel有什么区别和联系？如今现代Java后端开发为什么很少再直接在业务代码中使用HttpURLConnection？它存在什么局限性？
 
-> 计算机系统（CS）方向有关于客户端-服务端通信的经典实验，可参考[他们](https://www.glimmer.org.cn/cs/hard-1/#step2_%E7%BD%91%E7%BB%9C%E5%AE%9E%E9%AA%8C%E5%92%8C%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA)的Step2中的Part1和Part2。你可以尝试使用Java语言来完成这两个part。（非强制，但建议）
-
 ## 任务二：上手网络编程
 
 ### 基础实践：API数据交互
@@ -68,7 +66,7 @@ import java.time.LocalDateTime;
 
 public class SimpleDownloader {
     public static final String TEST_URL = "https://test.glimmer.org.cn/re/the_last_supper.png";
-    private static final String SAVE_PATH = "the_last_supper.png";
+    private static final String SAVE_PATH = "small.bin";
     public static void main(String[] args) {
         // 创建一个HttpClient
         try (HttpClient client = HttpClient.newBuilder()
@@ -117,10 +115,9 @@ public class SimpleDownloader {
 
 **原理要点**：
 
-- 发送携带鉴权信息的 <Badge text="GET" /> 请求，并添加 <Badge text="Range: bytes=0-0" />，获取文件的第一个字节。
-- 检查服务器是否返回 <Badge text="206 Partial Content" />，并从 <Badge text="Content-Range" /> 响应头中获取文件总大小。
-- 根据文件总大小和线程数，将文件划分为多个字节区间，利用Request Header中添加<Badge text="Range: bytes=start-end" />并发发送<Badge text="Range GET" />请求。
-- 将各分块正确写入同一个目标文件对应的偏移位置，最终组合为完整、可打开的文件。（提示：可了解<Badge text="RandomAccessFile" />或NIO <Badge text="FileChannel" />）
+- 发送 <Badge text="HEAD" /> 请求获取文件大小（<Badge text="Content-Length" />），以及是否支持分块下载（<Badge text="Accept-Ranges: bytes" />）。
+- 根据分配的线程数，切分每个线程要下载的字节区间，利用Request Header中添加<Badge text="Range: bytes=start-end" />并发请求不同的分块。
+- 将各分块数据正确写入同一个目标文件的对应偏移量处（提示：可了解<Badge text="RandomAccessFile" />或NIO <Badge text="FileChannel" />）。
 
 ## 任务三：深入网络编程
 
@@ -283,12 +280,6 @@ public class UserManager {
 当下，AI Agent也是一个热门的方向。简单来说， **Agent（智能体）** 就是一种不仅能“做解答”，还能“拿工具去干活”的AI。你给它一个复杂的最终目标，它能够自主规划步骤、调用外部工具、检查执行结果，并且根据报错或环境变化不断修正，直到把任务彻底办完。你可能听说过Claude Code，它可以帮助你写代码，改bug，还能做其他很多事情，而Claude Code就是一个Agent。尝试动手编写一个简单的Agent吧！
 
 以下两个任务只需要完成其一即可。推荐有能力的同学完成任务一。如果任务一对你来说还有点难，则可以尝试完成任务二。
-
-import { Aside } from '@astrojs/starlight/components';
-
-<Aside type="note" title="提示">
-	在排行榜前列的同学建议完成任务一，排行榜前列的同学完成任务二获得的分数会略低于任务一。（因为任务二对名列前茅的大家来说可能学到的东西相对较少）
-</Aside>
 
 >你需要模型服务商提供的API才能完成本题。强烈推荐[DeepSeek](https://platform.deepseek.com/)，完成本题所花的钱还没一瓶矿泉水贵，同时DeepSeek的模型也非常好用。如果想要寻求免费的API，可尝试[百度的ENRIE-Lite](https://ai.baidu.com/ai-doc/WENXINWORKSHOP/wlwg8f1i3)、[智谱的GLM-4.7-Flash](https://bigmodel.cn/pricing)、[谷歌的Gemini](https://ai.google.dev/gemini-api/docs/pricing?hl=zh-cn)甚至[Ollama](https://ollama.com/)本地运行LLM，但模型质量可能不及预期。
 >
@@ -479,7 +470,7 @@ import { Steps } from '@astrojs/starlight/components';
 
 1. 将代码托管在GitHub、Gitlab或Gitee等平台，并设置仓库为公开（public）。
 2. 在项目根目录的<Badge text="README.md" />中写下：本题的问答、思考和思考题等仅需用文字阐述的题目的答案。
-3. 向仓库上传你的代码、运行截图以及要求下载的<Badge text="the_last_supper.png" />图片等，并在<Badge text="README.md" />中展示你的运行截图和要求的图片，并作相应阐述。
+3. 向仓库上传你的代码和运行截图等，并在<Badge text="README.md" />中展示你的运行截图，并作相应阐述。
 4. 向我们提交仓库的URL地址。[提交点这里](https://www.glimmer.org.cn/submit/)
 
 </Steps>

@@ -109,8 +109,7 @@ export default defineConfig({
 						{ label: 'MEDIUM-2: 计算机中的整数与浮点数', slug: 'cs/medium-2' },
 						{ label: 'MEDIUM-3: 初识Linux系统', slug: 'cs/medium-3' },
 						{ label: 'MEDIUM-4: 计算机系统内存与执行机制', slug: 'cs/medium-4' },
-						{ label: 'HARD-1: 计算机网络基础', slug: 'cs/hard-1' },
-						{ label: 'HARD-2: 动态内存分配', slug: 'cs/hard-2' }
+						{ label: 'HARD-1: 计算机网络基础', slug: 'cs/hard-1' }
 					],
 				},{
 					label: 'Web前端',

@@ -1,91 +1,76 @@
 ---
-title: HARD-2：动态内存分配
-description: 微光工作室2026招新——计算机系统：HARD-2：动态内存分配
+title: "CS-Hard-01  Dynamic Memory Allocation"
+description: 归档文件
 
 prev:
-  link: /cs/hard-1/
-  label: HARD-1：计算机网络基础
-next: false
+  link: /archives/24/cs/
+  label: CS-Total-00 计算机系统方向总述
+next:
+  link: /archives/24/cs/cs-hard-02-network-programming/
+  label: CS-HARD-02 Network Programming
 ---
 
-import { Image } from 'astro:assets';
-import banner from '../../../assets/cs/banner.png';
+> 当前正在浏览归档文件。若需要返回索引，请[点击此处](/archives/)
 
-<Image src={banner} alt="计算机系统Banner" width="600" height="188" />
+![标题](./img/CS.PNG)
 
-引言: 你在前面的学习过程中，在数据结构的使用里，大量的用到了malloc这个函数。手动申请和释放内存是c语言的特色之一。那么你是否好奇malloc是怎样申请内存的？free又是怎样释放掉申请的内存的？我们将在这一题中**基于linux系统的内存架构**手写malloc函数，实现动态内存分配。
+## 前言
 
-此外，这道题改自csapp实验9，这道题中的两个实验与实验九存在一定差异与改编，推荐对比学习csapp中不同的做法。
+​	在计算机科学中，内存管理的重要性不言而喻，一个好的内存管理系统就能在资源有限的内存空间极大地提高程序的性能。而与固定不变的静态内存不同，动态内存具有更高的灵活性与效率，能够处理各种复杂的情形。
 
-## 前置知识
+​	此时的你一定对malloc函数的使用了如指掌，当你想要为你的链表添加一个节点时,你会很自然的打出：`Node* newNode = (Node*)malloc(sizeof(Node));`。可你有没有思考过好奇过，malloc的内部到底进行了怎样的操作？它是如何分配内存的？它从哪里分配来的内存？free释放了内存会怎样？free只需要一个指针作为参数，它是怎么知道要释放多大的内存？这些问题无不需要你去理解动态内存分配的底层原理。
 
-你在medium_04中已经学习过什么是虚拟内存了
+​	本题将带你从简单了解Linux的内存架构开始，逐步引导你从基础概念开始直到实现一个具有现实功能的动态内存分配器，实现包括如`malloc`、`calloc`、`realloc`和`free`等分配函数。
 
-import img1 from '../../../assets/cs/hard-2-1.jpg';
+准备好了么？
 
-<Image src={img1} alt="图1" width="500" />
+## part0 项目前置知识
 
-这是一张有关虚拟内存的图片，相信你对其中的内容应该有一定的了解了。
+> 一切问题从概念学习开始
 
-在完成实验之前，你需要有一定的知识储备：
+### 任务
 
-- 什么是堆？
-- 什么是动态内存分配器？什么是空闲块？什么是对齐？什么是碎片？
-- 为什么分隐式和显式？它们分别是什么？
-- 什么是吞吐量？什么是空间利用率？
+- 了解linux的**虚拟内存**结构尤其是其中**堆区域**的构成（如下图），简单理解**物理内存**与**虚拟内存**的概念还有关系和区别
 
-了解这些最基本的东西以后，你可以边看实验边学习和复用实验中的函数。
+  ![QQ_1723120212954](./img/图1.jpg)
 
-## 实验0：最简单的malloc
+- 了解有关**动态内存分配器**的各种概念：
 
-```c
-#include <assert.h>
-#include <string.h>
-#include <sys/types.h>
-#include <unistd.h>
+  - 区分**显式**与**隐式**分配器
 
-void *malloc(size_t size) {
-  void *p = sbrk(0);
-  void *request = sbrk(size);
-  if (request == (void*) -1) {
-    return NULL; // sbrk 失败。
-  } else {
-    assert(p == request); // 非线程安全。
-    return p;
-  }
-}
-```
+  - 何为**有效荷载**
 
-这是一个最简单的malloc函数。它的原理就是直接为堆申请一块新的空间。
+  - 何为**内部**与**外部**碎片
 
-显然，它存在很多问题，而最重要的问题是：它直接移动了brk，扩大了堆的范围，但是却不能回收增长的空间。
+  - 要求**吞吐量**和**内存利用率**
 
-思考：**为什么不能free新增长的空间**？
+  - 它如何解决了前言中的一些问题？
 
-brk唯一能安全下降的情况是：堆顶那一段空闲了。也就是 free 掉的是紧挨着堆顶、且一路往低地址连续空闲的一大块，才可能把 brk 降下来。但即便这样，普通分配器也很少做（因为频繁升降 brk 有开销，而且往往堆顶永远有活跃对象）。
+    ………………………………………………
 
-因此，当我们采用brk来做分配器时，我们往往可以采用另一个思路：我们的free不是真正的释放空间，而是把不用的空间标记为空闲，然后在下次调用时优先调用空闲的区域。
+### 提示
 
-同时，我们还要做一些优化，对于很大的完整空闲块（尤其是首次申请一定大小的空间之后），我们要对其进行分割，分出多余的部分用来减少碎片。对于小块，我们也要进行合并，不能一直申请堆空间。
+- 提供两个链接供简单了解：
+  - [4.1 为什么要有虚拟内存？ | 小林coding (xiaolincoding.com)](https://xiaolincoding.com/os/3_memory/vmem.html)(主要4.1，4.2)
+  - [Malloc教程 (danluu.com)](https://danluu.com/malloc-tutorial/)(最简易的分配器)
+- 着重学习**显式**分配器，这是你将实现的目标
+- 关注尤其是**加粗名词**的概念(后文同理，将不再提示)
 
-而这种**标记空闲**的做法又可以分为两类，接下来我们将分别实现这两种思路。
+### 要求
 
-## 实验1：隐式空闲链表
+- 将任务中问题用你自己的语言描述讲解，可配图
 
-要做到标记空闲，我们需要能够访问每个块的**元信息**。什么是元信息？
+## part1 从隐式空闲链表看起
 
-我们采用下图的隐式空闲链表形式，它将堆中的内存块按地址顺序串成一个链表，头部和尾部都存储表示块的大小，且头部的末位表示该块的分配状态，脚部的末位表示前块的分配状态。每个块由单字(实验 1中**单字**为**四字节**,**双字**为**八字节**)大小的头部和尾部与**有效荷载**构成。
+>好像不简单诶
 
-import img2 from '../../../assets/cs/hard-2-2.png';
+### 任务
 
-<Image src={img2} alt="图2" />
+![QQ_1723120212954](./img/图2.png)
 
-隐式空闲链表的核心思路：用一条链表保存全部的块，包括空闲块和已经分配的块。块的首尾（hdr和ftr）都保存一份元信息，通过首尾中的元信息可以计算出每一块的大小。分配时扫描堆里全部的块，找到大小合适的块分配出去。
+![QQ_1723120212954](./img/图3.jpg)
 
-思考：
-
-- 为什么我们要用链表来存储内存块地址？为什么不能用数组？
-- ftr的作用是什么？
+​	我们采用上图的隐式空闲链表形式，它将堆中的内存块按地址顺序串成一个链表，头部和尾部都存储表示块的大小，且头部的末位表示该块的分配状态，脚部的末位表示前块的分配状态。每个块由单字(part 1中**单字**为**四字节**,**双字**为**八字节**)大小的头部和尾部与**有效荷载**构成。
 
 ```c
 #include <stdio.h>
@@ -93,7 +78,6 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 #include <unistd.h>
 #include <string.h>
 
-/* ==================== 常量与对齐宏 ==================== */
 #define ALIGNMENT 8  // 双字对齐
 #define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1)) // 对齐到ALIGNMENT的倍数
 
@@ -104,8 +88,7 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 
 #define MAX(x, y)  ((x) > (y) ? (x) : (y))  // 返回最大值
 
-/* ==================== 读写块字段的宏 ==================== */
-#define PACK(size, alloc)  ((size) | (alloc))  // 将 size 和 allocated bit 合并为一个字
+#define PACK_ALLOC(val, alloc)  ((size) | (alloc))  // 将 size 和 allocated bit 合并为一个字
 
 #define GET(p)        (*(unsigned int *)(p))  // 读地址p处的一个字
 #define PUT(p, val)   (*(unsigned int *)(p) = (val))  // 向地址p处写一个字
@@ -119,42 +102,14 @@ import img2 from '../../../assets/cs/hard-2-2.png';
 #define NEXT_BLKP(bp)    ((char*)(bp) + GET_SIZE((char*)(bp) - WSIZE))  // 获取下一个块的指针
 #define PREV_BLKP(bp)    ((char*)(bp) - GET_SIZE((char*)(bp) - DSIZE))  // 获取前一个块的指针
 
-/* ==================== 全局状态 ==================== */
-static char *heap_listp;  // 堆的开始指针
+/* 堆管理接口 */
+static void* heap_listp;  // 堆的开始指针
 
+#define VERBOSE 0  // 默认不输出调试信息
 #ifdef DEBUG
 #define VERBOSE 1  // 在调试模式下启用调试信息输出
-#else
-#define VERBOSE 0  // 默认不输出调试信息
 #endif
 
-/* ==================== 前向声明 ==================== */
-static void *extend_heap(size_t size);
-static void *find_fit(size_t size);
-static void place(char *bp, size_t asize);
-static void *coalesce(void *bp);
-static void print_heap_blocks(int verbose, const char *func);
-```
-
-你首先要做到的是看懂宏定义。
-
-import { Steps } from '@astrojs/starlight/components';
-
-<Steps>
-
-1. 为什么要使用宏定义？
-2. 为什么要把size和alloc打包？（从位操作的角度想）
-3. 为什么可以得到上一个块的地址？对齐的作用是什么？
-
-</Steps>
-
-接下来我会给你主函数和你需要补全的函数名，请你补全函数，上传一个完整的c语言文件和运行截图。
-
-import { Badge } from '@astrojs/starlight/components';
-
-你需要学习并使用linux下c语言的调试功能。启用调试模式并在<Badge text="mm_free" />和<Badge text="mm_malloc" />函数中加入<Badge text="print_heap_blocks" />使其能正确运行测试用例输出内容。多用调试观察堆状态的变化。
-
-```c
 /**
  * @brief 初始化内存分配器
  * 
@@ -165,7 +120,7 @@ int mm_init(void)
     // 初始化堆
     if ((heap_listp = sbrk(4*WSIZE)) == (void*)-1)
         return -1;
-    
+    11
     // 初始化空闲链表
     PUT(heap_listp, 0); 
     PUT(heap_listp + 1*WSIZE, PACK(8, 1));
@@ -179,6 +134,7 @@ int mm_init(void)
 
     return 0;
 }
+
 /**
  * @brief 打印当前堆块的状态信息。
  *
@@ -209,7 +165,6 @@ static void print_heap_blocks(int verbose, const char* func) {
     printf("=========================== %s ===========================\n", func);
 }
 
-
 /**
  * @brief 扩展堆的大小以适应请求的内存。
  * 
@@ -222,7 +177,6 @@ static void print_heap_blocks(int verbose, const char* func) {
  */
 static void *extend_heap(size_t size) {}
 
-
 /**
  * @brief 在堆中查找合适的空闲块。
  * 
@@ -234,7 +188,6 @@ static void *extend_heap(size_t size) {}
  */
 static void *find_fit(size_t size) {}
 
-
 /**
  * @brief 将内存块分配给用户。
  * 
@@ -244,7 +197,6 @@ static void *find_fit(size_t size) {}
  * @param asize 需要分配的内存块的大小（以字节为单位）。
  */
 static void place(char *bp, size_t asize) {}
-
 
 /**
  * @brief 分配一个指定大小的内存块。
@@ -257,7 +209,6 @@ static void place(char *bp, size_t asize) {}
  */
 void *mm_malloc(size_t size) {}
 
-
 /**
  * @brief 合并相邻的空闲块。
  * 
@@ -269,7 +220,6 @@ void *mm_malloc(size_t size) {}
  */
 static void *coalesce(void *bp) {}
 
-
 /**
  * @brief 释放一个已分配的内存块。
  * 
@@ -278,7 +228,6 @@ static void *coalesce(void *bp) {}
  * @param ptr 指向要释放的内存块的指针。
  */
 void mm_free(void *ptr) {}
-
 
 //测试用例
 int main() {
@@ -302,28 +251,34 @@ int main() {
 
     return 0;
 }
+
 ```
 
-tips：你可以通过调试的过程更好的理解堆的构成。
+### 提示
 
-通过这个实验，相信你对知识储备中提出的那几个概念有了更好的理解。
+- 仔细阅读理解已经提供的**注释**内容
+- 多利用**调试模式**观察堆的变化
 
-- 这个实验中怎么处理内部碎片？合并和分割空闲块会产生多余的hdr和ftr吗？
-- 隐式分配器的时间复杂度是多少？为什么要遍历整个链表？怎么提升性能？
+### 要求
 
-在做实验之前我问过ftr的作用是什么。相信你在完成这个试验之后对ftr的作用有了更深的思考。堆可以用连续的数组去思考，但是代码的实现却是用的链表。这是很巧妙的一个点。在这个实验中，我们用ftr去实现合并操作，用链表去模拟数组的特点。在这个过程中，我们显露在外的是数组，而隐藏起来的是链表，所以是隐式空闲链表。
+- 不要更改已经给出的内容
+- 请启用调试模式并在`mm_free`和`mm_malloc`函数中加入`print_heap_blocks`使其能正确运行测试用例输出内容
+- 用给定测试用例输出正确的结果(还可以用更多测试检验自己的结果)
+- 提交.c文件以及运行结果图
 
-这个实验中存在一个可以明显优化产生碎片的点：只有在被分配的块被free时才进行一次合并。请你思考：为什么不在每次搜索不到足够大的空闲块时进行一次遍历合并？相对可行的合并方法是什么？
+## part2 打造你的内存分配器
 
-## 实验2：显示空闲链表
+>真正挑战的开始了	
 
-在隐式空闲链表方案中，块分配时间复杂度与堆中块的总数呈线性关系。为了进行改善，我们本次在该part中主要设计和实现一种由**双向链表**组织的**显式空闲链表**方案。
+​	你已经实现了一个简易的隐式空闲链表分配器，但在隐式空闲链表方案中，块分配时间复杂度与堆中块的总数呈线性关系。为了进行改善，我们本次在该part中主要设计和实现一种由**双向链表**组织的**显式空闲链表**方案。
 
-显示空闲链表的核心思路：用一个双向链表去存储全部的空闲块，当空闲块被分配，就将其删除。对于分割和合并的部分，将其头插进入链表。链表是显露在外的。
+### 任务
 
-import img3 from '../../../assets/cs/hard-2-3.jpg';
+#### 描述
 
-<Image src={img3} alt="图3" />
+##### 1. **块的格式**
+
+![QQ_1723120212954](./img/图4.jpg)
 
 下面详细说明一下分配块和空闲块的格式：
 
@@ -338,6 +293,90 @@ import img3 from '../../../assets/cs/hard-2-3.jpg';
     - 头部与分配块同理
     - 前驱和后继记录了链式相链的前一个和后一个空闲块的地址
 
+##### 2. **宏定义**
+
+|        **宏**         |                  含义                   |
+| :-------------------: | :-------------------------------------: |
+|         WSIZE         |                  字长                   |
+|         DSIZE         |                 双字长                  |
+|       CHUNKSIZE       |         内存分配器扩容最小单元          |
+|         PACK          |      块大小和分配位结合返回一个值       |
+|       GET / PUT       |       对指针p指向的位置取值/赋值        |
+|      HDRP / FTRP      |        返回bp指向块的头/脚部指针        |
+| PREV_BLKP / NEXT_BLKP |        返回与bp相邻的上一/下一块        |
+|  GET_PRED / GET_SUCC  | 返回与空闲块bp相连的上一个/下一个空闲块 |
+
+```c
+#define ALIGNMENT 16
+#define ALIGN(size) (((size) + (ALIGNMENT-1)) & ~(ALIGNMENT-1))
+
+#define WSIZE 8 
+#define DSIZE 16
+#define CHUNKSIZE (1 << 12) 
+#define MIN_BLK_SIZE (2 * DSIZE)
+
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+
+#define PACK(size, prev_alloc, alloc) ((size) & ~(1<<1) | (prev_alloc << 1) & ~(1)
+| (alloc))
+#define PACK_PREV_ALLOC(val, prev_alloc) ((val) & ~(1<<1) | (prev_alloc << 1))
+#define PACK_ALLOC(val, alloc) ((val) | (alloc))
+
+#define GET(p) (*(unsigned long *)(p))
+#define PUT(p, val) (*(unsigned long *)(p) = (val))
+
+#define GET_SIZE(p) (GET(p) & ~0x7)
+#define GET_ALLOC(p) (GET(p) & 0x1)
+
+#define HDRP(bp) ((char *)(bp) - WSIZE)
+#define FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)
+
+#define GET_PRED(bp) (GET(bp))
+#define SET_PRED(bp, val) (PUT(bp, val))
+#define GET_SUCC(bp) (GET(bp + WSIZE))
+#define SET_SUCC(bp, val) (PUT(bp + WSIZE, val))
+
+#define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
+#define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
+```
+
+##### 3. 堆的延伸方式
+
+|   全局变量    |                  含义                  |
+| :-----------: | :------------------------------------: |
+| mem_start_brk |       记录内存块的第一个字节地址       |
+|  heap_listp   |          记录序言块的开始位置          |
+|  free_listp   |       指向堆中的第一个空闲内存块       |
+|    mem_brk    | 记录已分配内存的最后一个字节的末尾地址 |
+| mem_max_addr  |      记录当前内存块的最大可用地址      |
+
+![QQ_1723120212954](./img/图5.jpg)
+
+![QQ_1723120212954](./img/图6.png)
+
+![QQ_1723120212954](./img/图7.png)
+
+- 首先通过定义函数` void mm_init(void)`初始化，利用`sbrk()`获取5mb内存块，并更改全局变量
+- 然后定义函数`void *mem_sbrk(int incr)`模拟堆的增长
+  - 如果加上incr之后` mem_brk `的值超过了当前的` mem_max_addr `，则证明**堆1**不够用了，需要再次调用` sbrk() `来增加**堆1**的大小，并修改相关变量，然后增加` mem_brk `。如果没有超过，就直接给`mem_brk`增加一个incr，增加**堆2**，即分配堆2
+  - 返回新分配空间的基址
+
+##### 4. 空闲链表管理
+
+- 访问：利用空闲块的地址`bp`结合宏定义访问前块和后块
+- 增删：定义`static void delete_from_free_list(void *bp);`移除bp位置的空闲块；定义`static void add_to_free_list(void *bp);`用**头插法**将空闲块插入空闲链表中
+
+##### 5. 分配策略
+
+​	当我们调用 `malloc()` 发出一个内存分配请求时，分配器首先需要搜索堆中的内存块找到一个足够大的空闲块并返回。具体选择哪一个内存块由分配策略决定。主要有两种：
+
+- **首次适配**：从头开始搜索链表，找到第一个大小合适的空闲内存块便返回。
+- **最佳适配**：搜索整个链表，返回满足需求的最小的空闲块。
+
+​	你需要实现` find_fit_first() `和` find_fit_best() `两个函数。从名字就可以看出，两个函数分别按照首次适配和最佳适配策略查找合适的空闲块。函数输入为申请空间大小 ，返回值为分配块的地址。（不需要对块内的具体数据进行更改）
+
+#### 代码文件
+
 ```c
 //头文件
 #include <stdio.h>
@@ -346,50 +385,47 @@ import img3 from '../../../assets/cs/hard-2-3.jpg';
 #include <unistd.h>
 #include <string.h>
 
-#define WSIZE       8   // 头部或指针字段的字节数（64 位一个字）
-#define DSIZE       16  // 双字大小，块与负载的对齐粒度
-#define CHUNKSIZE  (1 << 12)       // 扩展堆时的默认字节数
-#define MAX_HEAP   (5 * (1 << 20)) // 模拟堆区上限（5MB）
-#define MIN_BLK_SIZE (2 * DSIZE)   // 最小块大小（须容纳 hdr + pred + succ + ftr）
+//宏定义
+#define WSIZE 8 
+#define DSIZE 16 
+#define CHUNKSIZE (1 << 12) 
+#define MAX_HEAP (5 * (1 << 20))
+#define MIN_BLK_SIZE (2 * DSIZE)
 
-#define ALIGN(size) (((size) + (DSIZE - 1)) & ~(DSIZE - 1)) // 向上对齐到 DSIZE 的倍数
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
 
-#define MAX(x, y)  ((x) > (y) ? (x) : (y))  // 返回较大值
+#define PACK(size, prev_alloc, alloc) ((size) & ~(1<<1) | (prev_alloc << 1) & ~(1)
+| (alloc))
+#define PACK_PREV_ALLOC(val, prev_alloc) ((val) & ~(1<<1) | (prev_alloc << 1))
+#define PACK_ALLOC(val, alloc) ((val) | (alloc))
 
+#define GET(p) (*(unsigned long *)(p))
+#define PUT(p, val) (*(unsigned long *)(p) = (val))
 
-#define PACK(size, prev_alloc, alloc) \
-    (((size) & ~0x7) | ((prev_alloc) << 1) | (alloc))  // 将 size、前块分配位、本块分配位合并为一个字
-#define PACK_PREV_ALLOC(val, prev_alloc) (((val) & ~0x2) | ((prev_alloc) << 1))  // 只更新 header 中的 prev_alloc 位
-#define PACK_ALLOC(val, alloc) (((val) & ~0x1) | (alloc))  // 只更新 header 中的 alloc 位
+#define GET_SIZE(p) (GET(p) & ~0x7)
+#define GET_ALLOC(p) (GET(p) & 0x1)
 
-#define GET(p)        (*(unsigned long *)(p))  // 读地址 p 处的一个字
-#define PUT(p, val)   (*(unsigned long *)(p) = (val))  // 向地址 p 处写一个字
+#define HDRP(bp) ((char *)(bp) - WSIZE)
+#define FTRP(bp) ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)
 
-#define GET_SIZE(p)       (GET(p) & ~0x7)           // 从 header/footer 取出块大小
-#define GET_ALLOC(p)      (GET(p) & 0x1)            // 本块是否已分配
-#define GET_PREV_ALLOC(p) ((GET(p) >> 1) & 0x1)     // 物理上前一块是否已分配（已分配块可无 footer）
+#define GET_PRED(bp) (GET(bp))
+#define SET_PRED(bp, val) (PUT(bp, val))
+#define GET_SUCC(bp) (GET(bp + WSIZE))
+#define SET_SUCC(bp, val) (PUT(bp + WSIZE, val))
 
-#define HDRP(bp)  ((char *)(bp) - WSIZE)  // 块头部指针（bp 为有效荷载起始地址）
-#define FTRP(bp)  ((char *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)  // 块尾部指针（主要用于空闲块）
+#define NEXT_BLKP(bp) ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))
+#define PREV_BLKP(bp) ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))
 
-#define GET_PRED(bp)  ((char *)GET(bp))  // 空闲块负载处：前驱空闲块指针
-#define SET_PRED(bp, val)  (PUT(bp, (unsigned long)(val)))
-#define GET_SUCC(bp)  ((char *)GET((char *)(bp) + WSIZE))  // 空闲块负载 +8：后继空闲块指针
-#define SET_SUCC(bp, val)  (PUT((char *)(bp) + WSIZE, (unsigned long)(val)))
+//全局定义
+static void* heap_listp;    
+static void* free_listp; 
+static void* mem_start_brk;
+static void* mem_brk;
+static void* mem_max_addr;
 
-#define NEXT_BLKP(bp)  ((char *)(bp) + GET_SIZE(((char *)(bp) - WSIZE)))  // 下一块的有效荷载指针
-#define PREV_BLKP(bp)  ((char *)(bp) - GET_SIZE(((char *)(bp) - DSIZE)))  // 前一块的有效荷载指针（经前块 footer）
-
-static char *heap_listp;      // 序言块有效荷载地址，物理堆遍历起点
-static char *free_listp;      // 显式空闲链表表头
-static char *mem_start_brk;   // 向 OS 预留的堆区起始地址
-static char *mem_brk;         // 当前堆顶（mm_sbrk 在此基础上递增）
-static char *mem_max_addr;    // 堆区上界（mem_start_brk + MAX_HEAP）
-
+#define VERBOSE 0  // 默认不输出调试信息
 #ifdef DEBUG
 #define VERBOSE 1  // 在调试模式下启用调试信息输出
-#else
-#define VERBOSE 0  // 默认不输出调试信息
 #endif
 
 //同part1的调试模式
@@ -467,7 +503,7 @@ static void *find_fit_best(size_t asize);
  * 该函数将指定的块标记为已分配，并更新块的大小信息。
  */
 static void place(void* bp, size_t asize);
-
+    
 /**
  * @brief 合并相邻的空闲块。
  * 
@@ -478,7 +514,7 @@ static void place(void* bp, size_t asize);
  * 该函数合并当前块与其相邻的空闲块，以减少内存碎片并增加大块的可用内存。
  */
 static void* coalesce(void* bp);
-
+    
 /**
  * @brief 从空闲链表中移除指定的空闲块。
  * 
@@ -507,7 +543,7 @@ static void add_to_free_list(void *bp);
  * 该函数根据请求的大小在堆中查找适合的空闲块，如果找到合适的块则分配该块，并返回其起始地址。如果没有足够的空间，则可能会扩展堆或返回 NULL。
  */
 void *mm_malloc(size_t size);
-
+    
 /**
  * @brief 释放内存块。
  * 
@@ -552,22 +588,53 @@ int main() {
 }
 ```
 
-现在请你根据提示补全代码，然后上传完整的c文件和运行结果的截图。
+### 提示
 
-## 后记
+- 理解part2能更好的让你完成本part的内容
 
-到现在你已经初步完成了两个分配器。但是在完成分配器之后，应该如何去测试分配器的性能呢？（分配时间，吞吐率）在这两个实验中，我们都采用的是首次适配，那如果我们改为最佳适配又会发生哪些变化呢？
+### 要求
 
-我们在这一题中初步学习了分配器背后的原理，更多的内容等待着你去探索。想继续深入的了解分配器的知识，你可以去学习csapp的实验9。本题同时参考了博客：[Malloc教程 (danluu.com)](https://danluu.com/malloc-tutorial/)(最简易的分配器)
+- 与part1同理，启用调试模式运行测试用例
 
-## **本题提交方式**
+- 用给定测试用例输出正确的结果(还可以用更多测试检验自己的结果)
+- 提交.c文件并以及运行结果图
 
-> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
+## part3 你需要更多测试
 
-## 出题人联系方式
+> 轻舟已过万重山
 
-> <p class="nickname-avatar-panel">出题人：<Image src="https://q2.qlogo.cn/headimg_dl?dst_uin=1748798371&spec=100" alt="出题人头像" width="45" height="45" />&nbsp;&nbsp;taaaakoooo</p>
+​	恭喜你，终于来到最后一步了，你的动态内存分配器即将大功告成了，现在是最后一步了——测试。想要检测动态内存分配器的性能，就需要大量的测试。
+
+### 任务
+
+- 修改代码文件，添加可以计算内存分配率的功能(更多可选：分配时间，吞吐率等)
+- 对比两种分配策略**首次**适配和**最佳**适配的测试结果
+- 对你的分配器进行大规模测试
+
+### 提示
+
+- 提供一种可选的测试方式：定义一个指针数组并分配随机大小的字符串再随机释放，不断分配释放检测性能
+- 了解`srand`和`rand`等函数，随机化测试
+
+- 了解如何编写`bash`脚本文件，高效运行测试文件
+- 了解`makefile`如何导出你的malloc的动态链接库，简化调用
+
+### 要求
+
+- 描述测试思路，用图片提交测试结果
+
+## 需要提交的内容及要求
+
+README文件，包含做题过程与个人思路
+
+做题中的C语言文件与运行截图
+
+其他相关佐证个人学习能力与求解过程的证明材料
+
+## 本题提交方式
+
+提交Github含有本题题解的url仓库链接
+
+> 出题人联系方式:
 >
-> QQ：1748798371
->
-> 邮箱：[1748798371@qq.com](mailto:1748798371@qq.com)
+> Bgmgm1(QQ:993170182)
