@@ -100,61 +100,22 @@ export default defineConfig({
 				},{
 					label: '计算机系统',
 					collapsed: true,
-					items: [{ label: '计算机系统简介', slug: 'cs/introduction' },
-						{ label: "C-EASY-1: C语言入门", slug: 'cs/c-easy-1' },
-						{ label: 'C-EASY-2: 指针', slug: 'cs/c-easy-2' },
-						{ label: 'C-EASY-3: 二叉树与递归', slug: 'cs/c-easy-3' },
-						{ label: 'C-EASY-4: 小应用之五子棋游戏', slug: 'cs/c-easy-4' },
-						{ label: 'MEDIUM-1: 位级操作', slug: 'cs/medium-1' },
-						{ label: 'MEDIUM-2: 计算机中的整数与浮点数', slug: 'cs/medium-2' },
-						{ label: 'MEDIUM-3: 初识Linux系统', slug: 'cs/medium-3' },
-						{ label: 'MEDIUM-4: 计算机系统内存与执行机制', slug: 'cs/medium-4' },
-						{ label: 'HARD-1: 计算机网络基础', slug: 'cs/hard-1' },
-						{ label: 'HARD-2: 动态内存分配', slug: 'cs/hard-2' }
+					items: [{ label: '计算机系统简介', slug: 'cs/introduction' }
 					],
 				},{
 					label: 'Web前端',
 					collapsed: true,
-					items: [{ label: 'Web前端简介', slug: 'frontend/introduction' },
-						{ label: '1: 初识HTML', slug: 'frontend/1' },
-						{ label: '2: 了解网页F12开发者工具', slug: 'frontend/2' },
-						{ label: '3: CSS初识', slug: 'frontend/3' },
-						{ label: '4: Javascript入门与进阶', slug: 'frontend/4' },
-						{ label: '5: 制作blog', slug: 'frontend/5' },
-						{ label: '6: 第三方API&&排序', slug: 'frontend/6' },
-						{ label: '7: Node.js初体验', slug: 'frontend/7' },
-						{ label: '8: VitePress', slug: 'frontend/8' },
-						{ label: '9: Vue的学习', slug: 'frontend/9' }
+					items: [{ label: 'Web前端简介', slug: 'frontend/introduction' }
 					],
 				},{
 					label: 'Web后端',
 					collapsed: true,
-					items: [{ label: 'Web后端简介', slug: 'backend/introduction' },
-						{ label: '1: 环境搭建与程序运行', slug: 'backend/1' },
-						{ label: '2: 数据类型、控制流与异常处理', slug: 'backend/2' },
-						{ label: '3: 面向对象、封装继承与多态', slug: 'backend/3' },
-						{ label: '4: 集合、泛型与设计模式', slug: 'backend/4' },
-						{ label: '5: IO流与项目挑战', slug: 'backend/5' },
-						{ label: '6: Linux的使用', slug: 'backend/6' },
-						{ label: '7: 概念补充', slug: 'backend/7' },
-						{ label: '8: 部署服务器', slug: 'backend/8' },
-						{ label: '9: 网络编程基础', slug: 'backend/9' },
-						{ label: '10: 初窥后端世界', slug: 'backend/10' }
+					items: [{ label: 'Web后端简介', slug: 'backend/introduction' }
 					],
 				},{
 					label: '机器学习',
 					collapsed: true,
-					items: [{ label: '机器学习简介', slug: 'ml/introduction' },
-						{ label: '0: 迈出机器学习的第一步', slug: 'ml/0' },
-						{ label: '1: 基础的线性回归', slug: 'ml/1' },
-						{ label: '2: 多层感知机理论', slug: 'ml/2' },
-						{ label: '3: 多层感知机实战', slug: 'ml/3' },
-						{ label: '4: 卷积神经网络理论', slug: 'ml/4' },
-						{ label: '5: 卷积神经网络实战', slug: 'ml/5' },
-						{ label: '6: 循环神经网络理论', slug: 'ml/6' },
-						{ label: '7: 循环神经网络实战', slug: 'ml/7' },
-						{ label: '8: Transformer', slug: 'ml/8' },
-						{ label: '9: 初识智能体 Agent', slug: 'ml/9' }
+					items: [{ label: '机器学习简介', slug: 'ml/introduction' }
 					],
 				}
 			],
