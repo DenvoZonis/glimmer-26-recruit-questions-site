@@ -15,6 +15,12 @@ import banner from '../../../assets/frontend/banner.png';
 
 <Image src={banner} alt="前端Banner" width="640" height="256" />
 
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="提示">
+	本次招新已于2026.10.25截止。人生有梦，各自精彩！感谢关注微光工作室的招新！
+</Aside>
+
 > ```
 > 难度系数：有点难
 > ```
@@ -412,8 +418,6 @@ app.get('/api/resources', (request, response) => {
 
 ## **本题提交方式**
 
-> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
->
 > 提交主题示例 <Badge text="2026090101012-张三-前端-T7" />
 >
 > 提交文件：完整的 T7 项目文件夹，并在文件夹根目录下附上README.md文件，附上自己的做题心得~

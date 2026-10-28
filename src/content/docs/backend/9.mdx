@@ -15,6 +15,12 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="提示">
+	本次招新已于2026.10.25截止。人生有梦，各自精彩！感谢关注微光工作室的招新！
+</Aside>
+
 > 欢迎来到Java网络编程的世界！
 > 本次任务将带你从经典的Java底层网络API出发，感受HTTP客户端封装技巧与设计模式的演进，并最终结合当下最具科技感的LLM（大语言模型）API，动手打造一个简单的CLI AI Agent客户端。
 
@@ -284,7 +290,6 @@ public class UserManager {
 
 以下两个任务只需要完成其一即可。推荐有能力的同学完成任务一。如果任务一对你来说还有点难，则可以尝试完成任务二。
 
-import { Aside } from '@astrojs/starlight/components';
 
 <Aside type="note" title="提示">
 	在排行榜前列的同学建议完成任务一，排行榜前列的同学完成任务二获得的分数会略低于任务一。（因为任务二对名列前茅的大家来说可能学到的东西相对较少）
@@ -480,7 +485,7 @@ import { Steps } from '@astrojs/starlight/components';
 1. 将代码托管在GitHub、Gitlab或Gitee等平台，并设置仓库为公开（public）。
 2. 在项目根目录的<Badge text="README.md" />中写下：本题的问答、思考和思考题等仅需用文字阐述的题目的答案。
 3. 向仓库上传你的代码、运行截图以及要求下载的<Badge text="the_last_supper.png" />图片等，并在<Badge text="README.md" />中展示你的运行截图和要求的图片，并作相应阐述。
-4. 向我们提交仓库的URL地址。[提交点这里](https://www.glimmer.org.cn/submit/)
+4. 向我们提交仓库的URL地址。
 
 </Steps>
 

@@ -13,6 +13,12 @@ import banner from '../../../assets/cs/banner.png';
 
 <Image src={banner} alt="计算机系统Banner" width="600" height="188" />
 
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="提示">
+	本次招新已于2026.10.25截止。人生有梦，各自精彩！感谢关注微光工作室的招新！
+</Aside>
+
 引言: 你在前面的学习过程中，在数据结构的使用里，大量的用到了malloc这个函数。手动申请和释放内存是c语言的特色之一。那么你是否好奇malloc是怎样申请内存的？free又是怎样释放掉申请的内存的？我们将在这一题中**基于linux系统的内存架构**手写malloc函数，实现动态内存分配。
 
 此外，这道题改自csapp实验9，这道题中的两个实验与实验九存在一定差异与改编，推荐对比学习csapp中不同的做法。
@@ -559,10 +565,6 @@ int main() {
 到现在你已经初步完成了两个分配器。但是在完成分配器之后，应该如何去测试分配器的性能呢？（分配时间，吞吐率）在这两个实验中，我们都采用的是首次适配，那如果我们改为最佳适配又会发生哪些变化呢？
 
 我们在这一题中初步学习了分配器背后的原理，更多的内容等待着你去探索。想继续深入的了解分配器的知识，你可以去学习csapp的实验9。本题同时参考了博客：[Malloc教程 (danluu.com)](https://danluu.com/malloc-tutorial/)(最简易的分配器)
-
-## **本题提交方式**
-
-> [ 提交点这里 ](https://www.glimmer.org.cn/submit/)
 
 ## 出题人联系方式
 

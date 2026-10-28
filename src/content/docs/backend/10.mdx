@@ -13,6 +13,12 @@ import banner from '../../../assets/backend/banner.png';
 
 <Image src={banner} alt="后端Banner" width="640" height="256" />
 
+import { Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="提示">
+	本次招新已于2026.10.25截止。人生有梦，各自精彩！感谢关注微光工作室的招新！
+</Aside>
+
 import { Badge } from '@astrojs/starlight/components';
 
 > 在前面几个题目中，你已经掌握了Java核心语法、SQL基础、网络与HTTP协议，甚至在上一题中通过<Badge text="HttpClient" />/<Badge text="OkHttp" />作为“客户端”去请求了别人的接口。
@@ -235,7 +241,7 @@ public class LogAspect {
 2. **测试证据**：利用**Curl/Postman/Apifox**对你实现的所有接口分别进行调测，附带成功调用和完整JSON响应结果的截图。
 3. **AOP日志截图**：附带一张控制台输出统计耗时与请求地址的日志截图。
 4. **README说明**：用简单明了的语言介绍你的表结构设计，同时在上面记录任何需要你回答和思考的问题的答案。
-5. **提交URL**：向我们提交仓库的URL地址。[提交点这里](https://www.glimmer.org.cn/submit/)
+5. **提交URL**：向我们提交仓库的URL地址。
 
 </Steps>
 
