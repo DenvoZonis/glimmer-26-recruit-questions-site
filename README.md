@@ -11,6 +11,7 @@
 - main：仓库主分支
 - feature/for-public：在未开放招新题时放出来的网站
 - feature/production：开放招新题时放出来的网站
+- feature/after：招新结束后的内容
 
 ## 构建和调试
 
